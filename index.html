@@ -47,49 +47,58 @@
     margin-bottom: 24px;
   }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  table-layout: fixed; /* 고정 너비로 줄바꿈 */
+}
+
+th, td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+th {
+  font-weight: 600;
+  color: #000;
+  background-color: #f9f9f9;
+}
+
+.chart-container {
+  margin: 40px auto;
+  max-width: 400px;
+  width: 100%;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 40px;
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+    padding: 1.5rem 1rem;
+  }
+  h2, h3 {
+    font-size: 18px;
+  }
   table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #333;
-    background-color: #fff;
+    font-size: 13px;
   }
+  td {
+    font-size: 12px;
+    text-align: center;
+  }
+}
 
-  th, td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-  }
-
-  th {
-    font-weight: 600;
-    color: #000;
-    background-color: #f9f9f9;
-  }
-
-  .chart-container {
-    margin: 40px auto;
-    max-width: 400px;
-    width: 100%;
-  }
-
-  .table-wrapper {
-    overflow-x: auto;
-    margin-top: 40px;
-  }
-
-  @media (max-width: 600px) {
-    body {
-      font-size: 15px;
-      padding: 1.5rem 1rem;
-    }
-    h2, h3 {
-      font-size: 18px;
-    }
-    table {
-      font-size: 13px;
-    }
-  }
+  
 </style>
 </head>
 <body>
@@ -339,8 +348,8 @@ function initDataTableKo() {
     columnDefs: [{
       targets: 3, // 금액 열
       render: function (data) {
-        // 이미 숫자일 경우만 포맷 적용
-        const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
+        if (typeof data !== 'string' || data.includes('₩')) return data;
+        const raw = data.replace(/[^\d]/g, '');
         const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
         return number.toLocaleString('ko-KR', {
@@ -364,8 +373,8 @@ function initDataTableEn() {
     columnDefs: [{
       targets: 3, // 금액 열
       render: function (data) {
-        // 이미 숫자일 경우만 포맷 적용
-        const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
+        if (typeof data !== 'string' || data.includes('₩')) return data;
+        const raw = data.replace(/[^\d]/g, '');
         const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
         return number.toLocaleString('ko-KR', {
@@ -439,7 +448,6 @@ function updateLastUpdated(lang) {
 }
 
 $(document).ready(function () {
-  initDataTable(); // 초기 DataTable 세팅
 });
   
     window.addEventListener('DOMContentLoaded', () => {
