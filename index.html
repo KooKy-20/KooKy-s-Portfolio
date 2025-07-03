@@ -131,13 +131,17 @@
       maintainAspectRatio: true,
       plugins: {
         legend: { display: false },
-        datalabels: {
-          color: '#000',
-          formatter: function(value, context) {
-            const total = context.chart._metasets[0].total;
-            const percent = ((value / total) * 100).toFixed(1);
-            return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
-          }
+      datalabels: {
+        color: '#111',
+        font: {
+          weight: 'bold',
+          size: 14 
+        },
+        formatter: function(value, context) {
+          const total = context.chart._metasets[0].total;
+          const percent = ((value / total) * 100).toFixed(1);
+          return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
+        }
         },
         tooltip: {
           callbacks: {
