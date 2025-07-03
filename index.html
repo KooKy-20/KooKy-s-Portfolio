@@ -1,23 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>KooKy's Portfolio</title>
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 2em;
+  body {
+    font-family: sans-serif;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 0.5rem;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+
+  .chart-container {
+    margin: 40px 0;
+    max-width: 500px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  @media (max-width: 600px) {
+    h2, h3 {
+      font-size: 1.2rem;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    th, td {
+      font-size: 0.9rem;
     }
-    h2 {
-      margin-bottom: 1em;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
@@ -30,8 +58,8 @@
 <!-- 파이차트 섹션 -->
 <h3 style="text-align: center;">섹터별 자산 비중</h3>
 
-<div style="display: flex; justify-content: center; margin: 40px 0;">
-  <canvas id="sectorChart" width="400" height="400"></canvas>
+<div class="chart-container">
+  <canvas id="sectorChart"></canvas>
 </div>
 
 <!-- Chart.js + DataLabels -->
@@ -75,7 +103,8 @@
     type: 'pie',
     data: data,
     options: {
-      responsive: false,
+      responsive: true,
+      maintainAspectRatio: true,
       plugins: {
         legend: { display: false },
         datalabels: {
@@ -101,8 +130,9 @@
     plugins: [ChartDataLabels]
   });
 </script>
-  
-<table id="portfolio" class="display">
+
+<div class="table-wrapper">
+  <table id="portfolio" class="display">  
   <thead>
     <tr>
       <th>분류</th>
@@ -150,7 +180,8 @@
     <tr><td>기타</td><td>비트코인</td><td>BTC</td><td>2529103</td><td>3%</td></tr>
   </tbody>
 </table>
-
+</div>
+  
 <p><strong>총합:</strong> ₩ 99,576,722</p>
 <p><strong>업데이트:</strong> 2025.06.30</p>
 
