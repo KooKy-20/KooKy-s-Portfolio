@@ -162,9 +162,19 @@
   $('#portfolio').DataTable({
     paging: true,
     searching: true,
-    order: [[2, "desc"]],
-    pageLength: -1,              // 모든 항목 표시
-    lengthMenu: [[-1], ["All"]]  // 드롭다운 옵션: "All"만 표시
+    order: [[3, "desc"]], // 금액 기준 정렬 (금액 열 인덱스: 3)
+    pageLength: -1,
+    lengthMenu: [[-1], ["All"]],
+    columnDefs: [
+      {
+        targets: 3, // "금액" 열의 인덱스 (0부터 시작)
+        render: function (data, type, row) {
+          const number = parseInt(data);
+          if (isNaN(number)) return data;
+          return number.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+        }
+      }
+    ]
   });
   });
 </script>
