@@ -336,9 +336,10 @@ const translations = {
   updateLastUpdated(lang);
 }
 
-  function updateTotal(lang) {
+function updateTotal(lang) {
   let sum = 0;
-  document.querySelectorAll("#portfolio tbody tr").forEach(row => {
+  const visibleTbodyId = lang === 'ko' ? 'tbody-ko' : 'tbody-en';
+  document.querySelectorAll(`#${visibleTbodyId} tr`).forEach(row => {
     const amountText = row.children[3]?.textContent.replace(/[^\d]/g, '');
     const amount = parseInt(amountText, 10);
     if (!isNaN(amount)) sum += amount;
