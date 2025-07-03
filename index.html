@@ -158,7 +158,7 @@ window.sectorChart = new Chart(ctx, {
         },
         anchor: 'center',
         align: 'center',
-        offset: 15,
+        offset: 20,
         formatter: function(value, context) {
           const total = context.chart._metasets[0].total;
           const percent = ((value / total) * 100).toFixed(1);
@@ -337,11 +337,16 @@ function initDataTableKo() {
     info: false,
     order: [[3, "desc"]],
     columnDefs: [{
-      targets: 3,
+      targets: 3, // 금액 열
       render: function (data) {
-        const number = parseInt(data.toString().replace(/[^\d]/g, ''));
+        // 이미 숫자일 경우만 포맷 적용
+        const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
+        const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
-        return number.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+        return number.toLocaleString('ko-KR', {
+          style: 'currency',
+          currency: 'KRW'
+        });
       }
     }]
   });
@@ -357,11 +362,16 @@ function initDataTableEn() {
     info: false,
     order: [[3, "desc"]],
     columnDefs: [{
-      targets: 3,
+      targets: 3, // 금액 열
       render: function (data) {
-        const number = parseInt(data.toString().replace(/[^\d]/g, ''));
+        // 이미 숫자일 경우만 포맷 적용
+        const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
+        const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
-        return number.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+        return number.toLocaleString('ko-KR', {
+          style: 'currency',
+          currency: 'KRW'
+        });
       }
     }]
   });
