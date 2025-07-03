@@ -75,12 +75,18 @@
 
 <h2>KooKy's Portfolio (2025.06.30 기준)</h2>
 
+<!-- 언어 전환 버튼 -->
+<div style="margin-bottom: 20px;">
+  <button onclick="setLanguage('ko')">Korean</button>
+  <button onclick="setLanguage('en')">English</button>
+</div>
+  
 <!-- Chart.js + DataLabels 플러그인 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <!-- 파이차트 섹션 -->
-<h3 style="text-align: center; margin-top: 40px;">섹터별 자산 비중</h3>
+<h3 style="text-align: center; margin-top: 40px;" data-i18n="chartTitle">섹터별 자산 비중</h3>
 
 <div class="chart-container">
   <canvas id="sectorChart"></canvas>
@@ -156,12 +162,12 @@
   <table id="portfolio" class="display">  
   <thead>
     <tr>
-      <th>분류</th>
-      <th>자산명</th>
-      <th>티커</th>
-      <th>금액</th>
-      <th>비중</th>
-      <th>섹터</th>
+    <th data-i18n="category">분류</th>
+    <th data-i18n="assetName">자산명</th>
+    <th data-i18n="ticker">티커</th>
+    <th data-i18n="amount">금액</th>
+    <th data-i18n="ratio">비중</th>
+    <th data-i18n="sector">섹터</th>
     </tr>
   </thead>
  <tbody>
@@ -211,6 +217,37 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
+const translations = {
+  ko: {
+    chartTitle: "섹터별 자산 비중",
+    category: "분류",
+    assetName: "자산명",
+    ticker: "티커",
+    amount: "금액",
+    ratio: "비중",
+    sector: "섹터",
+    // 필요한 만큼 추가
+  },
+  en: {
+    chartTitle: "Asset Allocation by Sector",
+    category: "Category",
+    assetName: "Asset Name",
+    ticker: "Ticker",
+    amount: "Amount",
+    ratio: "Weight",
+    sector: "Sector",
+    // 필요한 만큼 추가
+  }
+};
+function setLanguage(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+  });
+}
+  
   $(document).ready(function () {
 $('#portfolio').DataTable({
   paging: false,       // 페이지네이션 제거
