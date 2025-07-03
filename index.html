@@ -144,11 +144,13 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
   $(document).ready(function () {
-    $('#portfolio').DataTable({
-      paging: true,
-      searching: true,
-      order: [[2, "desc"]] // 기본 정렬: 금액 내림차순
-    });
+  $('#portfolio').DataTable({
+    paging: true,
+    searching: true,
+    order: [[2, "desc"]],
+    pageLength: -1,              // 모든 항목 표시
+    lengthMenu: [[-1], ["All"]]  // 드롭다운 옵션: "All"만 표시
+  });
   });
 </script>
 
