@@ -174,29 +174,33 @@
       hoverOffset: 10
     }]
   };
-
 window.sectorChart = new Chart(ctx, {
   type: 'pie',
   data: data,
   options: {
     responsive: true,
-    maintainAspectRatio: false, // ✅ 차트 높이 자동 조정 가능하게 변경
+    maintainAspectRatio: false,
     layout: {
-      padding: 30 // ✅ 라벨이 잘리지 않도록 내부 여백 확보
+      padding: 30
     },
     plugins: {
       title: {
-      display: true,
-      text: '섹터별 자산 비중',
-      font: {
-        size: 16,
-        weight: 'bold'
+        display: true,
+        text: '섹터별 자산 비중',
+        font: {
+          size: 16,
+          weight: 'bold'
+        },
+        padding: {
+          bottom: 20
+        },
+        color: '#111'
       },
       legend: { display: false },
       datalabels: {
         color: '#000',
         font: {
-          size: window.innerWidth <= 600 ? 12 : 15  // 모바일이면 글자 작게
+          size: window.innerWidth <= 600 ? 12 : 15
         },
         anchor: 'center',
         align: 'end',
