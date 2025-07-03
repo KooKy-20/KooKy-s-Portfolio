@@ -349,8 +349,11 @@ let dataTableKo, dataTableEn;
       targets: 3, // 금액 열
       render: function (data, type) {
         if (type !== 'display') return data;
-        if (typeof data === 'string' && data.match(/^₩[\d,]+$/)) return data;
       
+        // 이미 통화 형식(₩1,234,567)이면 그대로 반환
+        if (typeof data === 'string' && data.trim().startsWith('₩')) return data;
+      
+        // 숫자 추출 후 포맷 적용
         const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
         const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
@@ -377,8 +380,11 @@ function initDataTableEn() {
       targets: 3, // 금액 열
       render: function (data, type) {
         if (type !== 'display') return data;
-        if (typeof data === 'string' && data.match(/^₩[\d,]+$/)) return data;
       
+        // 이미 통화 형식(₩1,234,567)이면 그대로 반환
+        if (typeof data === 'string' && data.trim().startsWith('₩')) return data;
+      
+        // 숫자 추출 후 포맷 적용
         const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
         const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
