@@ -23,12 +23,13 @@
 
 <h2>KooKy's Portfolio (2025.06.30 기준)</h2>
 
-<!-- 파이차트 캔버스 -->
-<h3>섹터별 자산 비중</h3>
-<canvas id="sectorChart" width="400" height="400"></canvas>
-
-<!-- Chart.js CDN -->
+<!-- Chart.js + DataLabels 플러그인 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<!-- 파이차트 캔버스 (크기 줄임) -->
+<h3>섹터별 자산 비중</h3>
+<canvas id="sectorChart" width="200" height="200"></canvas>
 
 <script>
   const ctx = document.getElementById('sectorChart').getContext('2d');
@@ -43,14 +44,13 @@
       '기타'
     ],
     datasets: [{
-      label: '섹터별 자산 비중 (₩)',
       data: [
-        23932085,  // 현금/채권
-        29563703,  // 테크
-        19406752,  // 산업재
-        6015235,   // 금융
-        11598894,  // 소비재/서비스
-        9693603    // 기타
+        23932085,
+        29563703,
+        19406752,
+        6015235,
+        11598894,
+        9693603
       ],
       backgroundColor: [
         '#36A2EB',
@@ -68,10 +68,18 @@
     type: 'pie',
     data: data,
     options: {
-      responsive: true,
+      responsive: false,
       plugins: {
         legend: {
-          position: 'bottom'
+          display: false
+        },
+        datalabels: {
+          color: '#000',
+          formatter: function(value, context) {
+            const total = context.chart._metasets[0].total;
+            const percent = ((value / total) * 100).toFixed(1);
+            return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
+          }
         },
         tooltip: {
           callbacks: {
@@ -84,7 +92,8 @@
           }
         }
       }
-    }
+    },
+    plugins: [ChartDataLabels]
   });
 </script>
   
