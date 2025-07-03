@@ -347,15 +347,19 @@ let dataTableKo, dataTableEn;
     order: [[3, "desc"]],
     columnDefs: [{
       targets: 3, // 금액 열
-      render: function (data, type) {
-        if (type !== 'display') return data; // 내부 정렬 처리 시 원본 사용
-
-        if (typeof data === 'string' && data.includes('₩')) return data;
-
+      render: function (data, type, row) {
+        if (type !== 'display') return data;
+      
+        // 이미 포맷된 경우 (₩ + 쉼표) → 그대로 반환
+        if (typeof data === 'string' && data.match(/^₩[\d,]+$/)) {
+          return data;
+        }
+      
+        // 숫자 추출 후 포맷
         const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
         const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
-
+      
         return number.toLocaleString('ko-KR', {
           style: 'currency',
           currency: 'KRW'
@@ -376,15 +380,19 @@ function initDataTableEn() {
     order: [[3, "desc"]],
     columnDefs: [{
       targets: 3, // 금액 열
-      render: function (data, type) {
+      render: function (data, type, row) {
         if (type !== 'display') return data;
-
-        if (typeof data === 'string' && data.includes('₩')) return data;
-
+      
+        // 이미 포맷된 경우 (₩ + 쉼표) → 그대로 반환
+        if (typeof data === 'string' && data.match(/^₩[\d,]+$/)) {
+          return data;
+        }
+      
+        // 숫자 추출 후 포맷
         const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
         const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
-
+      
         return number.toLocaleString('ko-KR', {
           style: 'currency',
           currency: 'KRW'
