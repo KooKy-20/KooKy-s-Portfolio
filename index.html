@@ -335,8 +335,8 @@ const translations = {
 };
 
 let dataTableKo, dataTableEn;
-  
-function initDataTableKo() {
+
+  function initDataTableKo() {
   if ($.fn.DataTable.isDataTable('#portfolio-ko')) {
     $('#portfolio-ko').DataTable().destroy();
   }
@@ -347,11 +347,15 @@ function initDataTableKo() {
     order: [[3, "desc"]],
     columnDefs: [{
       targets: 3, // 금액 열
-      render: function (data) {
-        if (typeof data !== 'string' || data.includes('₩')) return data;
-        const raw = data.replace(/[^\d]/g, '');
+      render: function (data, type) {
+        if (type !== 'display') return data; // 내부 정렬 처리 시 원본 사용
+
+        if (typeof data === 'string' && data.includes('₩')) return data;
+
+        const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
         const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
+
         return number.toLocaleString('ko-KR', {
           style: 'currency',
           currency: 'KRW'
@@ -372,11 +376,15 @@ function initDataTableEn() {
     order: [[3, "desc"]],
     columnDefs: [{
       targets: 3, // 금액 열
-      render: function (data) {
-        if (typeof data !== 'string' || data.includes('₩')) return data;
-        const raw = data.replace(/[^\d]/g, '');
+      render: function (data, type) {
+        if (type !== 'display') return data;
+
+        if (typeof data === 'string' && data.includes('₩')) return data;
+
+        const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
         const number = parseInt(raw, 10);
         if (isNaN(number)) return data;
+
         return number.toLocaleString('ko-KR', {
           style: 'currency',
           currency: 'KRW'
