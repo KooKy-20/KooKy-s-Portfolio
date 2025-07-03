@@ -359,9 +359,17 @@ function updateTotal(lang) {
   const template = translations[lang].lastUpdated;
   el.textContent = template.replace('{{date}}', date);
 }
+
   
-$(document).ready(function () {
-  $('#portfolio').DataTable({
+// ① DataTable 초기화 함수 정의
+let dataTable;
+
+function initDataTable() {
+  if ($.fn.DataTable.isDataTable('#portfolio')) {
+    $('#portfolio').DataTable().destroy();
+  }
+
+  dataTable = $('#portfolio').DataTable({
     paging: false,
     searching: false,
     info: false,
@@ -370,16 +378,78 @@ $(document).ready(function () {
       {
         targets: 3,
         render: function (data, type, row) {
-          // 한글 또는 영문 tbody에서 공통 적용
           const number = parseInt(data.toString().replace(/[^\d]/g, ''));
           if (isNaN(number)) return data;
-          return number.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+          return number.toLocaleString('ko-KR', {
+            style: 'currency',
+            currency: 'KRW'
+          });
         }
       }
     ]
   });
-});
+}
 
+  // ② 언어 전환 함수 내에서 initDataTable() 호출
+function setLanguage(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang][key]) {
+      el.textContent = translations[lang][key]
+        .replace('{{amount}}', '')
+        .replace('{{date}}', '');
+    }
+  });
+
+  if (lang === 'ko') {
+    document.getElementById('tbody-ko').style.display = '';
+    document.getElementById('tbody-en').style.display = 'none';
+  } else {
+    document.getElementById('tbody-ko').style.display = 'none';
+    document.getElementById('tbody-en').style.display = '';
+  }
+
+  if (window.sectorChart) {
+    sectorChart.data.labels = translations[lang].labels;
+    sectorChart.update();
+  }
+
+  updateTotal(lang);
+  updateLastUpdated(lang);
+  initDataTable();
+}
+
+  // ③ 총합 업데이트
+function updateTotal(lang) {
+  const visibleTbodyId = lang === 'ko' ? 'tbody-ko' : 'tbody-en';
+  let sum = 0;
+
+  document.querySelectorAll(`#${visibleTbodyId} tr`).forEach(row => {
+    const amountText = row.children[3]?.textContent.replace(/[^\d]/g, '');
+    const amount = parseInt(amountText, 10);
+    if (!isNaN(amount)) sum += amount;
+  });
+
+  const formatted = sum.toLocaleString('en-US');
+  const template = translations[lang].total;
+  const translated = template.replace('{{amount}}', formatted);
+
+  document.getElementById("totalAmount").textContent = translated;
+}
+
+// ④ 업데이트일
+function updateLastUpdated(lang) {
+  const el = document.getElementById("lastUpdated");
+  const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
+  const template = translations[lang].lastUpdated;
+  el.textContent = template.replace('{{date}}', date);
+}
+
+  // ⑤ 최초 실행
+$(document).ready(function () {
+  initDataTable(); // 초기 DataTable 세팅
+});
+  
     window.addEventListener('DOMContentLoaded', () => {
     setLanguage('ko'); // 또는 'en'
   });
