@@ -179,20 +179,22 @@ window.sectorChart = new Chart(ctx, {
   });
 </script>
 
+<!-- ✅ 다국어 지원 테이블 구조 (테이블 2개 분리) -->
 <div class="table-wrapper">
-  <table id="portfolio" class="display">  
-  <thead>
-    <tr>
-    <th data-i18n="category">분류</th>
-    <th data-i18n="assetName">자산명</th>
-    <th data-i18n="ticker">티커</th>
-    <th data-i18n="amount">금액</th>
-    <th data-i18n="ratio">비중</th>
-    <th data-i18n="sector">섹터</th>
-    </tr>
-  </thead>
-<tbody id="tbody-ko">
-  <!-- 한국어 버전 데이터 -->
+  <!-- 한국어 테이블 -->
+  <table id="portfolio-ko" class="display">
+    <thead>
+      <tr>
+        <th data-i18n="category">분류</th>
+        <th data-i18n="assetName">자산명</th>
+        <th data-i18n="ticker">티커</th>
+        <th data-i18n="amount">금액</th>
+        <th data-i18n="ratio">비중</th>
+        <th data-i18n="sector">섹터</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 한국어 버전 데이터 -->
   <tr><td>현금</td><td>원화</td><td>KRW</td><td>7564539</td><td>8%</td><td>현금/채권</td></tr>
   <tr><td>현금</td><td>달러</td><td>USD</td><td>1813033</td><td>2%</td><td>현금/채권</td></tr>
   <tr><td>현금</td><td>미국채</td><td>UST10Y</td><td>8103933</td><td>8%</td><td>현금/채권</td></tr>
@@ -228,9 +230,22 @@ window.sectorChart = new Chart(ctx, {
   <tr><td>기타</td><td>금ETF(IAU)</td><td>IAU</td><td>0</td><td>0%</td><td>기타</td></tr>
   <tr><td>기타</td><td>금ETF(KRX)</td><td>132030.KQ</td><td>0</td><td>0%</td><td>기타</td></tr>
   <tr><td>기타</td><td>비트코인</td><td>BTC</td><td>2529103</td><td>3%</td><td>기타</td></tr>
-</tbody>
+    </tbody>
+  </table>
 
-<tbody id="tbody-en" style="display: none;">
+  <!-- 영어 테이블 -->
+  <table id="portfolio-en" class="display" style="display: none;">
+    <thead>
+      <tr>
+        <th data-i18n="category">Category</th>
+        <th data-i18n="assetName">Asset Name</th>
+        <th data-i18n="ticker">Ticker</th>
+        <th data-i18n="amount">Amount</th>
+        <th data-i18n="ratio">Weight</th>
+        <th data-i18n="sector">Sector</th>
+      </tr>
+    </thead>
+    <tbody>
   <!-- 영어 버전 데이터 -->
   <tr><td>Cash</td><td>KRW</td><td>KRW</td><td>7564539</td><td>8%</td><td>Cash/Bond</td></tr>
   <tr><td>Cash</td><td>USD</td><td>USD</td><td>1813033</td><td>2%</td><td>Cash/Bond</td></tr>
@@ -267,9 +282,8 @@ window.sectorChart = new Chart(ctx, {
   <tr><td>Others</td><td>Gold ETF (IAU)</td><td>IAU</td><td>0</td><td>0%</td><td>Others</td></tr>
   <tr><td>Others</td><td>Gold ETF (KRX)</td><td>132030.KQ</td><td>0</td><td>0%</td><td>Others</td></tr>
   <tr><td>Others</td><td>Bitcoin</td><td>BTC</td><td>2529103</td><td>3%</td><td>Others</td></tr>
-</tbody>
-    
-</table>
+    </tbody>
+  </table>
 </div>
 
 <p id="totalAmount" data-i18n="total"></p>  
@@ -308,91 +322,49 @@ const translations = {
 
   }
 };
+
+let dataTableKo, dataTableEn;
   
-  function setLanguage(lang) {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (translations[lang][key]) {
-      el.textContent = translations[lang][key]
-        .replace('{{amount}}', '') // 총합 기본 텍스트 처리
-        .replace('{{date}}', '');  // 업데이트 기본 텍스트 처리
-    }
-  });
-
-  if (lang === 'ko') {
-    document.getElementById('tbody-ko').style.display = '';
-    document.getElementById('tbody-en').style.display = 'none';
-  } else {
-    document.getElementById('tbody-ko').style.display = 'none';
-    document.getElementById('tbody-en').style.display = '';
+function initDataTableKo() {
+  if ($.fn.DataTable.isDataTable('#portfolio-ko')) {
+    $('#portfolio-ko').DataTable().destroy();
   }
-
-  if (window.sectorChart) {
-    sectorChart.data.labels = translations[lang].labels;
-    sectorChart.update();
-  }
-
-  updateTotal(lang);
-  updateLastUpdated(lang);
-}
-
-function updateTotal(lang) {
-  let sum = 0;
-  const visibleTbodyId = lang === 'ko' ? 'tbody-ko' : 'tbody-en';
-  document.querySelectorAll(`#${visibleTbodyId} tr`).forEach(row => {
-    const amountText = row.children[3]?.textContent.replace(/[^\d]/g, '');
-    const amount = parseInt(amountText, 10);
-    if (!isNaN(amount)) sum += amount;
-  });
-
-  const formatted = sum.toLocaleString('en-US');
-  const template = translations[lang].total;
-  const translated = template.replace('{{amount}}', formatted);
-
-  const totalEl = document.getElementById("totalAmount");
-  totalEl.textContent = translated;
-}
-
-  function updateLastUpdated(lang) {
-  const el = document.getElementById("lastUpdated");
-  const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
-  const template = translations[lang].lastUpdated;
-  el.textContent = template.replace('{{date}}', date);
-}
-
-  
-// ① DataTable 초기화 함수 정의
-let dataTable;
-
-function initDataTable() {
-  if ($.fn.DataTable.isDataTable('#portfolio')) {
-    $('#portfolio').DataTable().clear().destroy(); // 기존 인스턴스 정리
-  }
-
-  $('#portfolio').DataTable({
+  dataTableKo = $('#portfolio-ko').DataTable({
     paging: false,
     searching: false,
     info: false,
     order: [[3, "desc"]],
-    destroy: true, // 기존 테이블 제거
-    retrieve: true, // 테이블 유지
-    columnDefs: [
-      {
-        targets: 3,
-        render: function (data, type, row) {
-          const number = parseInt(data.toString().replace(/[^\d]/g, ''));
-          if (isNaN(number)) return data;
-          return number.toLocaleString('ko-KR', {
-            style: 'currency',
-            currency: 'KRW'
-          });
-        }
+    columnDefs: [{
+      targets: 3,
+      render: function (data) {
+        const number = parseInt(data.toString().replace(/[^\d]/g, ''));
+        if (isNaN(number)) return data;
+        return number.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
       }
-    ]
+    }]
   });
 }
 
-  // ② 언어 전환 함수 내에서 initDataTable() 호출
+function initDataTableEn() {
+  if ($.fn.DataTable.isDataTable('#portfolio-en')) {
+    $('#portfolio-en').DataTable().destroy();
+  }
+  dataTableEn = $('#portfolio-en').DataTable({
+    paging: false,
+    searching: false,
+    info: false,
+    order: [[3, "desc"]],
+    columnDefs: [{
+      targets: 3,
+      render: function (data) {
+        const number = parseInt(data.toString().replace(/[^\d]/g, ''));
+        if (isNaN(number)) return data;
+        return number.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+      }
+    }]
+  });
+}
+
 function setLanguage(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -404,50 +376,38 @@ function setLanguage(lang) {
   });
 
   if (lang === 'ko') {
-    document.getElementById('tbody-ko').style.display = '';
-    document.getElementById('tbody-en').style.display = 'none';
+    document.getElementById('portfolio-ko').style.display = '';
+    document.getElementById('portfolio-en').style.display = 'none';
+    initDataTableKo();
   } else {
-    document.getElementById('tbody-ko').style.display = 'none';
-    document.getElementById('tbody-en').style.display = '';
-  }
-
-  if (window.sectorChart) {
-    sectorChart.data.labels = translations[lang].labels;
-    sectorChart.update();
+    document.getElementById('portfolio-ko').style.display = 'none';
+    document.getElementById('portfolio-en').style.display = '';
+    initDataTableEn();
   }
 
   updateTotal(lang);
   updateLastUpdated(lang);
-  initDataTable();
 }
 
-  // ③ 총합 업데이트
 function updateTotal(lang) {
-  const visibleTbodyId = lang === 'ko' ? 'tbody-ko' : 'tbody-en';
+  const tableId = lang === 'ko' ? 'portfolio-ko' : 'portfolio-en';
   let sum = 0;
-
-  document.querySelectorAll(`#${visibleTbodyId} tr`).forEach(row => {
+  document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
     const amountText = row.children[3]?.textContent.replace(/[^\d]/g, '');
     const amount = parseInt(amountText, 10);
     if (!isNaN(amount)) sum += amount;
   });
-
   const formatted = sum.toLocaleString('en-US');
-  const template = translations[lang].total;
-  const translated = template.replace('{{amount}}', formatted);
-
-  document.getElementById("totalAmount").textContent = translated;
+  document.getElementById("totalAmount").textContent =
+    translations[lang].total.replace('{{amount}}', formatted);
 }
 
-// ④ 업데이트일
 function updateLastUpdated(lang) {
-  const el = document.getElementById("lastUpdated");
   const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
-  const template = translations[lang].lastUpdated;
-  el.textContent = template.replace('{{date}}', date);
+  document.getElementById("lastUpdated").textContent =
+    translations[lang].lastUpdated.replace('{{date}}', date);
 }
 
-  // ⑤ 최초 실행
 $(document).ready(function () {
   initDataTable(); // 초기 DataTable 세팅
 });
