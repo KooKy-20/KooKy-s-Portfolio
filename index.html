@@ -308,7 +308,7 @@ const translations = {
 
   }
 };
-
+  
   function setLanguage(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -379,8 +379,9 @@ $('#portfolio').DataTable({
 });
   });
 
-    // 페이지 로드 후 기본 언어 설정
-  setLanguage('ko'); // 또는 'en'
+    window.addEventListener('DOMContentLoaded', () => {
+    setLanguage('ko'); // 또는 'en'
+  });
   
 </script>
 
