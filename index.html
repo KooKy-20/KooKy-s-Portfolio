@@ -3,31 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <title>KooKy's Portfolio</title>
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
   <style>
+    body {
+      font-family: sans-serif;
+      margin: 2em;
+    }
     table {
-      border-collapse: collapse;
       width: 100%;
+      border-collapse: collapse;
     }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      cursor: pointer;
+    h2 {
+      margin-bottom: 1em;
     }
   </style>
 </head>
 <body>
 
 <h2>KooKy's Portfolio (2025.06.30 기준)</h2>
-<table id="portfolio">
+
+<table id="portfolio" class="display">
   <thead>
     <tr>
-      <th onclick="sortTable(0)">분류</th>
-      <th onclick="sortTable(1)">자산명</th>
-      <th onclick="sortTable(2)">금액</th>
-      <th onclick="sortTable(3)">비중</th>
+      <th>분류</th>
+      <th>자산명</th>
+      <th>금액</th>
+      <th>비중</th>
     </tr>
   </thead>
   <tbody>
@@ -72,44 +74,17 @@
 <p><strong>총합:</strong> ₩ 99,576,722</p>
 <p><strong>업데이트:</strong> 2025.06.30</p>
 
+<!-- jQuery + DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
-function sortTable(n) {
-  const table = document.getElementById("portfolio");
-  let switching = true;
-  let dir = "asc";
-  let switchcount = 0;
-
-  while (switching) {
-    switching = false;
-    const rows = table.rows;
-    for (let i = 1; i < rows.length - 1; i++) {
-      let shouldSwitch = false;
-      const x = rows[i].getElementsByTagName("TD")[n];
-      const y = rows[i + 1].getElementsByTagName("TD")[n];
-
-      let xContent = x.textContent || x.innerText;
-      let yContent = y.textContent || y.innerText;
-
-      const xNum = parseFloat(xContent.replace(/[₩,%\s]/g, '')) || 0;
-      const yNum = parseFloat(yContent.replace(/[₩,%\s]/g, '')) || 0;
-
-      if (dir == "asc" ? xNum > yNum : xNum < yNum) {
-        shouldSwitch = true;
-        break;
-      }
-    }
-    if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-      switchcount++;
-    } else {
-      if (switchcount == 0 && dir == "asc") {
-        dir = "desc";
-        switching = true;
-      }
-    }
-  }
-}
+  $(document).ready(function () {
+    $('#portfolio').DataTable({
+      paging: true,
+      searching: true,
+      order: [[2, "desc"]] // 기본 정렬: 금액 내림차순
+    });
+  });
 </script>
 
 </body>
