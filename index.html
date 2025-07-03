@@ -141,7 +141,7 @@
     }]
   };
 
-  new Chart(ctx, {
+window.sectorChart = new Chart(ctx, {
     type: 'pie',
     data: data,
     options: {
@@ -247,6 +247,14 @@ const translations = {
     amount: "금액",
     ratio: "비중",
     sector: "섹터",
+    chartTitle: "섹터별 자산 비중",
+    category: "분류",
+    assetName: "자산명",
+    ticker: "티커",
+    amount: "금액",
+    ratio: "비중",
+    sector: "섹터",
+    labels: ["현금/채권", "테크", "산업재", "금융", "소비재/서비스", "기타"]
     // 필요한 만큼 추가
   },
   en: {
@@ -257,7 +265,16 @@ const translations = {
     amount: "Amount",
     ratio: "Weight",
     sector: "Sector",
+    chartTitle: "Asset Allocation by Sector",
+    category: "Category",
+    assetName: "Asset Name",
+    ticker: "Ticker",
+    amount: "Amount",
+    ratio: "Weight",
+    sector: "Sector",
+    labels: ["Cash/Bond", "Tech", "Industrials", "Finance", "Consumer", "Others"]
     // 필요한 만큼 추가
+
   }
 };
 function setLanguage(lang) {
@@ -267,6 +284,11 @@ function setLanguage(lang) {
       el.textContent = translations[lang][key];
     }
   });
+  
+  if (window.sectorChart) {
+    sectorChart.data.labels = translations[lang].labels;
+    sectorChart.update();
+  }
 }
   
   $(document).ready(function () {
