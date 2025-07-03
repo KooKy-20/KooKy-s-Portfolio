@@ -123,12 +123,33 @@ backgroundColor: [
     }]
   };
 
+  // 정렬
+  const sorted = labels.map((label, i) => ({
+    label: label,
+    value: values[i],
+    color: colors[i]
+  })).sort((a, b) => b.value - a.value);
+
+  const sortedLabels = sorted.map(item => item.label);
+  const sortedValues = sorted.map(item => item.value);
+  const sortedColors = sorted.map(item => item.color);
+
+  const data = {
+    labels: sortedLabels,
+    datasets: [{
+      data: sortedValues,
+      backgroundColor: sortedColors,
+      hoverOffset: 10
+    }]
+  };
+
   new Chart(ctx, {
     type: 'pie',
     data: data,
     options: {
       responsive: true,
       maintainAspectRatio: true,
+      rotation: 0,
       plugins: {
         legend: { display: false },
       datalabels: {
@@ -136,7 +157,7 @@ backgroundColor: [
         font: {
           size: 14 
         },
-        anchor: 'end',
+        anchor: 'center',
         align: 'center',
         formatter: function(value, context) {
           const total = context.chart._metasets[0].total;
