@@ -88,15 +88,6 @@
     margin-top: 40px;
   }
 
-    th.sorting::after,
-    th.sorting::before,
-    th.sorting_asc::after,
-    th.sorting_asc::before,
-    th.sorting_desc::after,
-    th.sorting_desc::after {
-      font-size: 8px;
-  }
-
   @media (max-width: 600px) {  
     .lang-switcher {
       position: static;
@@ -140,9 +131,21 @@
       
   }
 </style>
-</head>
-<body>
 
+<style>
+  th.sorting::after,
+  th.sorting::before,
+  th.sorting_asc::after,
+  th.sorting_asc::before,
+  th.sorting_desc::after,
+  th.sorting_desc::before {
+    font-size: 8px !important;
+  }
+</style>
+  
+</head>
+
+<body>
 <!-- 상단 제목과 언어 버튼 -->
 <div style="position: relative; margin-top: 20px; margin-bottom: 20px;">
   <!-- 가운데 정렬 제목 -->
