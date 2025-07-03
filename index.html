@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>KooKy's Portfolio</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h2>KooKy's Portfolio (2025.06.30 기준)</h2>
+<table id="portfolio">
+  <thead>
+    <tr>
+      <th onclick="sortTable(0)">분류</th>
+      <th onclick="sortTable(1)">자산명</th>
+      <th onclick="sortTable(2)">금액</th>
+      <th onclick="sortTable(3)">비중</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>현금</td><td>원화</td><td>7564539</td><td>8%</td></tr>
+    <tr><td>현금</td><td>달러</td><td>1813033</td><td>2%</td></tr>
+    <tr><td>현금</td><td>미국채</td><td>8103933</td><td>8%</td></tr>
+    <tr><td>현금</td><td>미국채ETF</td><td>6450580</td><td>6%</td></tr>
+    <tr><td>해외주식</td><td>테슬라</td><td>10490784</td><td>11%</td></tr>
+    <tr><td>해외주식</td><td>애플</td><td>6364747</td><td>6%</td></tr>
+    <tr><td>해외주식</td><td>GE버노바</td><td>2156284</td><td>2%</td></tr>
+    <tr><td>해외주식</td><td>제이피모건</td><td>3139377</td><td>3%</td></tr>
+    <tr><td>해외주식</td><td>골드만삭스</td><td>2875858</td><td>3%</td></tr>
+    <tr><td>해외주식</td><td>쿠팡</td><td>1907781</td><td>2%</td></tr>
+    <tr><td>해외주식</td><td>인튜이티브서지컬</td><td>1474611</td><td>1%</td></tr>
+    <tr><td>해외주식</td><td>알파벳A</td><td>1435778</td><td>1%</td></tr>
+    <tr><td>해외주식</td><td>GE에어로스페이스</td><td>349161</td><td>0%</td></tr>
+    <tr><td>해외주식</td><td>TSMC</td><td>310190</td><td>0%</td></tr>
+    <tr><td>국내주식</td><td>두산에너빌리티</td><td>5092500</td><td>5%</td></tr>
+    <tr><td>국내주식</td><td>CJ</td><td>4135200</td><td>4%</td></tr>
+    <tr><td>국내주식</td><td>SK하이닉스</td><td>3198250</td><td>3%</td></tr>
+    <tr><td>국내주식</td><td>SK텔레콤</td><td>2530000</td><td>3%</td></tr>
+    <tr><td>국내주식</td><td>SK이노베이션</td><td>2400000</td><td>2%</td></tr>
+    <tr><td>국내주식</td><td>현대중공업</td><td>2989000</td><td>3%</td></tr>
+    <tr><td>국내주식</td><td>현대차</td><td>2912000</td><td>3%</td></tr>
+    <tr><td>국내주식</td><td>삼성전자</td><td>1703800</td><td>2%</td></tr>
+    <tr><td>국내주식</td><td>두산로보틱스</td><td>1244500</td><td>1%</td></tr>
+    <tr><td>국내주식</td><td>한화에어로스페이스</td><td>1706000</td><td>2%</td></tr>
+    <tr><td>국내주식</td><td>현대모템</td><td>2211000</td><td>2%</td></tr>
+    <tr><td>국내주식</td><td>LIG넥스원</td><td>0</td><td>0%</td></tr>
+    <tr><td>국내주식</td><td>LG에너지솔루션</td><td>895500</td><td>1%</td></tr>
+    <tr><td>국내주식</td><td>LG이노텍</td><td>760500</td><td>1%</td></tr>
+    <tr><td>국내주식</td><td>삼성SDI</td><td>705800</td><td>1%</td></tr>
+    <tr><td>국내주식</td><td>오뚜기</td><td>400500</td><td>0%</td></tr>
+    <tr><td>국내주식</td><td>비바리퍼블리카</td><td>2561913</td><td>3%</td></tr>
+    <tr><td>기타</td><td>금</td><td>7164500</td><td>7%</td></tr>
+    <tr><td>기타</td><td>금ETF(IAU)</td><td>0</td><td>0%</td></tr>
+    <tr><td>기타</td><td>금ETF(KRX)</td><td>0</td><td>0%</td></tr>
+    <tr><td>기타</td><td>비트코인</td><td>2529103</td><td>3%</td></tr>
+  </tbody>
+</table>
+
+<p><strong>총합:</strong> ₩ 99,576,722</p>
+<p><strong>업데이트:</strong> 2025.06.30</p>
+
+<script>
+function sortTable(n) {
+  const table = document.getElementById("portfolio");
+  let switching = true;
+  let dir = "asc";
+  let switchcount = 0;
+
+  while (switching) {
+    switching = false;
+    const rows = table.rows;
+    for (let i = 1; i < rows.length - 1; i++) {
+      let shouldSwitch = false;
+      const x = rows[i].getElementsByTagName("TD")[n];
+      const y = rows[i + 1].getElementsByTagName("TD")[n];
+
+      let xContent = x.textContent || x.innerText;
+      let yContent = y.textContent || y.innerText;
+
+      const xNum = parseFloat(xContent.replace(/[₩,%\s]/g, '')) || 0;
+      const yNum = parseFloat(yContent.replace(/[₩,%\s]/g, '')) || 0;
+
+      if (dir == "asc" ? xNum > yNum : xNum < yNum) {
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+
+</body>
+</html>
