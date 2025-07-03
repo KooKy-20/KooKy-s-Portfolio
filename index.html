@@ -349,19 +349,24 @@ let dataTableKo, dataTableEn;
       targets: 3, // 금액 열
       render: function (data, type) {
         if (type !== 'display') return data;
-      
-        if (typeof data === 'string' && data.trim().match(/^₩[\d,]+(\.\d{1,2})?$/)) {
-          return data; // 이미 포맷된 값이면 그대로 반환
+        
+        if (typeof data === 'number') {
+          return data.toLocaleString('ko-KR', {
+            style: 'currency',
+            currency: 'KRW'
+          });
         }
       
-        const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
-        const number = parseInt(raw, 10);
-        if (isNaN(number)) return data;
+        // 숫자처럼 보이는 문자열만 변환
+        const number = Number(String(data).replace(/[^\d]/g, ''));
+        if (!isNaN(number) && number > 0) {
+          return number.toLocaleString('ko-KR', {
+            style: 'currency',
+            currency: 'KRW'
+          });
+        }
       
-        return number.toLocaleString('ko-KR', {
-          style: 'currency',
-          currency: 'KRW'
-        });
+        return data;
       }
     }]
   });
@@ -380,19 +385,24 @@ function initDataTableEn() {
       targets: 3, // 금액 열
       render: function (data, type) {
         if (type !== 'display') return data;
-      
-        if (typeof data === 'string' && data.trim().match(/^₩[\d,]+(\.\d{1,2})?$/)) {
-          return data; // 이미 포맷된 값이면 그대로 반환
+        
+        if (typeof data === 'number') {
+          return data.toLocaleString('ko-KR', {
+            style: 'currency',
+            currency: 'KRW'
+          });
         }
       
-        const raw = typeof data === 'string' ? data.replace(/[^\d]/g, '') : data;
-        const number = parseInt(raw, 10);
-        if (isNaN(number)) return data;
+        // 숫자처럼 보이는 문자열만 변환
+        const number = Number(String(data).replace(/[^\d]/g, ''));
+        if (!isNaN(number) && number > 0) {
+          return number.toLocaleString('ko-KR', {
+            style: 'currency',
+            currency: 'KRW'
+          });
+        }
       
-        return number.toLocaleString('ko-KR', {
-          style: 'currency',
-          currency: 'KRW'
-        });
+        return data;
       }
     }]
   });
