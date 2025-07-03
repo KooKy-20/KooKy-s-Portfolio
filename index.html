@@ -336,7 +336,7 @@ const translations = {
 
 let dataTableKo, dataTableEn;
 
-  function initDataTableKo() {
+function initDataTableKo() {
   if ($.fn.DataTable.isDataTable('#portfolio-ko')) {
     $('#portfolio-ko').DataTable().destroy();
   }
@@ -346,27 +346,15 @@ let dataTableKo, dataTableEn;
     info: false,
     order: [[3, "desc"]],
     columnDefs: [{
-      targets: 3, // 금액 열
+      targets: 3,
       render: function (data, type) {
         if (type !== 'display') return data;
-        
-        if (typeof data === 'number') {
-          return data.toLocaleString('ko-KR', {
-            style: 'currency',
-            currency: 'KRW'
-          });
-        }
-      
-        // 숫자처럼 보이는 문자열만 변환
-        const number = Number(String(data).replace(/[^\d]/g, ''));
-        if (!isNaN(number) && number > 0) {
-          return number.toLocaleString('ko-KR', {
-            style: 'currency',
-            currency: 'KRW'
-          });
-        }
-      
-        return data;
+        const num = parseInt(String(data).replace(/[^\d]/g, ''), 10);
+        if (isNaN(num)) return data;
+        return num.toLocaleString('ko-KR', {
+          style: 'currency',
+          currency: 'KRW'
+        });
       }
     }]
   });
@@ -382,27 +370,15 @@ function initDataTableEn() {
     info: false,
     order: [[3, "desc"]],
     columnDefs: [{
-      targets: 3, // 금액 열
+      targets: 3,
       render: function (data, type) {
         if (type !== 'display') return data;
-        
-        if (typeof data === 'number') {
-          return data.toLocaleString('ko-KR', {
-            style: 'currency',
-            currency: 'KRW'
-          });
-        }
-      
-        // 숫자처럼 보이는 문자열만 변환
-        const number = Number(String(data).replace(/[^\d]/g, ''));
-        if (!isNaN(number) && number > 0) {
-          return number.toLocaleString('ko-KR', {
-            style: 'currency',
-            currency: 'KRW'
-          });
-        }
-      
-        return data;
+        const num = parseInt(String(data).replace(/[^\d]/g, ''), 10);
+        if (isNaN(num)) return data;
+        return num.toLocaleString('ko-KR', {
+          style: 'currency',
+          currency: 'KRW'
+        });
       }
     }]
   });
