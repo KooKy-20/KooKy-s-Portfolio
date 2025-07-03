@@ -366,14 +366,16 @@ let dataTable;
 
 function initDataTable() {
   if ($.fn.DataTable.isDataTable('#portfolio')) {
-    $('#portfolio').DataTable().destroy();
+    $('#portfolio').DataTable().clear().destroy(); // 기존 인스턴스 정리
   }
 
-  dataTable = $('#portfolio').DataTable({
+  $('#portfolio').DataTable({
     paging: false,
     searching: false,
     info: false,
     order: [[3, "desc"]],
+    destroy: true, // 기존 테이블 제거
+    retrieve: true, // 테이블 유지
     columnDefs: [
       {
         targets: 3,
