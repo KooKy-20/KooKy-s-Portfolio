@@ -89,36 +89,6 @@
 <script>
   const ctx = document.getElementById('sectorChart').getContext('2d');
 
-  const data = {
-    labels: [
-      '현금/채권',
-      '테크',
-      '산업재',
-      '금융',
-      '소비재/서비스',
-      '기타'
-    ],
-    datasets: [{
-      data: [
-        23932085,
-        29563703,
-        19406752,
-        6015235,
-        11598894,
-        9693603
-      ],
-backgroundColor: [
-        '#4BC0C0', 
-        '#FF6384', 
-        '#FFCE56', 
-        '#36A2EB', 
-        '#9966FF', 
-        '#999999'  
-      ],
-      hoverOffset: 10
-    }]
-  };
-
    // 원본 데이터 정의
   const labels = ['현금/채권', '테크', '산업재', '금융', '소비재/서비스', '기타'];
   const values = [23932085, 29563703, 19406752, 6015235, 11598894, 9693603];
