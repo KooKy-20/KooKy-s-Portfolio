@@ -162,11 +162,10 @@ window.sectorChart = new Chart(ctx, {
       datalabels: {
         color: '#111',
         font: {
-          size: 14
+          size: 15
         },
-        anchor: 'center',       // 중심 기준
-        align: 'start',         // 시작점부터 바깥쪽 방향
-        offset: -20,            // 안쪽으로 약간 이동시킴
+        anchor: 'center', // 각 섹터 중심 anchor
+        align: 'end',  // 중심 기준 정렬
         formatter: function (value, context) {
           const total = context.chart._metasets[0].total;
           const percent = ((value / total) * 100).toFixed(1);
