@@ -96,11 +96,6 @@
     width: 500px;   /* 모바일은 더 크게 */
     }
     
-    #sectorChart {
-      transform: scale(0.9);     /* 10% 축소 */
-      transform-origin: center;  /* 가운데 기준으로 축소 */
-    }
-
     body {
       font-size: 15px;
       padding: 1.5rem 1rem;
@@ -189,7 +184,7 @@ window.sectorChart = new Chart(ctx, {
       datalabels: {
         color: '#000',
         font: {
-          size: 15,
+          size: window.innerWidth <= 600 ? 12 : 15  // 모바일이면 글자 작게
         },
         anchor: 'center',
         align: 'end',
