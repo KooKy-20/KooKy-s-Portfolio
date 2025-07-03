@@ -132,7 +132,7 @@
 <!-- 파이차트 섹션 -->
 <h3 style="text-align: center; margin-top: 40px;" data-i18n="chartTitle">섹터별 자산 비중</h3>
 
-<div class="chart-container">
+<div class="chart-container" style="height: 420px;">
   <canvas id="sectorChart"></canvas>
 </div>
 
@@ -169,9 +169,9 @@ window.sectorChart = new Chart(ctx, {
   data: data,
   options: {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: false, // ✅ 차트 높이 자동 조정 가능하게 변경
     layout: {
-      padding: 30
+      padding: 30 // ✅ 라벨이 잘리지 않도록 내부 여백 확보
     },
     plugins: {
       legend: { display: false },
