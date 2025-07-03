@@ -143,8 +143,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <!-- 파이차트 섹션 -->
-<h3 style="text-align: center; margin-top: 40px;" data-i18n="chartTitle">섹터별 자산 비중</h3>
-
 <div class="chart-container">
   <canvas id="sectorChart"></canvas>
 </div>
@@ -187,6 +185,13 @@ window.sectorChart = new Chart(ctx, {
       padding: 30 // ✅ 라벨이 잘리지 않도록 내부 여백 확보
     },
     plugins: {
+      title: {
+      display: true,
+      text: '섹터별 자산 비중',
+      font: {
+        size: 16,
+        weight: 'bold'
+      },
       legend: { display: false },
       datalabels: {
         color: '#000',
