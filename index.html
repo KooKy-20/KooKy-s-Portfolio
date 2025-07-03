@@ -136,6 +136,8 @@ backgroundColor: [
         font: {
           size: 14 
         },
+        anchor: 'end',
+        align: 'end',
         formatter: function(value, context) {
           const total = context.chart._metasets[0].total;
           const percent = ((value / total) * 100).toFixed(1);
