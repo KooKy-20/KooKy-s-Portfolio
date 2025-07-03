@@ -191,7 +191,8 @@ window.sectorChart = new Chart(ctx, {
     <th data-i18n="sector">섹터</th>
     </tr>
   </thead>
- <tbody>
+<tbody id="tbody-ko">
+  <!-- 한국어 버전 데이터 -->
   <tr><td>현금</td><td>원화</td><td>KRW</td><td>7564539</td><td>8%</td><td>현금/채권</td></tr>
   <tr><td>현금</td><td>달러</td><td>USD</td><td>1813033</td><td>2%</td><td>현금/채권</td></tr>
   <tr><td>현금</td><td>미국채</td><td>UST10Y</td><td>8103933</td><td>8%</td><td>현금/채권</td></tr>
@@ -228,6 +229,46 @@ window.sectorChart = new Chart(ctx, {
   <tr><td>기타</td><td>금ETF(KRX)</td><td>132030.KQ</td><td>0</td><td>0%</td><td>기타</td></tr>
   <tr><td>기타</td><td>비트코인</td><td>BTC</td><td>2529103</td><td>3%</td><td>기타</td></tr>
 </tbody>
+
+<tbody id="tbody-en" style="display: none;">
+  <!-- 영어 버전 데이터 -->
+  <tr><td>Cash</td><td>KRW</td><td>KRW</td><td>7564539</td><td>8%</td><td>Cash/Bond</td></tr>
+  <tr><td>Cash</td><td>USD</td><td>USD</td><td>1813033</td><td>2%</td><td>Cash/Bond</td></tr>
+  <tr><td>Cash</td><td>UST10Y</td><td>UST10Y</td><td>8103933</td><td>8%</td><td>Cash/Bond</td></tr>
+  <tr><td>Cash</td><td>IEF</td><td>IEF</td><td>6450580</td><td>6%</td><td>Cash/Bond</td></tr>
+  <tr><td>USA</td><td>Tesla</td><td>TSLA</td><td>10490784</td><td>11%</td><td>Tech</td></tr>
+  <tr><td>USA</td><td>Apple</td><td>AAPL</td><td>6364747</td><td>6%</td><td>Tech</td></tr>
+  <tr><td>USA</td><td>GE Vernova</td><td>GEV</td><td>2156284</td><td>2%</td><td>Industrials</td></tr>
+  <tr><td>USA</td><td>JPMorgan</td><td>JPM</td><td>3139377</td><td>3%</td><td>Finance</td></tr>
+  <tr><td>USA</td><td>Goldman Sachs</td><td>GS</td><td>2875858</td><td>3%</td><td>Finance</td></tr>
+  <tr><td>USA</td><td>Coupang</td><td>CPNG</td><td>1907781</td><td>2%</td><td>Consumer/Services</td></tr>
+  <tr><td>USA</td><td>Intuitive Surgical</td><td>ISRG</td><td>1474611</td><td>1%</td><td>Consumer/Services</td></tr>
+  <tr><td>USA</td><td>Alphabet A</td><td>GOOGL</td><td>1435778</td><td>1%</td><td>Tech</td></tr>
+  <tr><td>USA</td><td>GE Aerospace</td><td>GE</td><td>349161</td><td>0%</td><td>Industrials</td></tr>
+  <tr><td>USA</td><td>TSMC</td><td>TSM</td><td>310190</td><td>0%</td><td>Tech</td></tr>
+  <tr><td>Korea</td><td>Doosan Enerbility</td><td>034020.KQ</td><td>5092500</td><td>5%</td><td>Industrials</td></tr>
+  <tr><td>Korea</td><td>CJ</td><td>001040.KQ</td><td>4135200</td><td>4%</td><td>Others</td></tr>
+  <tr><td>Korea</td><td>SK Hynix</td><td>000660.KQ</td><td>3198250</td><td>3%</td><td>Tech</td></tr>
+  <tr><td>Korea</td><td>SK Telecom</td><td>017670.KQ</td><td>2530000</td><td>3%</td><td>Consumer/Services</td></tr>
+  <tr><td>Korea</td><td>SK Innovation</td><td>096770.KQ</td><td>2400000</td><td>2%</td><td>Consumer/Services</td></tr>
+  <tr><td>Korea</td><td>Hyundai Heavy Industries</td><td>329180.KQ</td><td>2989000</td><td>3%</td><td>Industrials</td></tr>
+  <tr><td>Korea</td><td>Hyundai Motor</td><td>005380.KQ</td><td>2912000</td><td>3%</td><td>Industrials</td></tr>
+  <tr><td>Korea</td><td>Samsung Electronics</td><td>005930.KQ</td><td>1703800</td><td>2%</td><td>Tech</td></tr>
+  <tr><td>Korea</td><td>Doosan Robotics</td><td>454910.KQ</td><td>1244500</td><td>1%</td><td>Others</td></tr>
+  <tr><td>Korea</td><td>Hanwha Aerospace</td><td>012450.KQ</td><td>1706000</td><td>2%</td><td>Industrials</td></tr>
+  <tr><td>Korea</td><td>Hyundai Mobis</td><td>097320.KQ</td><td>2211000</td><td>2%</td><td>Industrials</td></tr>
+  <tr><td>Korea</td><td>LIG Nex1</td><td>079550.KQ</td><td>0</td><td>0%</td><td>Industrials</td></tr>
+  <tr><td>Korea</td><td>LG Energy Solution</td><td>373220.KQ</td><td>895500</td><td>1%</td><td>Tech</td></tr>
+  <tr><td>Korea</td><td>LG Innotek</td><td>011070.KQ</td><td>760500</td><td>1%</td><td>Tech</td></tr>
+  <tr><td>Korea</td><td>Samsung SDI</td><td>006400.KQ</td><td>705800</td><td>1%</td><td>Tech</td></tr>
+  <tr><td>Korea</td><td>Ottogi</td><td>007310.KQ</td><td>400500</td><td>0%</td><td>Consumer/Services</td></tr>
+  <tr><td>Korea</td><td>Viva Republica</td><td>비상장</td><td>2561913</td><td>3%</td><td>Consumer/Services</td></tr>
+  <tr><td>Others</td><td>Gold</td><td>XAU</td><td>7164500</td><td>7%</td><td>Others</td></tr>
+  <tr><td>Others</td><td>Gold ETF (IAU)</td><td>IAU</td><td>0</td><td>0%</td><td>Others</td></tr>
+  <tr><td>Others</td><td>Gold ETF (KRX)</td><td>132030.KQ</td><td>0</td><td>0%</td><td>Others</td></tr>
+  <tr><td>Others</td><td>Bitcoin</td><td>BTC</td><td>2529103</td><td>3%</td><td>Others</td></tr>
+</tbody>
+    
 </table>
 </div>
   
@@ -284,6 +325,14 @@ function setLanguage(lang) {
       el.textContent = translations[lang][key];
     }
   });
+
+   if (lang === 'ko') {
+    document.getElementById('tbody-ko').style.display = '';
+    document.getElementById('tbody-en').style.display = 'none';
+  } else if (lang === 'en') {
+    document.getElementById('tbody-ko').style.display = 'none';
+    document.getElementById('tbody-en').style.display = '';
+  }
   
   if (window.sectorChart) {
     sectorChart.data.labels = translations[lang].labels;
