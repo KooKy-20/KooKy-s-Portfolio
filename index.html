@@ -152,42 +152,41 @@ th {
   };
 
 window.sectorChart = new Chart(ctx, {
-    type: 'pie',
-    data: data,
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      rotation: 0,
-      plugins: {
-        legend: { display: false },
+  type: 'pie',
+  data: data,
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false },
       datalabels: {
         color: '#111',
         font: {
-          size: 15 
+          size: 14
         },
-        anchor: 'center',
-        align: 'center',
-        offset: 50,
-        formatter: function(value, context) {
+        anchor: 'center',       // 중심 기준
+        align: 'start',         // 시작점부터 바깥쪽 방향
+        offset: -20,            // 안쪽으로 약간 이동시킴
+        formatter: function (value, context) {
           const total = context.chart._metasets[0].total;
           const percent = ((value / total) * 100).toFixed(1);
           return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
         }
-        },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const value = context.raw.toLocaleString();
-              const total = context.dataset.data.reduce((a, b) => a + b, 0);
-              const percent = ((context.raw / total) * 100).toFixed(1);
-              return `${context.label}: ₩${value} (${percent}%)`;
-            }
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const value = context.raw.toLocaleString();
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percent = ((context.raw / total) * 100).toFixed(1);
+            return `${context.label}: ₩${value} (${percent}%)`;
           }
         }
       }
-    },
-    plugins: [ChartDataLabels]
-  });
+    }
+  },
+  plugins: [ChartDataLabels]
+});
 </script>
 
 <!-- ✅ 다국어 지원 테이블 구조 (테이블 2개 분리) -->
