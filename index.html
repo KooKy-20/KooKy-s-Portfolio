@@ -134,18 +134,18 @@
 
   /* ✅ 데스크탑용 스타일 (모바일보다 나중에 위치해서 덮어씀) */
   @media (min-width: 601px) {
-    th.sorting::before,
-    th.sorting::after,
-    th.sorting_asc::before,
-    th.sorting_asc::after,
-    th.sorting_desc::before,
-    th.sorting_desc::after {
-      font-size: 8px !important;
-      line-height: 1;
-      vertical-align: middle;
-      padding: 0 2px;
-      display: inline-block;
-    }
+  th.sorting::before,
+  th.sorting::after,
+  th.sorting_asc::before,
+  th.sorting_asc::after,
+  th.sorting_desc::before,
+  th.sorting_desc::after {
+    font-size: 8px !important;
+    font-family: inherit !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    margin: 0 !important;
+  }
   }
 </style>
 </head>
