@@ -360,24 +360,25 @@ function updateTotal(lang) {
   el.textContent = template.replace('{{date}}', date);
 }
   
-  $(document).ready(function () {
-$('#portfolio').DataTable({
-  paging: false,       // 페이지네이션 제거
-  searching: false,    // 검색창 제거
-  info: false,         // "Showing 1 to ..." 제거
-  order: [[3, "desc"]],
-  columnDefs: [
-    {
-      targets: 3,
-      render: function (data, type, row) {
-        const number = parseInt(data);
-        if (isNaN(number)) return data;
-        return number.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+$(document).ready(function () {
+  $('#portfolio').DataTable({
+    paging: false,
+    searching: false,
+    info: false,
+    order: [[3, "desc"]],
+    columnDefs: [
+      {
+        targets: 3,
+        render: function (data, type, row) {
+          // 한글 또는 영문 tbody에서 공통 적용
+          const number = parseInt(data.toString().replace(/[^\d]/g, ''));
+          if (isNaN(number)) return data;
+          return number.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+        }
       }
-    }
-  ]
-});
+    ]
   });
+});
 
     window.addEventListener('DOMContentLoaded', () => {
     setLanguage('ko'); // 또는 'en'
