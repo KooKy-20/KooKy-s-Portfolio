@@ -402,20 +402,22 @@ let exchangeRate = 1390; // 기본값
 
 async function fetchExchangeRate() {
   try {
-    const res = await fetch('https://api.exchangerate.host/latest?base=KRW&symbols=USD');
+    const res = await fetch('https://api.frankfurter.app/latest?from=KRW&to=USD');
     const data = await res.json();
-    const rate = data?.rates?.USD;
-    if (rate) {
-      exchangeRate = 1 / rate; // KRW to USD 환산을 위해 뒤집기
+    const usd = data?.rates?.USD;
+    if (usd) {
+      exchangeRate = 1 / usd; // 1 USD ≒ N KRW
       console.log("환율 업데이트:", exchangeRate.toFixed(2), "KRW/USD");
-      // 영어 테이블이 이미 초기화돼 있다면 다시 렌더링
+
+      // 영어 테이블과 총합 업데이트
       if (isEnInitialized) {
         initDataTableEn();
         updateTotal('en');
       }
+      updateExchangeRate('en');
     }
   } catch (err) {
-    console.error('환율 가져오기 실패:', err);
+    console.error('Frankfurter 환율 불러오기 실패:', err);
   }
 }
 
