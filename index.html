@@ -536,6 +536,38 @@ function setLanguage(lang) {
   }
   
   updateChartTitle(lang); 
+
+  // ✅ 차트의 데이터레이블 레이블도 언어에 맞게 갱신
+const chartLabelMap = {
+  sectorChart: 'sector',
+  amountChart: 'assetName',
+  categoryChart: 'category'
+};
+
+for (const chartId of chartIds) {
+  const chart = Chart.getChart(chartId);
+  if (!chart) continue;
+
+  // 기존 라벨 값 (차트 내부 레이블 기준)
+  const oldLabels = chart.data.labels;
+
+  // 테이블에서 대응되는 새로운 라벨 목록
+  const translatedLabels = oldLabels.map(label => {
+    if (lang === 'ko') {
+      // 한글로 되돌리기
+      const index = translations.en.labels.indexOf(label);
+      return index >= 0 ? translations.ko.labels[index] : label;
+    } else {
+      const index = translations.ko.labels.indexOf(label);
+      return index >= 0 ? translations.en.labels[index] : label;
+    }
+  });
+
+  // 라벨 업데이트 후 차트 갱신
+  chart.data.labels = translatedLabels;
+  chart.update();
+}
+  
   updateTotal(lang);
   updateExchangeRate(lang);
   updateLastUpdated(lang);
