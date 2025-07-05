@@ -210,7 +210,7 @@ window.sectorChart = new Chart(ctx, {
     plugins: {
       title: {
         display: true,
-        text: '섹터별 자산 비중',
+        text: translations[lang].chartTitle,
         font: {
           size: 18,
           weight: 'bold'
@@ -498,6 +498,7 @@ function setLanguage(lang) {
       .sort((a, b) => b.value - a.value);
     const newLabels = reordered.map(item => item.label);
     window.sectorChart.data.labels = newLabels;
+    window.sectorChart.options.plugins.title.text = translations[lang].chartTitle;
     window.sectorChart.update();
   }
 
