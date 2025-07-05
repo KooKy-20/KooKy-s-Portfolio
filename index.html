@@ -686,7 +686,15 @@ const chartIds = ['sectorChart', 'amountChart', 'categoryChart'];
 
 function showChart(index) {
   chartIds.forEach((id, i) => {
-    document.getElementById(id).style.display = i === index ? 'block' : 'none';
+    const canvas = document.getElementById(id);
+    canvas.style.display = (i === index) ? 'block' : 'none';
+
+    if (i === index) {
+      const chartInstance = Chart.getChart(id);
+      if (chartInstance) {
+        chartInstance.resize();  // ✅ 여기!
+      }
+    }
   });
   currentChartIndex = index;
 }
