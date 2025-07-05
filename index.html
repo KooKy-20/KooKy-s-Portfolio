@@ -183,10 +183,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <!-- 차트 슬라이더 컨테이너 -->
-<div id="chartSlider" style="position: relative; width: 100%; max-width: 500px; margin: 40px auto;">
+<div id="chartSlider" style="position: relative; width: 100%; max-width: 500px; height: 400px; margin: 40px auto;">
   <canvas id="sectorChart" class="chart-canvas"></canvas>
-  <canvas id="amountChart" class="chart-canvas" style="display: none;"></canvas>
-  <canvas id="categoryChart" class="chart-canvas" style="display: none;"></canvas>
+  <canvas id="amountChart" class="chart-canvas" style="display:none;"></canvas>
+  <canvas id="categoryChart" class="chart-canvas" style="display:none;"></canvas>
 
   <!-- 화살표 버튼 -->
   <button id="prevChart" style="position: absolute; left: -40px; top: 45%; font-size: 24px;">◀</button>
@@ -195,27 +195,10 @@
   
 <script>
   
-  // 정렬
-  const sorted = labels.map((label, i) => ({
-    label: label,
-    value: values[i],
-    color: colors[i]
-  })).sort((a, b) => b.value - a.value);
-
-  const sortedLabels = sorted.map(item => item.label);
-  const sortedValues = sorted.map(item => item.value);
-  const sortedColors = sorted.map(item => item.color);
-
-  const data = {
-    labels: sortedLabels,
-    datasets: [{
-      data: sortedValues,
-      backgroundColor: sortedColors,
-      hoverOffset: 10
-    }]
-  };
-
   function createPieChart(ctxId, title, dataMap) {
+  const ctx = document.getElementById(ctxId)?.getContext('2d');
+  if (!ctx) return;
+    
   const entries = Object.entries(dataMap)
     .map(([label, value]) => ({ label, value }))
     .sort((a, b) => b.value - a.value);
@@ -634,9 +617,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  createPieChart('amountChart', '금액별 자산 비중', nameMap);
-  createPieChart('categoryChart', '분류별 자산 비중', categoryMap);
-  createPieChart('sectorChart', '섹터별 자산 비중', sectorMap);
+  window.amountChart = createPieChart('amountChart', '금액별 자산 비중', nameMap);
+  window.categoryChart = createPieChart('categoryChart', '분류별 자산 비중', categoryMap);
+  window.sectorChart = createPieChart('sectorChart', '섹터별 자산 비중', sectorMap);
 
   // ✅ 반드시 마지막에 다시 호출
   updateTotal('ko');
