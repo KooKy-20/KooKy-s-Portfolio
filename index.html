@@ -589,11 +589,11 @@ function updateLastUpdated(lang) {
     translations[lang].lastUpdated.replace('{{date}}', date);
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  await fetchExchangeRate(); 
-  setLanguage('ko');
-  updateExchangeRate(currentLang);
+window.addEventListener('DOMContentLoaded', async () => {
+  await fetchExchangeRate();       // ✅ 환율 먼저 불러오고
+  setLanguage('ko');               // ✅ 최신 환율로 UI 표시
 });
+  
 </script>
 </body>
 </html>
