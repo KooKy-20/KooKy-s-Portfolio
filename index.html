@@ -172,21 +172,48 @@
 </div>
 
 <script>
+let lang = 'ko';
 
+const values = [23932085, 29563703, 19406752, 6015235, 11598894, 9693603];
+const colors = ['#4BC0C0', '#FF6384', '#FFCE56', '#36A2EB', '#9966FF', '#999999'];
+  
+const translations = {
+  ko: {
+    chartTitle: "섹터별 자산 비중",
+    category: "분류",
+    assetName: "자산명",
+    ticker: "티커",
+    amount: "금액",
+    ratio: "비중",
+    sector: "섹터",
+    labels: ["현금/채권", "테크", "산업재", "금융", "소비재/서비스", "기타"],
+    total: "총합: {{amount}}원",
+    lastUpdated: "업데이트: {{date}}"
+  },
+  en: {
+    chartTitle: "Asset Allocation by Sector",
+    category: "Category",
+    assetName: "Asset Name",
+    ticker: "Ticker",
+    amount: "Amount",
+    ratio: "Weight",
+    sector: "Sector",
+    labels: ["Cash/Bond", "Tech", "Industrials", "Finance", "Consumer", "Others"],
+    total: "Total: ₩{{amount}}",
+    lastUpdated: "Last updated: {{date}}"
+  }
+};
+</script>
+
+<!-- 이후 DOMContentLoaded 내부 -->
+<script>
 window.addEventListener('DOMContentLoaded', () => {
-  
-  let lang = 'ko';
   const ctx = document.getElementById('sectorChart').getContext('2d');
-   // 원본 데이터 정의
-  const labels = ['현금/채권', '테크', '산업재', '금융', '소비재/서비스', '기타'];
-  const values = [23932085, 29563703, 19406752, 6015235, 11598894, 9693603];
-  const colors = ['#4BC0C0', '#FF6384', '#FFCE56', '#36A2EB', '#9966FF', '#999999'];
-  
-  // 정렬
+
+  const labels = translations[lang].labels;
+
   const sorted = labels.map((label, i) => ({
-    label: label,
-    value: values[i],
-    color: colors[i]
+    label, value: values[i], color: colors[i]
   })).sort((a, b) => b.value - a.value);
 
   const sortedLabels = sorted.map(item => item.label);
@@ -201,59 +228,54 @@ window.addEventListener('DOMContentLoaded', () => {
       hoverOffset: 10
     }]
   };
-window.sectorChart = new Chart(ctx, {
-  type: 'pie',
-  data: data,
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    layout: {
-      padding: 30
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: translations[lang].chartTitle,
-        font: {
-          size: 18,
-          weight: 'bold'
+
+  window.sectorChart = new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: 30 },
+      plugins: {
+        title: {
+          display: true,
+          text: translations[lang].chartTitle,
+          font: { size: 18, weight: 'bold' },
+          padding: { bottom: 20 },
+          color: '#111'
         },
-        padding: {
-          bottom: 20
+        legend: { display: false },
+        datalabels: {
+          color: '#000',
+          font: {
+            size: window.innerWidth <= 600 ? 12 : 15
+          },
+          anchor: 'center',
+          align: 'end',
+          textStrokeColor: '#fff',
+          textStrokeWidth: 3,
+          formatter: function(value, context) {
+            const total = context.chart._metasets[0].total;
+            const percent = ((value / total) * 100).toFixed(1);
+            return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
+          }
         },
-        color: '#111'
-      },
-      legend: { display: false },
-      datalabels: {
-        color: '#000',
-        font: {
-          size: window.innerWidth <= 600 ? 12 : 15
-        },
-        anchor: 'center',
-        align: 'end',
-        textStrokeColor: '#fff',
-        textStrokeWidth: 3,
-        formatter: function(value, context) {
-          const total = context.chart._metasets[0].total;
-          const percent = ((value / total) * 100).toFixed(1);
-          return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
-        }
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            const value = context.raw.toLocaleString();
-            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-            const percent = ((context.raw / total) * 100).toFixed(1);
-            return `${context.label}: ₩${value} (${percent}%)`;
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const value = context.raw.toLocaleString();
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percent = ((context.raw / total) * 100).toFixed(1);
+              return `${context.label}: ₩${value} (${percent}%)`;
+            }
           }
         }
       }
-    }
-  },
-  plugins: [ChartDataLabels]
-});
-    setLanguage('ko');
+    },
+    plugins: [ChartDataLabels]
+  });
+
+  setLanguage(lang);
 });
 </script>
 
@@ -398,6 +420,8 @@ const translations = {
     lastUpdated: "Last updated: {{date}}"
   }
 };
+
+let lang = 'ko';
 
 function preserveAmountData(tableId) {
   document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
