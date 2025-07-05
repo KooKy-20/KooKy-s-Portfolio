@@ -180,7 +180,6 @@
 </div>
   
 <script>
-  const ctx = document.getElementById('sectorChart').getContext('2d');
   
   // 정렬
   const sorted = labels.map((label, i) => ({
@@ -263,58 +262,6 @@
   });
 }
   
-window.sectorChart = new Chart(ctx, {
-  type: 'pie',
-  data: data,
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    layout: {
-      padding: 30
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: '섹터별 자산 비중',
-        font: {
-          size: 18,
-          weight: 'bold'
-        },
-        padding: {
-          bottom: 20
-        },
-        color: '#111'
-      },
-      legend: { display: false },
-      datalabels: {
-        color: '#000',
-        font: {
-          size: window.innerWidth <= 600 ? 12 : 15
-        },
-        anchor: 'center',
-        align: 'end',
-        textStrokeColor: '#fff',
-        textStrokeWidth: 3,
-        formatter: function(value, context) {
-          const total = context.chart._metasets[0].total;
-          const percent = ((value / total) * 100).toFixed(1);
-          return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
-        }
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            const value = context.raw.toLocaleString();
-            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-            const percent = ((context.raw / total) * 100).toFixed(1);
-            return `${context.label}: ₩${value} (${percent}%)`;
-          }
-        }
-      }
-    }
-  },
-  plugins: [ChartDataLabels]
-});
 </script>
 
 <!-- ✅ 다국어 지원 테이블 구조 (테이블 2개 분리) -->
