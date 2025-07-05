@@ -154,7 +154,7 @@
   }
 
    .chart-canvas {
-    position: absolute;
+    position: static;
     top: 0;
     left: 0;
     width: 100%;
@@ -182,13 +182,14 @@
     display: flex;
     justify-content: center;
     margin-top: 12px;
-    z-index: 10;
+    z-index: 10;       /* ✅ 차트보다 위에 배치되도록 */
   }
 
   .chart-button-group button {
     font-size: 16px;
     width: 28px;
     height: 28px;
+    pointer-events: auto; /* ✅ 클릭 가능하게 보장 */
   }
 
   #prevChart,
