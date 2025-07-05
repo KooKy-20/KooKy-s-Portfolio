@@ -534,16 +534,6 @@ function setLanguage(lang) {
       dataTableEn.columns.adjust().draw();
     }
   }
-
-  if (window.sectorChart) {
-    const baseLabels = translations[lang].labels;
-    const reordered = baseLabels
-      .map((label, i) => ({ label, value: values[i], color: colors[i] }))
-      .sort((a, b) => b.value - a.value);
-    const newLabels = reordered.map(item => item.label);
-    window.sectorChart.data.labels = newLabels;
-    window.sectorChart.update();
-  }
   
   updateChartTitle(lang); 
   updateTotal(lang);
