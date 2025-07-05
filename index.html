@@ -412,13 +412,6 @@ async function fetchExchangeRate() {
     if (usd) {
       exchangeRate = 1 / usd; // 1 USD ≒ N KRW
       console.log("환율 업데이트:", exchangeRate.toFixed(2), "KRW/USD");
-
-      // 영어 테이블과 총합 업데이트
-      if (isEnInitialized) {
-        initDataTableEn();
-        updateTotal('en');
-      }
-      updateExchangeRate('currentLang');
     }
   } catch (err) {
     console.error('Frankfurter 환율 불러오기 실패:', err);
@@ -597,8 +590,8 @@ function updateLastUpdated(lang) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  await fetchExchangeRate(); 
   setLanguage('ko');
-  fetchExchangeRate();
   updateExchangeRate(currentLang);
 });
 </script>
