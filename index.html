@@ -4,13 +4,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>KooKy's Portfolio</title>
+  <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
 <style>
   .lang-switcher {
     position: absolute;
     top: 5px;
     right: 20px;
   }
+
   .lang-switcher button {
     background-color: #f0f0f0;
     color: #333;
@@ -22,9 +25,11 @@
     cursor: pointer;
     transition: background-color 0.3s;
   }
+
   .lang-switcher button:hover {
     background-color: #e0e0e0;
   }
+
   body {
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 16px;
@@ -35,6 +40,7 @@
     padding: 2rem 1rem;
     line-height: 1.6;
   }
+
   h2, h3 {
     text-align: center;
     font-weight: 600;
@@ -42,6 +48,7 @@
     margin-top: 40px;
     margin-bottom: 24px;
   }
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -50,144 +57,139 @@
     background-color: #fff;
     table-layout: fixed;
   }
+
   th, td {
     padding: 10px 12px;
     border-bottom: 1px solid #ddd;
     text-align: left;
     overflow-wrap: break-word;
   }
+
   th {
     font-weight: 600;
     color: #000;
     background-color: #f9f9f9;
   }
+
   .chart-container {
     max-width: 500px;
     width: 100%;
     height: 400px;
     margin: 40px auto;
   }
+
   #sectorChart {
     transform: scale(1);
     transform-origin: center;
   }
+
   .table-wrapper {
     overflow-x: auto;
     margin-top: 40px;
   }
-  th.sorting::before, th.sorting_asc::before, th.sorting_desc::before{
+
+  th.sorting::before,
+  th.sorting_asc::before,
+  th.sorting_desc::before{
     font-size: 9px !important;
   }
-  th.sorting::after, th.sorting_asc::after, th.sorting_desc::after{
+
+  th.sorting::after,
+  th.sorting_asc::after,
+  th.sorting_desc::after{
     font-size: 8px !important;
   }
+  
+  /* ✅ 모바일용 스타일 */
   @media (max-width: 600px) {
     .lang-switcher {
       position: static;
       text-align: center;
       margin: 10px 0;
     }
+
     .chart-container {
       max-width: 100%;
       width: 500px;
       height: 400px;
       margin: 40px auto;
     }
+
     body {
       font-size: 15px;
       padding: 1.5rem 1rem;
     }
+
     h2, h3 {
       font-size: 18px;
     }
+
     table {
       font-size: 13px;
       text-align: left;
     }
+
     th {
       font-size: 13px;
       padding: 0px 0px;
     }
-    th.sorting::before, th.sorting_asc::before, th.sorting_desc::before{
-      font-size: 8px !important;
-    }
-    th.sorting::after, th.sorting_asc::after, th.sorting_desc::after{
-      font-size: 8px !important;
-    }
+    th.sorting::before,
+    th.sorting_asc::before,
+    th.sorting_desc::before{
+    font-size: 8px !important;
+  }
+
+    th.sorting::after,
+    th.sorting_asc::after,
+    th.sorting_desc::after{
+    font-size: 8px !important;
+  }
   }
 </style>
 </head>
+
 <body>
+<!-- 상단 제목과 언어 버튼 -->
 <div style="position: relative; margin-top: 20px; margin-bottom: 20px;">
-  <h2 style="text-align: center; margin: 0;" data-i18n="chartTitle">섹터별 자산 비중</h2>
+  <!-- 가운데 정렬 제목 -->
+  <h2 style="text-align: center; margin: 0;">KooKy's Portfolio (2025.06.30 기준)</h2>
+  
+  <!-- 언어 전환 버튼 -->
   <div class="lang-switcher">
     <button onclick="setLanguage('ko')">Korean</button>
     <button onclick="setLanguage('en')">English</button>
   </div>
+    
 </div>
+  
+<!-- Chart.js + DataLabels 플러그인 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<!-- 파이차트 섹션 -->
 <div class="chart-container">
   <canvas id="sectorChart"></canvas>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
 <script>
-let lang = 'ko';
-const values = [23932085, 29563703, 19406752, 6015235, 11598894, 9693603];
-const colors = ['#4BC0C0', '#FF6384', '#FFCE56', '#36A2EB', '#9966FF', '#999999'];
-const translations = {
-  ko: {
-    chartTitle: "섹터별 자산 비중",
-    category: "분류",
-    assetName: "자산명",
-    ticker: "티커",
-    amount: "금액",
-    ratio: "비중",
-    sector: "섹터",
-    labels: ["현금/채권", "테크", "산업재", "금융", "소비재/서비스", "기타"],
-    total: "총합: {{amount}}원",
-    lastUpdated: "업데이트: {{date}}"
-  },
-  en: {
-    chartTitle: "Asset Allocation by Sector",
-    category: "Category",
-    assetName: "Asset Name",
-    ticker: "Ticker",
-    amount: "Amount",
-    ratio: "Weight",
-    sector: "Sector",
-    labels: ["Cash/Bond", "Tech", "Industrials", "Finance", "Consumer", "Others"],
-    total: "Total: ₩{{amount}}",
-    lastUpdated: "Last updated: {{date}}"
-  }
-};
-
-function updateTotal(lang) {
-  const tableId = lang === 'ko' ? 'portfolio-ko' : 'portfolio-en';
-  let sum = 0;
-  document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
-    const amountText = row.children[3]?.dataset.amount || row.children[3]?.textContent.replace(/[^\d]/g, '');
-    const amount = parseInt(amountText, 10);
-    if (!isNaN(amount)) sum += amount;
-  });
-  const formatted = sum.toLocaleString('en-US');
-  document.getElementById("totalAmount").textContent = translations[lang].total.replace('{{amount}}', formatted);
-}
-
-function updateLastUpdated(lang) {
-  const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
-  document.getElementById("lastUpdated").textContent = translations[lang].lastUpdated.replace('{{date}}', date);
-}
-
-let isKoInitialized = false;
-let isEnInitialized = false;
-
-window.addEventListener('DOMContentLoaded', () => {
   const ctx = document.getElementById('sectorChart').getContext('2d');
-  const labels = translations[lang].labels;
-  const sorted = labels.map((label, i) => ({ label, value: values[i], color: colors[i] })).sort((a, b) => b.value - a.value);
+
+   // 원본 데이터 정의
+  const labels = ['현금/채권', '테크', '산업재', '금융', '소비재/서비스', '기타'];
+  const values = [23932085, 29563703, 19406752, 6015235, 11598894, 9693603];
+  const colors = ['#4BC0C0', '#FF6384', '#FFCE56', '#36A2EB', '#9966FF', '#999999'];
+  
+  // 정렬
+  const sorted = labels.map((label, i) => ({
+    label: label,
+    value: values[i],
+    color: colors[i]
+  })).sort((a, b) => b.value - a.value);
+
   const sortedLabels = sorted.map(item => item.label);
   const sortedValues = sorted.map(item => item.value);
   const sortedColors = sorted.map(item => item.color);
+
   const data = {
     labels: sortedLabels,
     datasets: [{
@@ -196,50 +198,57 @@ window.addEventListener('DOMContentLoaded', () => {
       hoverOffset: 10
     }]
   };
-  window.sectorChart = new Chart(ctx, {
-    type: 'pie',
-    data: data,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: 30 },
-      plugins: {
-        title: {
-          display: true,
-          text: translations[lang].chartTitle,
-          font: { size: 18, weight: 'bold' },
-          padding: { bottom: 20 },
-          color: '#111'
+window.sectorChart = new Chart(ctx, {
+  type: 'pie',
+  data: data,
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: 30
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: '섹터별 자산 비중',
+        font: {
+          size: 18,
+          weight: 'bold'
         },
-        legend: { display: false },
-        datalabels: {
-          color: '#000',
-          font: { size: window.innerWidth <= 600 ? 12 : 15 },
-          anchor: 'center',
-          align: 'end',
-          textStrokeColor: '#fff',
-          textStrokeWidth: 3,
-          formatter: function(value, context) {
-            const total = context.chart._metasets[0].total;
-            const percent = ((value / total) * 100).toFixed(1);
-            return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
-          }
+        padding: {
+          bottom: 20
         },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const value = context.raw.toLocaleString();
-              const total = context.dataset.data.reduce((a, b) => a + b, 0);
-              const percent = ((context.raw / total) * 100).toFixed(1);
-              return `${context.label}: ₩${value} (${percent}%)`;
-            }
+        color: '#111'
+      },
+      legend: { display: false },
+      datalabels: {
+        color: '#000',
+        font: {
+          size: window.innerWidth <= 600 ? 12 : 15
+        },
+        anchor: 'center',
+        align: 'end',
+        textStrokeColor: '#fff',
+        textStrokeWidth: 3,
+        formatter: function(value, context) {
+          const total = context.chart._metasets[0].total;
+          const percent = ((value / total) * 100).toFixed(1);
+          return `${context.chart.data.labels[context.dataIndex]} (${percent}%)`;
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.raw.toLocaleString();
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percent = ((context.raw / total) * 100).toFixed(1);
+            return `${context.label}: ₩${value} (${percent}%)`;
           }
         }
       }
-    },
-    plugins: [ChartDataLabels]
-  });
-  setLanguage(lang);
+    }
+  },
+  plugins: [ChartDataLabels]
 });
 </script>
 
@@ -385,8 +394,6 @@ const translations = {
   }
 };
 
-let lang = 'ko';
-
 function preserveAmountData(tableId) {
   document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
     const cell = row.children[3];
@@ -464,18 +471,21 @@ function setLanguage(lang) {
     }
   });
 
-  document.getElementById('portfolio-ko').style.display = lang === 'ko' ? '' : 'none';
-  document.getElementById('portfolio-en').style.display = lang === 'en' ? '' : 'none';
-
   if (lang === 'ko') {
+    document.getElementById('portfolio-ko').style.display = '';
+    document.getElementById('portfolio-en').style.display = 'none';
     if (!isKoInitialized) {
-      initDataTableKo(); isKoInitialized = true;
+      initDataTableKo();
+      isKoInitialized = true;
     } else {
       dataTableKo.columns.adjust().draw();
     }
   } else {
+    document.getElementById('portfolio-ko').style.display = 'none';
+    document.getElementById('portfolio-en').style.display = '';
     if (!isEnInitialized) {
-      initDataTableEn(); isEnInitialized = true;
+      initDataTableEn();
+      isEnInitialized = true;
     } else {
       dataTableEn.columns.adjust().draw();
     }
@@ -483,21 +493,17 @@ function setLanguage(lang) {
 
   if (window.sectorChart) {
     const baseLabels = translations[lang].labels;
-    const reordered = baseLabels.map((label, i) => ({
-      label, value: values[i], color: colors[i]
-    })).sort((a, b) => b.value - a.value);
-
+    const reordered = baseLabels
+      .map((label, i) => ({ label, value: values[i], color: colors[i] }))
+      .sort((a, b) => b.value - a.value);
     const newLabels = reordered.map(item => item.label);
     window.sectorChart.data.labels = newLabels;
-    window.sectorChart.options.plugins.title.text = translations[lang].chartTitle;
     window.sectorChart.update();
   }
 
   updateTotal(lang);
   updateLastUpdated(lang);
 }
-
-window.setLanguage = setLanguage;
 
 function updateTotal(lang) {
   const tableId = lang === 'ko' ? 'portfolio-ko' : 'portfolio-en';
