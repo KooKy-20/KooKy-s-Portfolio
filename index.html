@@ -418,7 +418,7 @@ async function fetchExchangeRate() {
         initDataTableEn();
         updateTotal('en');
       }
-      updateExchangeRate('en');
+      updateExchangeRate('currentLang');
     }
   } catch (err) {
     console.error('Frankfurter 환율 불러오기 실패:', err);
