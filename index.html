@@ -172,6 +172,9 @@
 </div>
 
 <script>
+
+window.addEventListener('DOMContentLoaded', () => {
+  
   let lang = 'ko';
   const ctx = document.getElementById('sectorChart').getContext('2d');
    // 원본 데이터 정의
@@ -249,6 +252,8 @@ window.sectorChart = new Chart(ctx, {
     }
   },
   plugins: [ChartDataLabels]
+});
+    setLanguage('ko');
 });
 </script>
 
