@@ -168,19 +168,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-<!-- 파이차트 섹션 -->
-<div class="chart-container">
-  <canvas id="sectorChart"></canvas>
-</div>
+<!-- 차트 슬라이더 컨테이너 -->
+<div id="chartSlider" style="position: relative; width: 100%; max-width: 500px; margin: 40px auto;">
+  <canvas id="sectorChart" class="chart-canvas"></canvas>
+  <canvas id="amountChart" class="chart-canvas" style="display: none;"></canvas>
+  <canvas id="categoryChart" class="chart-canvas" style="display: none;"></canvas>
 
-  <div class="chart-container">
-  <canvas id="amountChart"></canvas>
+  <!-- 화살표 버튼 -->
+  <button id="prevChart" style="position: absolute; left: -40px; top: 45%; font-size: 24px;">◀</button>
+  <button id="nextChart" style="position: absolute; right: -40px; top: 45%; font-size: 24px;">▶</button>
 </div>
-
-<div class="chart-container">
-  <canvas id="categoryChart"></canvas>
-</div>
-
+  
 <script>
   const ctx = document.getElementById('sectorChart').getContext('2d');
 
@@ -681,6 +679,26 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   createPieChart('amountChart', '금액별 자산 비중', nameMap);
   createPieChart('categoryChart', '분류별 자산 비중', categoryMap);
+});
+
+  let currentChartIndex = 0;
+const chartIds = ['sectorChart', 'amountChart', 'categoryChart'];
+
+function showChart(index) {
+  chartIds.forEach((id, i) => {
+    document.getElementById(id).style.display = i === index ? 'block' : 'none';
+  });
+  currentChartIndex = index;
+}
+
+document.getElementById('prevChart').addEventListener('click', () => {
+  const nextIndex = (currentChartIndex - 1 + chartIds.length) % chartIds.length;
+  showChart(nextIndex);
+});
+
+document.getElementById('nextChart').addEventListener('click', () => {
+  const nextIndex = (currentChartIndex + 1) % chartIds.length;
+  showChart(nextIndex);
 });
   
 </script>
