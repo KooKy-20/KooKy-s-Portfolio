@@ -111,12 +111,23 @@
   #nextChart:hover {
     background-color: #e0e0e0;
   }
-
-  #sectorChart {
-    transform: scale(1);
-    transform-origin: center;
+  
+  .chart-button-group {
+    position: absolute;
+    top: 45%;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    pointer-events: none;
   }
-
+  
+  .chart-button-group button {
+    pointer-events: auto;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+  }
+  
   .table-wrapper {
     overflow-x: auto;
     margin-top: 40px;
@@ -135,68 +146,87 @@
   }
   
   /* ✅ 모바일용 스타일 */
-  @media (max-width: 600px) {
-    .lang-switcher {
-      position: static;
-      text-align: center;
-      margin: 10px 0;
-    }
+@media (max-width: 600px) {
+  .lang-switcher {
+    position: static;
+    text-align: center;
+    margin: 10px 0;
+  }
 
-     .chart-container {
+  .chart-container {
     max-width: 100%;
     width: 100%;
     height: 500px;
     margin: 40px auto;
-    }
+  }
 
-    #chartSlider {
-      max-width: 100%;
-      height: 500px;
-      position: relative;
-    }
-  
-    #prevChart,
-    #nextChart {
-      position: static; /* absolute 해제 */
-      margin: 0 8px;
-    }
-  
-    .chart-button-group {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
-    
-    body {
-      font-size: 15px;
-      padding: 1.5rem 1rem;
-    }
+  #chartSlider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    height: 500px;
+    position: relative;
+  }
 
-    h2, h3 {
-      font-size: 18px;
-    }
+  #chartSlider canvas {
+    margin-bottom: 12px;
+  }
 
-    table {
-      font-size: 13px;
-      text-align: left;
-    }
+  #prevChart,
+  #nextChart {
+    position: static;  /* 좌우 배치 → 아래 정렬 */
+    margin: 0 10px;
+    font-size: 14px;
+    width: 28px;
+    height: 28px;
+  }
 
-    th {
-      font-size: 13px;
-      padding: 0px 0px;
-    }
-    th.sorting::before,
-    th.sorting_asc::before,
-    th.sorting_desc::before{
+  .chart-button-group {
+    position: static;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .chart-button-group button {
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+  }
+
+  body {
+    font-size: 15px;
+    padding: 1.5rem 1rem;
+  }
+
+  h2, h3 {
+    font-size: 18px;
+  }
+
+  table {
+    font-size: 13px;
+    text-align: left;
+  }
+
+  th {
+    font-size: 13px;
+    padding: 0px 0px;
+  }
+
+  th.sorting::before,
+  th.sorting_asc::before,
+  th.sorting_desc::before {
     font-size: 8px !important;
   }
 
-    th.sorting::after,
-    th.sorting_asc::after,
-    th.sorting_desc::after{
+  th.sorting::after,
+  th.sorting_asc::after,
+  th.sorting_desc::after {
     font-size: 8px !important;
   }
-  }
+}
 </style>
 </head>
 
@@ -220,18 +250,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-<!-- 차트 슬라이더 컨테이너 -->
-<div id="chartSlider" style="position: relative; width: 100%; max-width: 500px; height: 400px; margin: 40px auto;">
+<!-- 차트 슬라이더 + 버튼 포함 -->
+<div id="chartSlider">
   <canvas id="sectorChart" class="chart-canvas"></canvas>
   <canvas id="amountChart" class="chart-canvas" style="display:none;"></canvas>
   <canvas id="categoryChart" class="chart-canvas" style="display:none;"></canvas>
 
-  <!-- 화살표 버튼 -->
-  <button id="prevChart" style="position: absolute; left: -40px; top: 45%; font-size: 24px;">◀</button>
-  <button id="nextChart" style="position: absolute; right: -40px; top: 45%; font-size: 24px;">▶</button>
-</div>
-
-  <!-- 모바일용 버튼 그룹 -->
+  <!-- 버튼 그룹은 하나만 -->
   <div class="chart-button-group">
     <button id="prevChart">◀</button>
     <button id="nextChart">▶</button>
