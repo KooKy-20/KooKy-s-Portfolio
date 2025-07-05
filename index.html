@@ -173,6 +173,14 @@
   <canvas id="sectorChart"></canvas>
 </div>
 
+  <div class="chart-container">
+  <canvas id="amountChart"></canvas>
+</div>
+
+<div class="chart-container">
+  <canvas id="categoryChart"></canvas>
+</div>
+
 <script>
   const ctx = document.getElementById('sectorChart').getContext('2d');
 
@@ -200,6 +208,68 @@
       hoverOffset: 10
     }]
   };
+
+  function createPieChart(ctxId, title, dataMap) {
+  const entries = Object.entries(dataMap)
+    .map(([label, value]) => ({ label, value }))
+    .sort((a, b) => b.value - a.value);
+
+  const labels = entries.map(e => e.label);
+  const values = entries.map(e => e.value);
+  const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#999999'];
+
+  return new Chart(document.getElementById(ctxId).getContext('2d'), {
+    type: 'pie',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: colors,
+        hoverOffset: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: 30 },
+      plugins: {
+        title: {
+          display: true,
+          text: title,
+          font: { size: 18, weight: 'bold' },
+          padding: { bottom: 20 },
+          color: '#111'
+        },
+        legend: { display: false },
+        datalabels: {
+          color: '#000',
+          font: { size: window.innerWidth <= 600 ? 12 : 15 },
+          anchor: 'center',
+          align: 'end',
+          textStrokeColor: '#fff',
+          textStrokeWidth: 3,
+          formatter: (value, ctx) => {
+            const total = ctx.chart._metasets[0].total;
+            const percent = ((value / total) * 100).toFixed(1);
+            return `${ctx.chart.data.labels[ctx.dataIndex]} (${percent}%)`;
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const value = ctx.raw.toLocaleString();
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const percent = ((ctx.raw / total) * 100).toFixed(1);
+              return `${ctx.label}: ₩${value} (${percent}%)`;
+            }
+          }
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+}
+  
 window.sectorChart = new Chart(ctx, {
   type: 'pie',
   data: data,
@@ -592,6 +662,25 @@ function updateLastUpdated(lang) {
 window.addEventListener('DOMContentLoaded', async () => {
   await fetchExchangeRate();       // ✅ 환율 먼저 불러오고
   setLanguage('ko');               // ✅ 최신 환율로 UI 표시
+
+  // ✅ 금액별/분류별 차트용 데이터 생성
+  const rows = document.querySelectorAll('#portfolio-ko tbody tr');
+  const categoryMap = {};
+  const nameMap = {};
+
+  rows.forEach(row => {
+    const category = row.children[0]?.textContent.trim();
+    const asset = row.children[1]?.textContent.trim();
+    const amount = parseInt(row.children[3]?.dataset.amount || row.children[3]?.textContent.replace(/[^\d]/g, ''), 10);
+    
+    if (!isNaN(amount)) {
+      categoryMap[category] = (categoryMap[category] || 0) + amount;
+      nameMap[asset] = (nameMap[asset] || 0) + amount;
+    }
+  });
+
+  createPieChart('amountChart', '금액별 자산 비중', nameMap);
+  createPieChart('categoryChart', '분류별 자산 비중', categoryMap);
 });
   
 </script>
