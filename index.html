@@ -195,10 +195,10 @@
   
 <script>
   
-  function createPieChart(ctxId, title, dataMap) {
+function createPieChart(ctxId, title, dataMap) {
   const ctx = document.getElementById(ctxId)?.getContext('2d');
   if (!ctx) return;
-    
+
   const entries = Object.entries(dataMap)
     .map(([label, value]) => ({ label, value }))
     .sort((a, b) => b.value - a.value);
@@ -207,7 +207,7 @@
   const values = entries.map(e => e.value);
   const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#999999'];
 
-  return new Chart(document.getElementById(ctxId).getContext('2d'), {
+  return new Chart(ctx, {
     type: 'pie',
     data: {
       labels,
