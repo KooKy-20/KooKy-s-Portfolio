@@ -398,6 +398,8 @@ const translations = {
   }
 };
 
+const exchangeRate = 1390; // 1 USD = 1390 KRW (실시간 적용 원하면 API 필요)
+
 function preserveAmountData(tableId) {
   document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
     const cell = row.children[3];
@@ -417,10 +419,22 @@ function getAmountRenderFn(tableId) {
     if (type !== 'display') return raw;
     const number = parseInt(raw, 10);
     if (isNaN(number)) return data;
-    return number.toLocaleString('ko-KR', {
-      style: 'currency',
-      currency: 'KRW'
-    });
+
+    const isKo = tableId === 'portfolio-ko';
+    if (isKo) {
+      return number.toLocaleString('ko-KR', {
+        style: 'currency',
+        currency: 'KRW'
+      });
+    } else {
+      const usd = number / exchangeRate;
+      return usd.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
   };
 }
 
@@ -518,7 +532,15 @@ function updateTotal(lang) {
     const amount = parseInt(amountText, 10);
     if (!isNaN(amount)) sum += amount;
   });
-  const formatted = sum.toLocaleString('en-US');
+
+  let formatted;
+  if (lang === 'ko') {
+    formatted = sum.toLocaleString('ko-KR');
+  } else {
+    const usd = sum / exchangeRate;
+    formatted = usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
   document.getElementById("totalAmount").textContent =
     translations[lang].total.replace('{{amount}}', formatted);
 }
