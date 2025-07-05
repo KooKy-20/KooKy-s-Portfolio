@@ -535,6 +535,8 @@ function setLanguage(lang) {
   updateLastUpdated(lang);
 }
 
+  window.setLanguage = setLanguage;
+
 function updateTotal(lang) {
   const tableId = lang === 'ko' ? 'portfolio-ko' : 'portfolio-en';
   let sum = 0;
