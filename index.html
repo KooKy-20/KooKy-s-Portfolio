@@ -336,14 +336,15 @@ function createPieChart(ctxId, title, dataMap) {
   });
 
     // ✅ 차트 캔버스 아래에 스와이프 안내 텍스트 추가 (한 번만)
-  const existingHint = document.querySelector(`#${ctxId}-swipe-hint`);
-  if (!existingHint) {
+  const canvas = document.getElementById(ctxId);
+  const existingHint = document.getElementById(`${ctxId}-swipe-hint`);
+
+  if (!existingHint && canvas) {
     const hint = document.createElement('p');
     hint.id = `${ctxId}-swipe-hint`;
     hint.className = 'swipe-hint';
-    hint.textContent = '←→ 스와이프하면 차트를 넘길 수 있어요';
-    const canvas = document.getElementById(ctxId);
-    canvas?.parentNode?.appendChild(hint);
+    hint.textContent = translations[currentLang]?.swipeHint || '';
+    canvas.insertAdjacentElement('afterend', hint);
   }
 
   return chart;
@@ -470,6 +471,7 @@ const translations = {
   ko: {
     pageTitle: "KooKy's Portfolio (2025.06.30 기준)",
     chartTitle: "섹터별 자산 비중",
+    swipeHint: "←→ 스와이프하면 차트를 넘길 수 있어요"
     category: "분류",
     assetName: "자산명",
     ticker: "티커",
@@ -484,6 +486,7 @@ const translations = {
   en: {
     pageTitle: "KooKy's Portfolio (as of 2025.06.30)",
     chartTitle: "Asset Allocation by Sector",
+    swipeHint: "←→ Swipe to change charts"
     category: "Category",
     assetName: "Asset Name",
     ticker: "Ticker",
@@ -625,6 +628,7 @@ function setLanguage(lang) {
   }
   
   updateChartTitle(lang); 
+  updateSwipeHints();
 
   // ✅ 차트의 데이터레이블 레이블도 언어에 맞게 갱신
 const chartLabelMap = {
@@ -688,6 +692,15 @@ function updateChartTitle(lang) {
   if (window.sectorChart && window.sectorChart.options.plugins.title) {
     window.sectorChart.options.plugins.title.text = newTitle;
     window.sectorChart.update();
+  }
+}
+
+  function updateSwipeHints() {
+  for (const chartId of chartIds) {
+    const hintEl = document.getElementById(`${chartId}-swipe-hint`);
+    if (hintEl) {
+      hintEl.textContent = translations[currentLang]?.swipeHint || '';
+    }
   }
 }
 
