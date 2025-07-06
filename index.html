@@ -335,17 +335,15 @@ function createPieChart(ctxId, title, dataMap) {
     plugins: [ChartDataLabels]
   });
 
-  // ✅ 스와이프 힌트 추가 (차트 제목 바로 아래에 표시되도록)
-  const container = canvas.parentElement;
+  // ✅ 스와이프 힌트 추가
+  const canvas = document.getElementById(ctxId);
   const existingHint = document.getElementById(`${ctxId}-swipe-hint`);
-  if (!existingHint && container) {
+  if (!existingHint && canvas) {
     const hint = document.createElement('p');
     hint.id = `${ctxId}-swipe-hint`;
     hint.className = 'swipe-hint';
     hint.textContent = translations[currentLang]?.swipeHint || '';
-  
-    // ⬇️ 캔버스 앞에 힌트 삽입 (제목 아래처럼 보이게)
-    container.insertBefore(hint, canvas);
+    canvas.insertAdjacentElement('afterend', hint);
   }
 
   return chart;
