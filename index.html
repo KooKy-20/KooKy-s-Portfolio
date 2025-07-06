@@ -94,28 +94,11 @@
     margin: 40px auto;
   }
   
-  #prevChart,
-  #nextChart {
-    font-size: 16px;
-    width: 28px;
-    height: 28px;
-    padding: 2px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  #prevChart:hover,
-  #nextChart:hover {
-    background-color: #e0e0e0;
-  }
-  
   .chart-button-group {
     position: absolute;
     z-index: 10;
-    top: 45%;
+    top: 50%;
+    transform: translateY(-50%); /* 수직 정중앙 정렬 */
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -153,58 +136,58 @@
     text-align: center;
     margin: 10px 0;
   }
-
-.chart-canvas {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.chart-container {
-  max-width: 100%;
-  width: 100%;
-  height: 500px;
-  margin: 40px auto;
-}
-
-#chartSlider { 
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  height: 600px;
-  margin: 40px auto;
-  overflow: hidden;
-}
-
-.chart-button-group {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  display: flex;
-  gap: 12px;
-  pointer-events: none;
-}
-
-.chart-button-group button {
-  pointer-events: auto;
-  font-size: 16px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.chart-button-group button:hover {
-  background-color: #e0e0e0;
-}
+  
+  .chart-canvas {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .chart-container {
+    max-width: 100%;
+    width: 100%;
+    height: 500px;
+    margin: 40px auto;
+  }
+  
+  #chartSlider { 
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 600px;
+    margin: 40px auto;
+    overflow: hidden;
+  }
+  
+  .chart-button-group {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 12px;
+    pointer-events: none;
+  }
+  
+  .chart-button-group button {
+    pointer-events: auto;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .chart-button-group button:hover {
+    background-color: #e0e0e0;
+  }
   
   body {
     font-size: 15px;
