@@ -338,6 +338,7 @@ function createPieChart(ctxId, title, dataMap) {
  plugins: [ChartDataLabels, {
     id: 'customHint',
     afterDraw(chart) {
+      if (window.innerWidth > 600) return; // 데스크탑이면 힌트 출력 안 함
       const { ctx, chartArea } = chart;
       const text = translations[currentLang]?.swipeHint || '';
       ctx.save();
