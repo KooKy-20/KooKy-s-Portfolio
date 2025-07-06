@@ -345,7 +345,7 @@ function createPieChart(ctxId, title, dataMap) {
       ctx.font = '13px sans-serif';
       ctx.fillStyle = '#666';
       ctx.textAlign = 'center';
-      const y = Math.max(chartArea.top 0, 30); // 너무 위로 가는 것 방지
+      const y = Math.max(chartArea.top -10, 30); // 너무 위로 가는 것 방지
       ctx.fillText(text, chart.width / 2, y);
       ctx.restore();
     }
@@ -748,7 +748,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   window.amountChart = createPieChart('amountChart', '금액별 자산 비중', nameMap);
   window.categoryChart = createPieChart('categoryChart', '분류별 자산 비중', categoryMap);
   window.sectorChart = createPieChart('sectorChart', '섹터별 자산 비중', sectorMap);
-
+  
   setLanguage('ko');               
   
   // ✅ 반드시 마지막에 다시 호출
