@@ -791,6 +791,17 @@ function showChart(index) {
   });
 
   // ✅ resize 호출은 표시 후 한 번만, 살짝 지연
+function showChart(index) {
+  chartIds.forEach((id, i) => {
+    const canvas = document.getElementById(id);
+    canvas.style.display = (i === index) ? 'block' : 'none';
+
+    const hint = document.getElementById(`${id}-swipe-hint`);
+    if (hint) {
+      hint.style.display = (i === index && window.innerWidth <= 600) ? 'block' : 'none';
+    }
+  });
+
   const visibleId = chartIds[index];
   const chartInstance = Chart.getChart(visibleId);
   if (chartInstance) {
