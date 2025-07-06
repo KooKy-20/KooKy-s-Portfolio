@@ -714,6 +714,35 @@ window.addEventListener('DOMContentLoaded', async () => {
   updateExchangeRate('ko');
   updateLastUpdated('ko');
   showChart(0);  // 차트 초기 표시
+  
+  // ✅ 스와이프 이벤트 등록 추가
+  const slider = document.getElementById('chartSlider');
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  slider.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, false);
+
+  slider.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipeGesture();
+  }, false);
+
+  function handleSwipeGesture() {
+    const threshold = 50;
+    const diff = touchEndX - touchStartX;
+
+    if (Math.abs(diff) < threshold) return;
+
+    if (diff > 0) {
+      const prevIndex = (currentChartIndex - 1 + chartIds.length) % chartIds.length;
+      showChart(prevIndex);
+    } else {
+      const nextIndex = (currentChartIndex + 1) % chartIds.length;
+      showChart(nextIndex);
+    }
+  }
 });
 
   let currentChartIndex = 0;
