@@ -169,6 +169,8 @@
     transform: translateX(-50%);
     z-index: 10;
     display: flex;
+    justify-content: center;     /* ✅ 좌우가 아닌 중앙 정렬 */
+    width: auto;                 /* ✅ 100% → auto로 덮어쓰기 */
     gap: 12px;
     pointer-events: none;
   }
