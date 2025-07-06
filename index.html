@@ -178,22 +178,23 @@
     margin: 40px auto;
     overflow: hidden; /* ✅ 추가 */
   }
-
+  
   .chart-button-group {
-    position: absolute;     /* ✅ 반드시 absolute 또는 relative */
-    z-index: 10;            /* ✅ 차트 위에 올라오게 */
-    top: 45%;
+    position: absolute;
+    bottom: 16px;             /* ✅ 차트 하단에서 약간 위 */
+    left: 50%;                /* ✅ 수평 중앙 기준 */
+    transform: translateX(-50%); /* ✅ 정확히 중앙 정렬 */
+    z-index: 10;
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    pointer-events: none;   /* 부모는 클릭 막고 */
+    gap: 12px;                /* ✅ 버튼 간 간격 */
+    pointer-events: none;
   }
-
+  
   .chart-button-group button {
     font-size: 16px;
     width: 28px;
     height: 28px;
-    pointer-events: auto; /* ✅ 클릭 가능하게 보장 */
+    pointer-events: auto;
   }
 
   #prevChart,
