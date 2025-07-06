@@ -93,10 +93,6 @@
     height: 600px;
     margin: 40px auto;
   }
-
-  .chart-header {
-  display: none; /* 기본: 숨김 */
-}
   
   .chart-button-group {
     position: absolute;
@@ -132,95 +128,69 @@
   th.sorting_desc::after{
     font-size: 8px !important;
   }
-
-  
   
   /* ✅ 모바일용 스타일 */
 @media (max-width: 600px) {
-  .lang-switcher {
-    position: static;
-    text-align: center;
-    margin: 10px 0;
-  }
-  
-  .chart-canvas {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .chart-container {
-    max-width: 100%;
-    width: 100%;
-    height: 500px;
-    margin: 40px auto;
-  }
-  
-  #chartSlider { 
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    height: 480px;
-    margin: 40px auto;
-    overflow: visible;
-  }
-  
-    .chart-header {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    font-size: 16px;
-    gap: 16px;
-    margin-top: 24px;
-  }
-
-  .chart-header button {
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
-  }
-
-  #chartTitle {
-    font-size: 16px;
-    text-align: center;
-    flex-shrink: 1;
-    max-width: 70%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .chart-button-group {
-    position: absolute;
-    top: 95%;                       /* 차트 바로 아래에 위치 */
-    left: 50%;
-    transform: translateX(-50%);     /* 가로 중앙 정렬 */
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    width: auto;
-    gap: 12px;
-    pointer-events: none;
-  }
+    .lang-switcher {
+      position: static;
+      text-align: center;
+      margin: 10px 0;
+    }
     
-  .chart-button-group button {
-    pointer-events: auto;
-    font-size: 16px;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
+    .chart-canvas {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .chart-container {
+      max-width: 100%;
+      width: 100%;
+      height: 500px;
+      margin: 40px auto;
+    }
+    
+    #chartSlider { 
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      height: 480px;
+      margin: 40px auto;
+      overflow: visible;
+    }
   
-  .chart-button-group button:hover {
-    background-color: #e0e0e0;
-  }
+    .chart-button-group {
+      position: absolute;
+      top: 95%;                       /* 차트 바로 아래에 위치 */
+      left: 50%;
+      transform: translateX(-50%);     /* 가로 중앙 정렬 */
+      z-index: 10;
+      display: none;
+      justify-content: center;
+      width: auto;
+      gap: 12px;
+      pointer-events: none;
+    }
+      
+    .chart-button-group button {
+      pointer-events: auto;
+      font-size: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .chart-button-group button:hover {
+      background-color: #e0e0e0;
+    }
+
   
   body {
     font-size: 15px;
@@ -281,14 +251,7 @@
   <canvas id="sectorChart" class="chart-canvas"></canvas>
   <canvas id="amountChart" class="chart-canvas" style="display:none;"></canvas>
   <canvas id="categoryChart" class="chart-canvas" style="display:none;"></canvas>
-  
-    <!-- 차트 제목과 버튼 그룹 (기존 .chart-button-group 제거하고 이걸로 교체) -->
-  <div class="chart-header">
-    <button id="prevChart">◀</button>
-    <span id="chartTitle">섹터별 자산 비중</span>
-    <button id="nextChart">▶</button>
-  </div>
-  
+
   <!-- 버튼 그룹은 하나만 -->
   <div class="chart-button-group">
     <button id="prevChart">◀</button>
@@ -792,22 +755,18 @@ function showChart(index) {
     canvas.style.display = (i === index) ? 'block' : 'none';
   });
 
+  // ✅ resize 호출은 표시 후 한 번만, 살짝 지연
   const visibleId = chartIds[index];
   const chartInstance = Chart.getChart(visibleId);
-
   if (chartInstance) {
     setTimeout(() => {
       chartInstance.resize();
     }, 10);
-
-    // 외부 제목 업데이트
-    const title = chartInstance.options.plugins.title?.text || '';
-    document.getElementById('chartTitle').textContent = title;
   }
 
   currentChartIndex = index;
 }
-  
+
 document.getElementById('prevChart').addEventListener('click', () => {
   const nextIndex = (currentChartIndex - 1 + chartIds.length) % chartIds.length;
   showChart(nextIndex);
