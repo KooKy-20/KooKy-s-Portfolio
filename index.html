@@ -329,23 +329,26 @@ function createPieChart(ctxId, title, dataMap) {
               return `${ctx.label}: ₩${value} (${percent}%)`;
             }
           }
-        }
+        },
+         customHint: {
+        display: true
+      }
       }
     },
-    plugins: [ChartDataLabels]
-  });
-
-// ✅ 차트 제목 아래에 힌트 삽입
-const canvas = document.getElementById(ctxId);
-const existingHint = document.getElementById(`${ctxId}-swipe-hint`);
-if (!existingHint && canvas) {
-  const hint = document.createElement('p');
-  hint.id = `${ctxId}-swipe-hint`;
-  hint.className = 'swipe-hint';
-  hint.textContent = translations[currentLang]?.swipeHint || '';
-
-  canvas.parentElement.insertBefore(hint, canvas);
-}
+ plugins: [ChartDataLabels, {
+    id: 'customHint',
+    afterDraw(chart) {
+      const { ctx, chartArea } = chart;
+      const text = translations[currentLang]?.swipeHint || '';
+      ctx.save();
+      ctx.font = '13px sans-serif';
+      ctx.fillStyle = '#666';
+      ctx.textAlign = 'center';
+      ctx.fillText(text, chart.width / 2, chartArea.top - 10); // 제목 아래 위치
+      ctx.restore();
+    }
+  }]
+});
 
   return chart;
 }
