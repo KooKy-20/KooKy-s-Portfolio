@@ -164,17 +164,17 @@
   
   .chart-button-group {
     position: absolute;
-    bottom: 16px;
+    top: 100%;                       /* 차트 바로 아래에 위치 */
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%);     /* 가로 중앙 정렬 */
     z-index: 10;
     display: flex;
-    justify-content: center;     /* ✅ 좌우가 아닌 중앙 정렬 */
-    width: auto;                 /* ✅ 100% → auto로 덮어쓰기 */
+    justify-content: center;
+    width: auto;
     gap: 12px;
     pointer-events: none;
   }
-  
+    
   .chart-button-group button {
     pointer-events: auto;
     font-size: 16px;
