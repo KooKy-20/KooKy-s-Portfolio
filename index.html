@@ -335,16 +335,18 @@ function createPieChart(ctxId, title, dataMap) {
     plugins: [ChartDataLabels]
   });
 
-  // ✅ 스와이프 힌트 추가
-  const canvas = document.getElementById(ctxId);
-  const existingHint = document.getElementById(`${ctxId}-swipe-hint`);
-  if (!existingHint && canvas) {
-    const hint = document.createElement('p');
-    hint.id = `${ctxId}-swipe-hint`;
-    hint.className = 'swipe-hint';
-    hint.textContent = translations[currentLang]?.swipeHint || '';
-    canvas.insertAdjacentElement('afterend', hint);
-  }
+// ✅ 스와이프 힌트 추가 (차트 하단에 위치하도록)
+const canvas = document.getElementById(ctxId);
+const existingHint = document.getElementById(`${ctxId}-swipe-hint`);
+if (!existingHint && canvas) {
+  const hint = document.createElement('p');
+  hint.id = `${ctxId}-swipe-hint`;
+  hint.className = 'swipe-hint';
+  hint.textContent = translations[currentLang]?.swipeHint || '';
+
+  // ⬇️ 캔버스의 부모 요소가 #chartSlider이므로 하단에 삽입
+  canvas.parentElement.appendChild(hint);
+}
 
   return chart;
 }
