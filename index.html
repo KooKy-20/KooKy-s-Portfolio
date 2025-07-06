@@ -784,12 +784,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   let currentChartIndex = 0;
 const chartIds = ['sectorChart', 'amountChart', 'categoryChart'];
 
-function showChart(index) {
-  chartIds.forEach((id, i) => {
-    const canvas = document.getElementById(id);
-    canvas.style.display = (i === index) ? 'block' : 'none';
-  });
-
   // ✅ resize 호출은 표시 후 한 번만, 살짝 지연
 function showChart(index) {
   chartIds.forEach((id, i) => {
