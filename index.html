@@ -93,6 +93,10 @@
     height: 600px;
     margin: 40px auto;
   }
+
+  .chart-header {
+  display: none; /* 기본: 숨김 */
+}
   
   .chart-button-group {
     position: absolute;
@@ -128,6 +132,8 @@
   th.sorting_desc::after{
     font-size: 8px !important;
   }
+
+  
   
   /* ✅ 모바일용 스타일 */
 @media (max-width: 600px) {
@@ -160,6 +166,31 @@
     height: 480px;
     margin: 40px auto;
     overflow: visible;
+  }
+  
+    .chart-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    font-size: 16px;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .chart-header button {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+
+  #chartTitle {
+    font-size: 16px;
+    text-align: center;
+    flex-shrink: 1;
+    max-width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .chart-button-group {
@@ -250,7 +281,14 @@
   <canvas id="sectorChart" class="chart-canvas"></canvas>
   <canvas id="amountChart" class="chart-canvas" style="display:none;"></canvas>
   <canvas id="categoryChart" class="chart-canvas" style="display:none;"></canvas>
-
+  
+    <!-- 차트 제목과 버튼 그룹 (기존 .chart-button-group 제거하고 이걸로 교체) -->
+  <div class="chart-header">
+    <button id="prevChart">◀</button>
+    <span id="chartTitle">섹터별 자산 비중</span>
+    <button id="nextChart">▶</button>
+  </div>
+  
   <!-- 버튼 그룹은 하나만 -->
   <div class="chart-button-group">
     <button id="prevChart">◀</button>
@@ -754,18 +792,22 @@ function showChart(index) {
     canvas.style.display = (i === index) ? 'block' : 'none';
   });
 
-  // ✅ resize 호출은 표시 후 한 번만, 살짝 지연
   const visibleId = chartIds[index];
   const chartInstance = Chart.getChart(visibleId);
+
   if (chartInstance) {
     setTimeout(() => {
       chartInstance.resize();
     }, 10);
+
+    // 외부 제목 업데이트
+    const title = chartInstance.options.plugins.title?.text || '';
+    document.getElementById('chartTitle').textContent = title;
   }
 
   currentChartIndex = index;
 }
-
+  
 document.getElementById('prevChart').addEventListener('click', () => {
   const nextIndex = (currentChartIndex - 1 + chartIds.length) % chartIds.length;
   showChart(nextIndex);
