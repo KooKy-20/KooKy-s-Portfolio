@@ -335,7 +335,7 @@ function createPieChart(ctxId, title, dataMap) {
     plugins: [ChartDataLabels]
   });
 
-// ✅ 스와이프 힌트 추가 (차트 하단에 위치하도록)
+// ✅ 차트 제목 아래에 힌트 삽입
 const canvas = document.getElementById(ctxId);
 const existingHint = document.getElementById(`${ctxId}-swipe-hint`);
 if (!existingHint && canvas) {
@@ -344,8 +344,7 @@ if (!existingHint && canvas) {
   hint.className = 'swipe-hint';
   hint.textContent = translations[currentLang]?.swipeHint || '';
 
-  // ⬇️ 캔버스의 부모 요소가 #chartSlider이므로 하단에 삽입
-  canvas.insertAdjacentElement('afterend', hint);
+  canvas.parentElement.insertBefore(hint, canvas);
 }
 
   return chart;
