@@ -345,7 +345,7 @@ if (!existingHint && canvas) {
   hint.textContent = translations[currentLang]?.swipeHint || '';
 
   // ⬇️ 캔버스의 부모 요소가 #chartSlider이므로 하단에 삽입
-  canvas.parentElement.appendChild(hint);
+  canvas.insertAdjacentElement('afterend', hint);
 }
 
   return chart;
