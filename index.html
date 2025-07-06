@@ -93,6 +93,14 @@
     height: 600px;
     margin: 40px auto;
   }
+
+  .swipe-hint {
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+  margin-top: 12px;
+  display: none;
+  }
   
   .chart-button-group {
     position: absolute;
@@ -161,7 +169,11 @@
       margin: 40px auto;
       overflow: visible;
     }
-  
+
+    .swipe-hint {
+      display: block;
+    }
+
     .chart-button-group {
       position: absolute;
       top: 95%;                       /* 차트 바로 아래에 위치 */
@@ -260,7 +272,6 @@
 </div>
   
 <script>
-  
 function createPieChart(ctxId, title, dataMap) {
   const ctx = document.getElementById(ctxId)?.getContext('2d');
   if (!ctx) return;
@@ -323,8 +334,20 @@ function createPieChart(ctxId, title, dataMap) {
     },
     plugins: [ChartDataLabels]
   });
+
+    // ✅ 차트 캔버스 아래에 스와이프 안내 텍스트 추가 (한 번만)
+  const existingHint = document.querySelector(`#${ctxId}-swipe-hint`);
+  if (!existingHint) {
+    const hint = document.createElement('p');
+    hint.id = `${ctxId}-swipe-hint`;
+    hint.className = 'swipe-hint';
+    hint.textContent = '←→ 스와이프하면 차트를 넘길 수 있어요';
+    const canvas = document.getElementById(ctxId);
+    canvas?.parentNode?.appendChild(hint);
+  }
+
+  return chart;
 }
-  
 </script>
 
 <!-- ✅ 다국어 지원 테이블 구조 (테이블 2개 분리) -->
