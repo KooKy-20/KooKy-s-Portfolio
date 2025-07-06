@@ -284,7 +284,7 @@ function createPieChart(ctxId, title, dataMap) {
   const values = entries.map(e => e.value);
   const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#999999'];
 
-  return new Chart(ctx, {
+  const chart = new Chart(ctx, {
     type: 'pie',
     data: {
       labels,
@@ -335,10 +335,9 @@ function createPieChart(ctxId, title, dataMap) {
     plugins: [ChartDataLabels]
   });
 
-    // ✅ 차트 캔버스 아래에 스와이프 안내 텍스트 추가 (한 번만)
+  // ✅ 스와이프 힌트 추가
   const canvas = document.getElementById(ctxId);
   const existingHint = document.getElementById(`${ctxId}-swipe-hint`);
-
   if (!existingHint && canvas) {
     const hint = document.createElement('p');
     hint.id = `${ctxId}-swipe-hint`;
