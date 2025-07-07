@@ -315,7 +315,7 @@ function createPieChart(ctxId, title, dataMap) {
           textStrokeColor: '#fff',
           textStrokeWidth: 3,
           formatter: (value, ctx) => {
-            const total = ctx.chart._metasets[0].total;
+            const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
             const percent = ((value / total) * 100).toFixed(1);
             return `${ctx.chart.data.labels[ctx.dataIndex]} (${percent}%)`;
           }
@@ -694,10 +694,13 @@ function updateTotal(lang) {
 
 function updateChartTitle(lang) {
   const newTitle = translations[lang].chartTitle;
-  if (window.sectorChart && window.sectorChart.options.plugins.title) {
-    window.sectorChart.options.plugins.title.text = newTitle;
-    window.sectorChart.update();
-  }
+  chartIds.forEach(id => {
+    const chart = Chart.getChart(id);
+    if (chart?.options?.plugins?.title) {
+      chart.options.plugins.title.text = newTitle;
+      chart.update();
+    }
+  });
 }
 
   function updateSwipeHints() {
