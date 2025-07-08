@@ -675,9 +675,15 @@ function setLanguage(lang) {
     const labelKeyBase = chartLabelMap[chartId];
     const oldLabels = chart.data.labels;
   
+    const fromList = lang === 'ko'
+      ? translations.en[labelKeyBase]
+      : translations.ko[labelKeyBase];
+  
+    const toList = lang === 'ko'
+      ? translations.ko[labelKeyBase]
+      : translations.en[labelKeyBase];
+  
     const translatedLabels = oldLabels.map(label => {
-      const fromList = translations[lang === 'ko' ? `${labelKeyBase}_en` : `${labelKeyBase}`];
-      const toList   = translations[lang === 'ko' ? `${labelKeyBase}` : `${labelKeyBase}_en`];
       const idx = fromList?.indexOf(label);
       return idx >= 0 ? toList[idx] : label;
     });
