@@ -272,7 +272,7 @@
 </div>
   
 <script>
-function createPieChart(ctxId, title, dataMap) {
+function createPieChart(ctxId, dataMap) {
   const ctx = document.getElementById(ctxId)?.getContext('2d');
   if (!ctx) return;
 
@@ -282,7 +282,7 @@ function createPieChart(ctxId, title, dataMap) {
 
   const labels = entries.map(e => e.label);
   const values = entries.map(e => e.value);
-  const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#999999'];
+  const title = chartTitles[ctxId]?.[currentLang] || '';
 
   const chart = new Chart(ctx, {
     type: 'pie',
@@ -290,7 +290,7 @@ function createPieChart(ctxId, title, dataMap) {
       labels,
       datasets: [{
         data: values,
-        backgroundColor: colors,
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#999999'],
         hoverOffset: 10
       }]
     },
@@ -301,7 +301,7 @@ function createPieChart(ctxId, title, dataMap) {
       plugins: {
         title: {
           display: true,
-          text: translations[currentLang].chartTitle,
+          text: title,
           font: { size: 18, weight: 'bold' },
           padding: { bottom: 20 },
           color: '#111'
@@ -475,7 +475,6 @@ function createPieChart(ctxId, title, dataMap) {
 const translations = {
   ko: {
     pageTitle: "KooKy's Portfolio (2025.06.30 기준)",
-    chartTitle: "섹터별 자산 비중",
     swipeHint: "←→ 스와이프하면 차트를 넘길 수 있어요",
     category: "분류",
     assetName: "자산명",
@@ -490,7 +489,6 @@ const translations = {
   },
   en: {
     pageTitle: "KooKy's Portfolio (as of 2025.06.30)",
-    chartTitle: "Asset Allocation by Sector",
     swipeHint: "←→ Swipe to change charts",
     category: "Category",
     assetName: "Asset Name",
@@ -502,6 +500,21 @@ const translations = {
     total: "Total: ${{amount}}",
     exchangeRate: "Exchange Rate: 1 USD ≒ ₩{{rate}} (Source: Frankfurter.app)",
     lastUpdated: "Last updated: {{date}}"
+  }
+};
+
+  const chartTitles = {
+  sectorChart: {
+    ko: '섹터별 자산 비중',
+    en: 'Asset Allocation by Sector'
+  },
+  amountChart: {
+    ko: '금액별 자산 비중',
+    en: 'Asset Allocation by Amount'
+  },
+  categoryChart: {
+    ko: '분류별 자산 비중',
+    en: 'Asset Allocation by Category'
   }
 };
 
@@ -693,13 +706,11 @@ function updateTotal(lang) {
 }
 
 function updateChartTitle(lang) {
-  const newTitle = translations[lang].chartTitle;
   chartIds.forEach(id => {
     const chart = Chart.getChart(id);
     if (chart?.options?.plugins?.title) {
-      chart.options.plugins.title.text = newTitle;
-      chart.update();
-      chart.resize();
+      chart.options.plugins.title.text = chartTitles[id]?.[lang] || '';
+      chart.update('none');
     }
   });
 }
@@ -815,6 +826,7 @@ function showChart(index) {
   }
 
   currentChartIndex = index;
+  updateChartTitle(currentLang);
 }
 
 document.getElementById('prevChart').addEventListener('click', () => {
