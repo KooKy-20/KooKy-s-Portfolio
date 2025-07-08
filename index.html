@@ -170,10 +170,6 @@
       overflow: visible;
     }
 
-    .swipe-hint {
-      display: block;
-    }
-
     .chart-button-group {
       position: absolute;
       top: 95%;                       /* 차트 바로 아래에 위치 */
@@ -344,7 +340,7 @@ function createPieChart(ctxId, dataMap) {
           ctx.font = '13px sans-serif';
           ctx.fillStyle = '#666';
           ctx.textAlign = 'center';
-          const y = Math.max(chartArea.top - 10, 30);
+          const y = 50;
           ctx.fillText(text, chart.width / 2, y);
           ctx.restore();
         }
