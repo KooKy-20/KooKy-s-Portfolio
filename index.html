@@ -82,7 +82,8 @@
   .chart-canvas {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
     height: 100%;
   }
@@ -98,15 +99,15 @@
   
   .chart-button-group {
     position: absolute;
+    z-index: 10;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);  /* ← 정중앙 기준으로 이동 */
+    transform: translateY(-50%); /* 수직 정중앙 정렬 */
     display: flex;
     justify-content: space-between;
-    width: 100px;                      /* ✅ 버튼들만 포함하는 고정 폭 */
-    gap: 20px;
+    width: 100%;
     pointer-events: none;
   }
+  
   
   .chart-button-group button {
     pointer-events: auto;
