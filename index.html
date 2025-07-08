@@ -98,12 +98,13 @@
   
   .chart-button-group {
     position: absolute;
-    z-index: 10;
     top: 50%;
-    transform: translateY(-50%); /* 수직 정중앙 정렬 */
+    left: 50%;
+    transform: translate(-50%, -50%);  /* ← 정중앙 기준으로 이동 */
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 100px;                      /* ✅ 버튼들만 포함하는 고정 폭 */
+    gap: 20px;
     pointer-events: none;
   }
   
