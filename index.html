@@ -301,7 +301,7 @@ function createPieChart(ctxId, title, dataMap) {
       plugins: {
         title: {
           display: true,
-          text: title,
+          text: translations[currentLang].chartTitle,
           font: { size: 18, weight: 'bold' },
           padding: { bottom: 20 },
           color: '#111'
@@ -699,6 +699,7 @@ function updateChartTitle(lang) {
     if (chart?.options?.plugins?.title) {
       chart.options.plugins.title.text = newTitle;
       chart.update();
+      chart.resize();
     }
   });
 }
