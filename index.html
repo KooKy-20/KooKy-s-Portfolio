@@ -280,6 +280,8 @@ function createPieChart(ctxId, dataMap) {
   const values = entries.map(e => e.value);
   const title = chartTitles[ctxId]?.[currentLang] || '';
 
+  const isMobile = window.innerWidth <= 600;
+  
   const chart = new Chart(ctx, {
     type: 'pie',
     data: {
