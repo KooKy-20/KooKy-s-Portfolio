@@ -298,7 +298,10 @@ function createPieChart(ctxId, dataMap) {
         title: {
           display: true,
           text: title,
-          font: { size: 18, weight: 'bold' },
+          font: { 
+           size: isMobile ? 18 : 22,  
+            weight: 'bold' 
+          },
           padding: { bottom: 30 },
           color: '#111'
         },
@@ -702,10 +705,12 @@ function updateTotal(lang) {
 }
 
 function updateChartTitle(lang) {
+  const isMobile = window.innerWidth <= 600;
   chartIds.forEach(id => {
     const chart = Chart.getChart(id);
     if (chart?.options?.plugins?.title) {
       chart.options.plugins.title.text = chartTitles[id]?.[lang] || '';
+      chart.options.plugins.title.font.size = isMobile ? 18 : 22; // ← 여기에도 반영
       chart.update('none');
     }
   });
