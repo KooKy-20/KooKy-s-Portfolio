@@ -233,6 +233,32 @@
 </head>
 
 <body>
+
+<!-- ✅ 반응형 부트스트랩 메뉴바 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">KooKy</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="#">칼럼</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">포트폴리오</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">커뮤니티</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  
 <!-- 상단 제목과 언어 버튼 -->
 <div style="position: relative; margin-top: 20px; margin-bottom: 20px;">
   <!-- 가운데 정렬 제목 -->
@@ -862,5 +888,8 @@ document.getElementById('nextChart').addEventListener('click', () => {
 });
   
 </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
 </body>
 </html>
