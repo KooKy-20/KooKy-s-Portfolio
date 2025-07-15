@@ -26,7 +26,7 @@ function reloadGiscus(lang) {
 }
 
 function setLanguage(lang) {
-  currentLang = lang;
+  window.currentLang = lang;
 
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -56,13 +56,13 @@ function setLanguage(lang) {
     }
   }
 
-  updateChartTitle?.(lang); 
+  updateChartTitle?.(lang);
   updateSwipeHints?.();
 
   const chartLabelMap = {
     sectorChart: 'labels_sector',
     amountChart: 'labels_amount',
-    categoryChart: 'labels_category'
+    categoryChart: 'labels_category',
   };
 
   const ids = typeof chartIds !== 'undefined' ? chartIds : [];
@@ -115,13 +115,9 @@ function updateTotal(lang) {
     if (!isNaN(amount)) sum += amount;
   });
 
-  let formatted;
-  if (lang === 'ko') {
-    formatted = sum.toLocaleString('ko-KR');
-  } else {
-    const usd = sum / exchangeRate;
-    formatted = usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
+  const formatted = lang === 'ko'
+    ? sum.toLocaleString('ko-KR')
+    : (sum / exchangeRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   document.getElementById("totalAmount").textContent =
     translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
@@ -145,7 +141,7 @@ function updateSwipeHints() {
   ids.forEach(chartId => {
     const hintEl = document.getElementById(`${chartId}-swipe-hint`);
     if (hintEl) {
-      hintEl.textContent = translations?.[currentLang]?.swipeHint || '';
+      hintEl.textContent = translations?.[window.currentLang]?.swipeHint || '';
     }
   });
 }
@@ -166,7 +162,6 @@ function updateLastUpdated(lang) {
   document.getElementById("lastUpdated").textContent = text || '';
 }
 
-// 언어 스위치 버튼 이벤트 등록
 function registerLanguageSwitcherEvents() {
   document.getElementById('lang-ko')?.addEventListener('click', () => setLanguage('ko'));
   document.getElementById('lang-en')?.addEventListener('click', () => setLanguage('en'));
@@ -174,13 +169,12 @@ function registerLanguageSwitcherEvents() {
   document.getElementById('nav-lang-en')?.addEventListener('click', () => setLanguage('en'));
 }
 
-// 페이지 로딩 시 초기화
 document.addEventListener('DOMContentLoaded', () => {
   setLanguage(window.currentLang);
   registerLanguageSwitcherEvents();
 });
 
-// 전역 등록
+// ✅ 전역 등록 (꼭 이대로)
 (() => {
   window.setLanguage = setLanguage;
   window.registerLanguageSwitcherEvents = registerLanguageSwitcherEvents;
