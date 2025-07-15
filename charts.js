@@ -110,17 +110,6 @@ function showChart(index) {
   updateChartTitle(currentLang);
 }
 
-document.getElementById('prevChart').addEventListener('click', () => {
-  const nextIndex = (currentChartIndex - 1 + chartIds.length) % chartIds.length;
-  showChart(nextIndex);
-});
-
-document.getElementById('nextChart').addEventListener('click', () => {
-  const nextIndex = (currentChartIndex + 1) % chartIds.length;
-  showChart(nextIndex);
-});
-
-
 function setupChartNavigation() {
   document.getElementById('prevChart').addEventListener('click', () => {
     const nextIndex = (currentChartIndex - 1 + chartIds.length) % chartIds.length;
