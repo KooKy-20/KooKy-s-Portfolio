@@ -11,30 +11,55 @@
 
   <div class="container text-center mt-5">
     <h1>커뮤니티 페이지</h1>
-    <p>곧 콘텐츠가 추가될 예정입니다.</p>
+    <p>포트폴리오에 대한 조언의 한마디를 남겨주세요</p>
   </div>
 
-<script>
-  // 공통 헤더 삽입
-  fetch('header.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
+  <!-- ✅ Giscus 삽입 위치 -->
+  <div class="container mt-5" style="max-width: 800px;">
+    <div id="giscus-container"></div>
+  </div>
 
-      // 현재 경로에 맞게 메뉴 강조
-      const path = location.pathname.split("/").pop();
-      document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === path || (path === '' && href === 'index.html')) {
-          link.classList.add('active');
-          link.setAttribute('aria-current', 'page');
+  <!-- ✅ 헤더 불러오기 -->
+  <script>
+    fetch('header.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('header-placeholder').innerHTML = html;
+
+        const path = location.pathname.split("/").pop();
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+          const href = link.getAttribute('href');
+          if (href === path || (path === '' && href === 'index.html')) {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+          }
+        });
+
+        if (typeof setLanguage === 'function') {
+          setLanguage(currentLang);
         }
       });
+  </script>
 
-      // ✅ 언어 상태 반영 (data-i18n 적용, 버튼 강조 등)
-      setLanguage(currentLang);
-    });
-</script>
+  <!-- ✅ Giscus 동적 삽입 -->
+  <script>
+    const giscus = document.createElement('script');
+    giscus.src = 'https://giscus.app/client.js';
+    giscus.setAttribute('data-repo', 'KooKy-20/KooKy-s-Portfolio');
+    giscus.setAttribute('data-repo-id', 'R_kgDOPF8vpA');
+    giscus.setAttribute('data-category', 'Guestbook');
+    giscus.setAttribute('data-category-id', 'DIC_kwDOPF8vpM4Cs-_2');
+    giscus.setAttribute('data-mapping', 'pathname');
+    giscus.setAttribute('data-strict', '0');
+    giscus.setAttribute('data-reactions-enabled', '1');
+    giscus.setAttribute('data-emit-metadata', '0');
+    giscus.setAttribute('data-input-position', 'top');
+    giscus.setAttribute('data-theme', 'preferred_color_scheme');
+    giscus.setAttribute('data-lang', 'ko');
+    giscus.crossOrigin = 'anonymous';
+    giscus.async = true;
 
+    document.getElementById('giscus-container').appendChild(giscus);
+  </script>
 </body>
 </html>
