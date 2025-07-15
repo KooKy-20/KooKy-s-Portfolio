@@ -1,3 +1,27 @@
+function reloadGiscus(lang) {
+  const container = document.getElementById('giscus-container');
+  if (!container) return;
+
+  container.innerHTML = ''; // 기존 위젯 제거
+
+  const giscus = document.createElement('script');
+  giscus.src = 'https://giscus.app/client.js';
+  giscus.setAttribute('data-repo', 'KooKy-20/KooKy-s-Portfolio');
+  giscus.setAttribute('data-repo-id', 'R_kgDOPF8vpA');
+  giscus.setAttribute('data-category', 'Guestbook');
+  giscus.setAttribute('data-category-id', 'DIC_kwDOPF8vpM4Cs-_2');
+  giscus.setAttribute('data-mapping', 'pathname');
+  giscus.setAttribute('data-strict', '0');
+  giscus.setAttribute('data-reactions-enabled', '1');
+  giscus.setAttribute('data-emit-metadata', '0');
+  giscus.setAttribute('data-input-position', 'top');
+  giscus.setAttribute('data-theme', 'light_high_contrast');
+  giscus.setAttribute('data-lang', lang);
+  giscus.crossOrigin = 'anonymous';
+  giscus.async = true;
+  container.appendChild(giscus);
+}
+
 function setLanguage(lang) {
   currentLang = lang;
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -10,69 +34,72 @@ function setLanguage(lang) {
   });
 
   if (lang === 'ko') {
-    document.getElementById('portfolio-ko').style.display = '';
-    document.getElementById('portfolio-en').style.display = 'none';
+    document.getElementById('portfolio-ko')?.style?.display = '';
+    document.getElementById('portfolio-en')?.style?.display = 'none';
     if (!isKoInitialized) {
-      initDataTableKo();
+      initDataTableKo?.();
       isKoInitialized = true;
     } else {
-      dataTableKo.columns.adjust().draw();
+      dataTableKo?.columns?.adjust().draw();
     }
   } else {
-    document.getElementById('portfolio-ko').style.display = 'none';
-    document.getElementById('portfolio-en').style.display = '';
+    document.getElementById('portfolio-ko')?.style?.display = 'none';
+    document.getElementById('portfolio-en')?.style?.display = '';
     if (!isEnInitialized) {
-      initDataTableEn();
+      initDataTableEn?.();
       isEnInitialized = true;
     } else {
-      dataTableEn.columns.adjust().draw();
+      dataTableEn?.columns?.adjust().draw();
     }
   }
-  
-  updateChartTitle(lang); 
-  updateSwipeHints();
 
-  // ✅ 차트의 데이터레이블 레이블도 언어에 맞게 갱신
+  updateChartTitle?.(lang); 
+  updateSwipeHints?.();
+
   const chartLabelMap = {
     sectorChart: 'labels_sector',
     amountChart: 'labels_amount',
     categoryChart: 'labels_category'
   };
-  
-  for (const chartId of chartIds) {
+
+  for (const chartId of chartIds || []) {
     const chart = Chart.getChart(chartId);
     if (!chart) continue;
-  
+
     const labelKeyBase = chartLabelMap[chartId];
     const oldLabels = chart.data.labels;
-  
+
     const fromList = lang === 'ko'
       ? translations.en[labelKeyBase]
       : translations.ko[labelKeyBase];
-  
+
     const toList = lang === 'ko'
       ? translations.ko[labelKeyBase]
       : translations.en[labelKeyBase];
-  
+
     const translatedLabels = oldLabels.map(label => {
       const idx = fromList?.indexOf(label);
       return idx >= 0 ? toList[idx] : label;
     });
-  
+
     chart.data.labels = translatedLabels;
     chart.update();
   }
 
-  // ✅ 네비게이션 바 언어 강조 처리도 추가
   ['lang', 'nav-lang'].forEach(prefix => {
     document.getElementById(`${prefix}-ko`)?.classList.remove('active-lang');
     document.getElementById(`${prefix}-en`)?.classList.remove('active-lang');
     document.getElementById(`${prefix}-${lang}`)?.classList.add('active-lang');
   });
-    
-  updateTotal(lang);
-  updateExchangeRate(lang);
-  updateLastUpdated(lang);
+
+  updateTotal?.(lang);
+  updateExchangeRate?.(lang);
+  updateLastUpdated?.(lang);
+
+  // ✅ Giscus 위젯 언어 재로딩
+  if (window.location.pathname.includes('community')) {
+    reloadGiscus(lang);
+  }
 }
 
 function updateTotal(lang) {
