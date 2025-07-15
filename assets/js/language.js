@@ -181,4 +181,5 @@ document.addEventListener('DOMContentLoaded', () => {
 (() => {
   window.setLanguage = setLanguage;
   window.registerLanguageSwitcherEvents = registerLanguageSwitcherEvents;
+  window.reloadGiscus = reloadGiscus;
 })();
