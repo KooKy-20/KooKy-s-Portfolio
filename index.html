@@ -315,10 +315,9 @@
  </h2>
   
   <!-- 언어 전환 버튼 -->
-  <div class="lang-switcher-text">
-    <span onclick="setLanguage('ko')">Korean</span>
-    <span class="divider">|</span>
-    <span onclick="setLanguage('en')">English</span>
+  <div class="lang-switcher">
+    <button id="lang-ko" onclick="setLanguage('ko')">Korean</button>
+    <button id="lang-en" onclick="setLanguage('en')">English</button>
   </div>
     
 </div>
@@ -768,10 +767,12 @@ function setLanguage(lang) {
   }
 
   // ✅ 네비게이션 바 언어 강조 처리도 추가
-  document.getElementById('nav-lang-ko')?.classList.remove('active-lang');
-  document.getElementById('nav-lang-en')?.classList.remove('active-lang');
-  document.getElementById(`nav-lang-${lang}`)?.classList.add('active-lang');
-  
+  ['lang', 'nav-lang'].forEach(prefix => {
+    document.getElementById(`${prefix}-ko`)?.classList.remove('active-lang');
+    document.getElementById(`${prefix}-en`)?.classList.remove('active-lang');
+    document.getElementById(`${prefix}-${lang}`)?.classList.add('active-lang');
+  });
+    
   updateTotal(lang);
   updateExchangeRate(lang);
   updateLastUpdated(lang);
