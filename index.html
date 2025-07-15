@@ -443,27 +443,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-<!-- ✅ 헤더 동적 삽입 및 언어 적용 -->
-<script>
-  fetch('header.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-
-      const path = location.pathname.split("/").pop();
-      document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === path || (path === '' && href === 'index.html')) {
-          link.classList.add('active');
-          link.setAttribute('aria-current', 'page');
-        }
-      });
-
-      // 언어 적용 및 이벤트 연결
-      setLanguage(window.currentLang);
-      registerLanguageSwitcherEvents();
-    });
-</script>
   
 </body>
 </html>
