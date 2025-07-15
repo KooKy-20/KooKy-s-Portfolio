@@ -1,23 +1,33 @@
-
 window.addEventListener('DOMContentLoaded', async () => {
-  // 네비게이션 메뉴 상태 처리
-  const path = location.pathname.split("/").pop();
-  document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
-    const href = link.getAttribute('href');
-    if (href === path || (path === '' && href === 'index.html')) {
-      link.classList.add('active');
-      link.setAttribute('aria-current', 'page');
-    }
-  });
+  // ✅ 헤더 먼저 로드
+  await fetch('header.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+
+      const path = location.pathname.split("/").pop();
+      document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === path || (path === '' && href === 'index.html')) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'page');
+        }
+      });
+
+      // ✅ 헤더 삽입 후 언어 버튼 이벤트 등록 + 초기 언어 설정
+      window.registerLanguageSwitcherEvents();
+      window.setLanguage(window.currentLang);
+    });
 
   await fetchExchangeRate();
 
+  // 모바일 환경이면 차트 버튼 제거
   if (window.innerWidth <= 600) {
     const btnGroup = document.querySelector('.chart-button-group');
     if (btnGroup) btnGroup.remove();
   }
 
-  // 테이블 기반 데이터 정리
+  // 테이블 기반 차트 데이터 수집
   const rows = document.querySelectorAll('#portfolio-ko tbody tr');
   const categoryMap = {}, nameMap = {}, sectorMap = {};
   rows.forEach(row => {
@@ -36,14 +46,15 @@ window.addEventListener('DOMContentLoaded', async () => {
   window.categoryChart = createPieChart('categoryChart', categoryMap);
   window.sectorChart   = createPieChart('sectorChart', sectorMap);
 
-  setLanguage('ko');
-  updateTotal('ko');
-  updateExchangeRate('ko');
-  updateLastUpdated('ko');
+  // ✅ 언어 초기 설정 다시 적용
+  setLanguage(window.currentLang);
+  updateTotal(window.currentLang);
+  updateExchangeRate(window.currentLang);
+  updateLastUpdated(window.currentLang);
   showChart(0);
   setupChartNavigation();
 
-  // 터치 스와이프 이벤트 등록
+  // 스와이프 이벤트 등록
   const slider = document.getElementById('chartSlider');
   let touchStartX = 0, touchEndX = 0;
 
