@@ -49,13 +49,16 @@
   </script>
 
   <!-- ✅ Giscus 위젯 삽입 함수 -->
-  <script>
+      <script>
     function reloadGiscus(lang) {
       const container = document.getElementById('giscus-container');
       if (!container) return;
-
-      container.innerHTML = '';
-
+    
+      // ✅ 기존 giscus script + iframe 모두 제거
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+    
       const giscus = document.createElement('script');
       giscus.src = 'https://giscus.app/client.js';
       giscus.setAttribute('data-repo', 'KooKy-20/KooKy-s-Portfolio');
