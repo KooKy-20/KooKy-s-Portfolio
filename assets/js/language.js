@@ -175,3 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setLanguage(window.currentLang); // 언어 초기 적용
   registerLanguageSwitcherEvents(); // 버튼 이벤트 등록
 });
+
+window.setLanguage = setLanguage;
+window.registerLanguageSwitcherEvents = registerLanguageSwitcherEvents;
