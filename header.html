@@ -1,4 +1,28 @@
 <!-- header.html -->
+
+<style>
+  .nav-lang-switcher span {
+    cursor: pointer;
+    font-weight: normal;
+    color: #ccc;
+    transition: color 0.2s;
+  }
+
+  .nav-lang-switcher span:hover {
+    color: #fff;
+  }
+
+  .nav-lang-switcher .active-lang {
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .nav-lang-switcher .divider {
+    pointer-events: none;
+    color: #aaa;
+  }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid d-flex align-items-center">
     <div class="d-flex align-items-center me-3 gap-2">
