@@ -36,9 +36,12 @@ function setLanguage(lang) {
     }
   });
 
+  const elKo = document.getElementById('portfolio-ko');
+  const elEn = document.getElementById('portfolio-en');
+
   if (lang === 'ko') {
-    document.getElementById('portfolio-ko')?.style?.display = '';
-    document.getElementById('portfolio-en')?.style?.display = 'none';
+    if (elKo) elKo.style.display = '';
+    if (elEn) elEn.style.display = 'none';
     if (!isKoInitialized) {
       initDataTableKo?.();
       isKoInitialized = true;
@@ -46,8 +49,8 @@ function setLanguage(lang) {
       dataTableKo?.columns?.adjust().draw();
     }
   } else {
-    document.getElementById('portfolio-ko')?.style?.display = 'none';
-    document.getElementById('portfolio-en')?.style?.display = '';
+    if (elKo) elKo.style.display = 'none';
+    if (elEn) elEn.style.display = '';
     if (!isEnInitialized) {
       initDataTableEn?.();
       isEnInitialized = true;
