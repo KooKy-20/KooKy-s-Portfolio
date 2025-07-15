@@ -12,15 +12,38 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
 <style>
+  .navbar {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ccc;
+  }
+
+    .lang-switcher-text span {
+    background: none;
+    border: none;
+    padding: 2px 4px;
+    color: #f0f0f0;
+    transition: color 0.2s;
+    cursor: pointer;
+    font-weight: normal;
+  }
+  
+  .lang-switcher-text span:hover {
+    color: #ddd;
+  }
+  
+  .lang-switcher-text .active-lang {
+    font-weight: bold;
+  }
+  
+  .lang-switcher-text .divider {
+    pointer-events: none;
+    color: #aaa;
+  }
+
   .lang-switcher {
     position: absolute;
     top: 5px;
     right: 20px;
-  }
-
-  .navbar {
-    margin-bottom: 30px;
-    border-bottom: 1px solid #ccc;
   }
   
   .lang-switcher button {
@@ -289,9 +312,10 @@
  </h2>
   
   <!-- 언어 전환 버튼 -->
-  <div class="lang-switcher">
-    <button onclick="setLanguage('ko')">Korean</button>
-    <button onclick="setLanguage('en')">English</button>
+  <div class="lang-switcher-text">
+    <span onclick="setLanguage('ko')">Korean</span>
+    <span class="divider">|</span>
+    <span onclick="setLanguage('en')">English</span>
   </div>
     
 </div>
@@ -739,6 +763,11 @@ function setLanguage(lang) {
     chart.data.labels = translatedLabels;
     chart.update();
   }
+
+  // ✅ 선택된 언어 강조
+  document.getElementById('lang-ko')?.classList.remove('active-lang');
+  document.getElementById('lang-en')?.classList.remove('active-lang');
+  document.getElementById(`lang-${lang}`)?.classList.add('active-lang');
   
   updateTotal(lang);
   updateExchangeRate(lang);
