@@ -1,3 +1,6 @@
+// 브라우저 기본 언어 또는 기본값 설정
+window.currentLang = (navigator.language || navigator.userLanguage).startsWith('en') ? 'en' : 'ko';
+
 function reloadGiscus(lang) {
   const container = document.getElementById('giscus-container');
   if (!container) return;
