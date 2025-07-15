@@ -162,3 +162,11 @@ function updateLastUpdated(lang) {
   document.getElementById("lastUpdated").textContent =
     translations[lang].lastUpdated.replace('{{date}}', date);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('lang-ko')?.addEventListener('click', () => setLanguage('ko'));
+  document.getElementById('lang-en')?.addEventListener('click', () => setLanguage('en'));
+  document.getElementById('nav-lang-ko')?.addEventListener('click', () => setLanguage('ko'));
+  document.getElementById('nav-lang-en')?.addEventListener('click', () => setLanguage('en'));
+  setLanguage(window.currentLang);
+});
