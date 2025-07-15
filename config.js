@@ -80,3 +80,6 @@ async function fetchExchangeRate() {
     console.error('Frankfurter 환율 불러오기 실패:', err);
   }
 }
+
+const chartIds = ['sectorChart', 'amountChart', 'categoryChart'];
+let currentChartIndex = 0;
