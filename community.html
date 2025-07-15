@@ -47,7 +47,9 @@
   </script>
 
   <!-- ✅ Giscus 위젯 동적 삽입 -->
-  <script>
+<!-- giscus 위젯 동적 삽입 -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
     const giscus = document.createElement('script');
     giscus.src = 'https://giscus.app/client.js';
     giscus.setAttribute('data-repo', 'KooKy-20/KooKy-s-Portfolio');
@@ -60,10 +62,11 @@
     giscus.setAttribute('data-emit-metadata', '0');
     giscus.setAttribute('data-input-position', 'top');
     giscus.setAttribute('data-theme', 'light_high_contrast');
-    giscus.setAttribute('data-lang', currentLang);  // 자동 반영
+    giscus.setAttribute('data-lang', window.currentLang || 'ko');
     giscus.crossOrigin = 'anonymous';
     giscus.async = true;
     document.getElementById('giscus-container').appendChild(giscus);
-  </script>
+  });
+</script>
 </body>
 </html>
