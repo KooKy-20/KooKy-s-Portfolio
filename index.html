@@ -296,11 +296,17 @@
 
     <!-- 오른쪽 메뉴 -->
     <div class="collapse navbar-collapse" id="mainNavbar">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="column.html">칼럼</a></li>
-        <li class="nav-item"><a class="nav-link" href="index.html">포트폴리오</a></li>
-        <li class="nav-item"><a class="nav-link" href="community.html">커뮤니티</a></li>
-      </ul>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="column.html" data-i18n="nav_column">칼럼</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="portfolio.html" data-i18n="nav_portfolio">포트폴리오</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="community.html" data-i18n="nav_community">커뮤니티</a>
+      </li>
+    </ul>
     </div>
 
   </div>
@@ -547,6 +553,9 @@ function createPieChart(ctxId, dataMap) {
 <script>
 const translations = {
   ko: {
+    nav_column: "칼럼",
+    nav_portfolio: "포트폴리오",
+    nav_community: "커뮤니티",
     pageTitle: "KooKy's Portfolio (2025.06.30 기준)",
     swipeHint: "←→ 스와이프하면 차트를 넘길 수 있어요",
     category: "분류",
@@ -568,6 +577,9 @@ const translations = {
     lastUpdated: "업데이트: {{date}}"
   },
   en: {
+    nav_column: "Column",
+    nav_portfolio: "Portfolio",
+    nav_community: "Community",
     pageTitle: "KooKy's Portfolio (as of 2025.06.30)",
     swipeHint: "←→ Swipe to change charts",
     category: "Category",
