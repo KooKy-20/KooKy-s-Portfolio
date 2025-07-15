@@ -83,3 +83,8 @@ async function fetchExchangeRate() {
 
 const chartIds = ['sectorChart', 'amountChart', 'categoryChart'];
 let currentChartIndex = 0;
+
+let isKoInitialized = false;
+let isEnInitialized = false;
+let dataTableKo = null;
+let dataTableEn = null;
