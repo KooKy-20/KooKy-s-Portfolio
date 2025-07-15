@@ -1,6 +1,7 @@
-// 브라우저 기본 언어 또는 기본값 설정
+// ✅ 브라우저 기본 언어 또는 기본값 설정
 window.currentLang = (navigator.language || navigator.userLanguage).startsWith('en') ? 'en' : 'ko';
 
+// ✅ Giscus 위젯 재로딩
 function reloadGiscus(lang) {
   const container = document.getElementById('giscus-container');
   if (!container) return;
@@ -25,6 +26,7 @@ function reloadGiscus(lang) {
   container.appendChild(giscus);
 }
 
+// ✅ 언어 적용 함수
 function setLanguage(lang) {
   window.currentLang = lang;
 
@@ -39,27 +41,23 @@ function setLanguage(lang) {
   const elKo = document.getElementById('portfolio-ko');
   const elEn = document.getElementById('portfolio-en');
 
-  if (elKo || elEn) {
-    if (lang === 'ko') {
-      if (elKo) elKo.style.display = '';
-      if (elEn) elEn.style.display = 'none';
-
-      if (typeof initDataTableKo === 'function' && !isKoInitialized) {
-        initDataTableKo();
-        isKoInitialized = true;
-      } else {
-        dataTableKo?.columns?.adjust().draw();
-      }
+  if (lang === 'ko') {
+    if (elKo) elKo.style.display = '';
+    if (elEn) elEn.style.display = 'none';
+    if (typeof initDataTableKo === 'function' && !isKoInitialized) {
+      initDataTableKo();
+      isKoInitialized = true;
     } else {
-      if (elKo) elKo.style.display = 'none';
-      if (elEn) elEn.style.display = '';
-
-      if (typeof initDataTableEn === 'function' && !isEnInitialized) {
-        initDataTableEn();
-        isEnInitialized = true;
-      } else {
-        dataTableEn?.columns?.adjust().draw();
-      }
+      dataTableKo?.columns?.adjust().draw();
+    }
+  } else {
+    if (elKo) elKo.style.display = 'none';
+    if (elEn) elEn.style.display = '';
+    if (typeof initDataTableEn === 'function' && !isEnInitialized) {
+      initDataTableEn();
+      isEnInitialized = true;
+    } else {
+      dataTableEn?.columns?.adjust().draw();
     }
   }
 
@@ -113,6 +111,7 @@ function setLanguage(lang) {
   }
 }
 
+// ✅ 총합 갱신
 function updateTotal(lang) {
   const tableId = lang === 'ko' ? 'portfolio-ko' : 'portfolio-en';
   let sum = 0;
@@ -126,10 +125,11 @@ function updateTotal(lang) {
     ? sum.toLocaleString('ko-KR')
     : (sum / exchangeRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  document.getElementById("totalAmount")?.textContent =
+  document.getElementById("totalAmount").textContent =
     translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
 }
 
+// ✅ 차트 제목 갱신
 function updateChartTitle(lang) {
   const isMobile = window.innerWidth <= 600;
   const ids = typeof chartIds !== 'undefined' ? chartIds : [];
@@ -143,6 +143,7 @@ function updateChartTitle(lang) {
   });
 }
 
+// ✅ 스와이프 힌트 갱신
 function updateSwipeHints() {
   const ids = typeof chartIds !== 'undefined' ? chartIds : [];
   ids.forEach(chartId => {
@@ -153,6 +154,7 @@ function updateSwipeHints() {
   });
 }
 
+// ✅ 환율 텍스트 갱신
 function updateExchangeRate(lang) {
   if (!exchangeRate || isNaN(exchangeRate)) return;
 
@@ -160,15 +162,17 @@ function updateExchangeRate(lang) {
     Math.round(exchangeRate).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US')
   );
 
-  document.getElementById("exchangeRateText")?.textContent = rateText || '';
+  document.getElementById("exchangeRateText").textContent = rateText || '';
 }
 
+// ✅ 마지막 업데이트 날짜 표시
 function updateLastUpdated(lang) {
   const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
   const text = translations?.[lang]?.lastUpdated?.replace('{{date}}', date);
-  document.getElementById("lastUpdated")?.textContent = text || '';
+  document.getElementById("lastUpdated").textContent = text || '';
 }
 
+// ✅ 언어 버튼 이벤트 등록
 function registerLanguageSwitcherEvents() {
   document.getElementById('lang-ko')?.addEventListener('click', () => setLanguage('ko'));
   document.getElementById('lang-en')?.addEventListener('click', () => setLanguage('en'));
@@ -176,6 +180,7 @@ function registerLanguageSwitcherEvents() {
   document.getElementById('nav-lang-en')?.addEventListener('click', () => setLanguage('en'));
 }
 
+// ✅ 초기 실행
 document.addEventListener('DOMContentLoaded', () => {
   setLanguage(window.currentLang);
   registerLanguageSwitcherEvents();
