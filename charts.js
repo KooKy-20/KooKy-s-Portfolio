@@ -87,3 +87,50 @@ function createPieChart(ctxId, dataMap) {
 }
 
 
+function showChart(index) {
+  chartIds.forEach((id, i) => {
+    const canvas = document.getElementById(id);
+    canvas.style.display = (i === index) ? 'block' : 'none';
+
+    const hint = document.getElementById(`${id}-swipe-hint`);
+    if (hint) {
+      hint.style.display = (i === index && window.innerWidth <= 600) ? 'block' : 'none';
+    }
+  });
+
+  const visibleId = chartIds[index];
+  const chartInstance = Chart.getChart(visibleId);
+  if (chartInstance) {
+    setTimeout(() => {
+      chartInstance.resize();
+    }, 10);
+  }
+
+  currentChartIndex = index;
+  updateChartTitle(currentLang);
+}
+
+document.getElementById('prevChart').addEventListener('click', () => {
+  const nextIndex = (currentChartIndex - 1 + chartIds.length) % chartIds.length;
+  showChart(nextIndex);
+});
+
+document.getElementById('nextChart').addEventListener('click', () => {
+  const nextIndex = (currentChartIndex + 1) % chartIds.length;
+  showChart(nextIndex);
+});
+
+
+function setupChartNavigation() {
+  document.getElementById('prevChart').addEventListener('click', () => {
+    const nextIndex = (currentChartIndex - 1 + chartIds.length) % chartIds.length;
+    showChart(nextIndex);
+  });
+
+  document.getElementById('nextChart').addEventListener('click', () => {
+    const nextIndex = (currentChartIndex + 1) % chartIds.length;
+    showChart(nextIndex);
+  });
+}
+
+
