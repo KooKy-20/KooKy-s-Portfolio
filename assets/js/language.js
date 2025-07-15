@@ -99,7 +99,6 @@ function setLanguage(lang) {
   updateExchangeRate?.(lang);
   updateLastUpdated?.(lang);
 
-  // ✅ Giscus 위젯 언어 재로딩
   if (window.location.pathname.includes('community')) {
     reloadGiscus(lang);
   }
@@ -132,13 +131,13 @@ function updateChartTitle(lang) {
     const chart = Chart.getChart(id);
     if (chart?.options?.plugins?.title) {
       chart.options.plugins.title.text = chartTitles[id]?.[lang] || '';
-      chart.options.plugins.title.font.size = isMobile ? 18 : 22; // ← 여기에도 반영
+      chart.options.plugins.title.font.size = isMobile ? 18 : 22;
       chart.update('none');
     }
   });
 }
 
-  function updateSwipeHints() {
+function updateSwipeHints() {
   for (const chartId of chartIds) {
     const hintEl = document.getElementById(`${chartId}-swipe-hint`);
     if (hintEl) {
@@ -148,25 +147,31 @@ function updateChartTitle(lang) {
 }
 
 function updateExchangeRate(lang) {
-if (!exchangeRate || isNaN(exchangeRate)) return;
+  if (!exchangeRate || isNaN(exchangeRate)) return;
 
-const rateText = translations[lang].exchangeRate.replace('{{rate}}',
-  Math.round(exchangeRate).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US')
-);
+  const rateText = translations[lang].exchangeRate.replace('{{rate}}',
+    Math.round(exchangeRate).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US')
+  );
 
-document.getElementById("exchangeRateText").textContent = rateText;
+  document.getElementById("exchangeRateText").textContent = rateText;
 }
-  
+
 function updateLastUpdated(lang) {
   const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
   document.getElementById("lastUpdated").textContent =
     translations[lang].lastUpdated.replace('{{date}}', date);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// ✅ 새로운 함수: 언어 스위치 버튼 이벤트 등록
+function registerLanguageSwitcherEvents() {
   document.getElementById('lang-ko')?.addEventListener('click', () => setLanguage('ko'));
   document.getElementById('lang-en')?.addEventListener('click', () => setLanguage('en'));
   document.getElementById('nav-lang-ko')?.addEventListener('click', () => setLanguage('ko'));
   document.getElementById('nav-lang-en')?.addEventListener('click', () => setLanguage('en'));
-  setLanguage(window.currentLang);
+}
+
+// ✅ 페이지 로딩 시 초기화
+document.addEventListener('DOMContentLoaded', () => {
+  setLanguage(window.currentLang); // 언어 초기 적용
+  registerLanguageSwitcherEvents(); // 버튼 이벤트 등록
 });
