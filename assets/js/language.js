@@ -39,23 +39,27 @@ function setLanguage(lang) {
   const elKo = document.getElementById('portfolio-ko');
   const elEn = document.getElementById('portfolio-en');
 
-  if (lang === 'ko') {
-    if (elKo) elKo.style.display = '';
-    if (elEn) elEn.style.display = 'none';
-    if (!isKoInitialized) {
-      initDataTableKo?.();
-      isKoInitialized = true;
+  if (elKo || elEn) {
+    if (lang === 'ko') {
+      if (elKo) elKo.style.display = '';
+      if (elEn) elEn.style.display = 'none';
+
+      if (typeof initDataTableKo === 'function' && !isKoInitialized) {
+        initDataTableKo();
+        isKoInitialized = true;
+      } else {
+        dataTableKo?.columns?.adjust().draw();
+      }
     } else {
-      dataTableKo?.columns?.adjust().draw();
-    }
-  } else {
-    if (elKo) elKo.style.display = 'none';
-    if (elEn) elEn.style.display = '';
-    if (!isEnInitialized) {
-      initDataTableEn?.();
-      isEnInitialized = true;
-    } else {
-      dataTableEn?.columns?.adjust().draw();
+      if (elKo) elKo.style.display = 'none';
+      if (elEn) elEn.style.display = '';
+
+      if (typeof initDataTableEn === 'function' && !isEnInitialized) {
+        initDataTableEn();
+        isEnInitialized = true;
+      } else {
+        dataTableEn?.columns?.adjust().draw();
+      }
     }
   }
 
@@ -122,7 +126,7 @@ function updateTotal(lang) {
     ? sum.toLocaleString('ko-KR')
     : (sum / exchangeRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  document.getElementById("totalAmount").textContent =
+  document.getElementById("totalAmount")?.textContent =
     translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
 }
 
@@ -156,13 +160,13 @@ function updateExchangeRate(lang) {
     Math.round(exchangeRate).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US')
   );
 
-  document.getElementById("exchangeRateText").textContent = rateText || '';
+  document.getElementById("exchangeRateText")?.textContent = rateText || '';
 }
 
 function updateLastUpdated(lang) {
   const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
   const text = translations?.[lang]?.lastUpdated?.replace('{{date}}', date);
-  document.getElementById("lastUpdated").textContent = text || '';
+  document.getElementById("lastUpdated")?.textContent = text || '';
 }
 
 function registerLanguageSwitcherEvents() {
@@ -177,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
   registerLanguageSwitcherEvents();
 });
 
-// ✅ 전역 등록 (꼭 이대로)
+// ✅ 전역 등록
 (() => {
   window.setLanguage = setLanguage;
   window.registerLanguageSwitcherEvents = registerLanguageSwitcherEvents;
