@@ -5,7 +5,7 @@ function reloadGiscus(lang) {
   const container = document.getElementById('giscus-container');
   if (!container) return;
 
-  container.innerHTML = ''; // 기존 위젯 제거
+  container.innerHTML = '';
 
   const giscus = document.createElement('script');
   giscus.src = 'https://giscus.app/client.js';
@@ -27,12 +27,12 @@ function reloadGiscus(lang) {
 
 function setLanguage(lang) {
   currentLang = lang;
+
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[lang][key]) {
-      el.textContent = translations[lang][key]
-        .replace('{{amount}}', '')
-        .replace('{{date}}', '');
+    const translated = translations?.[lang]?.[key];
+    if (translated) {
+      el.textContent = translated.replace('{{amount}}', '').replace('{{date}}', '');
     }
   });
 
@@ -65,7 +65,9 @@ function setLanguage(lang) {
     categoryChart: 'labels_category'
   };
 
-  for (const chartId of chartIds || []) {
+  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
+
+  for (const chartId of ids) {
     const chart = Chart.getChart(chartId);
     if (!chart) continue;
 
@@ -73,16 +75,16 @@ function setLanguage(lang) {
     const oldLabels = chart.data.labels;
 
     const fromList = lang === 'ko'
-      ? translations.en[labelKeyBase]
-      : translations.ko[labelKeyBase];
+      ? translations?.en?.[labelKeyBase]
+      : translations?.ko?.[labelKeyBase];
 
     const toList = lang === 'ko'
-      ? translations.ko[labelKeyBase]
-      : translations.en[labelKeyBase];
+      ? translations?.ko?.[labelKeyBase]
+      : translations?.en?.[labelKeyBase];
 
     const translatedLabels = oldLabels.map(label => {
       const idx = fromList?.indexOf(label);
-      return idx >= 0 ? toList[idx] : label;
+      return idx >= 0 ? toList?.[idx] : label;
     });
 
     chart.data.labels = translatedLabels;
@@ -122,15 +124,16 @@ function updateTotal(lang) {
   }
 
   document.getElementById("totalAmount").textContent =
-    translations[lang].total.replace('{{amount}}', formatted);
+    translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
 }
 
 function updateChartTitle(lang) {
   const isMobile = window.innerWidth <= 600;
-  chartIds.forEach(id => {
+  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
+  ids.forEach(id => {
     const chart = Chart.getChart(id);
     if (chart?.options?.plugins?.title) {
-      chart.options.plugins.title.text = chartTitles[id]?.[lang] || '';
+      chart.options.plugins.title.text = chartTitles?.[id]?.[lang] || '';
       chart.options.plugins.title.font.size = isMobile ? 18 : 22;
       chart.update('none');
     }
@@ -138,31 +141,32 @@ function updateChartTitle(lang) {
 }
 
 function updateSwipeHints() {
-  for (const chartId of chartIds) {
+  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
+  ids.forEach(chartId => {
     const hintEl = document.getElementById(`${chartId}-swipe-hint`);
     if (hintEl) {
-      hintEl.textContent = translations[currentLang]?.swipeHint || '';
+      hintEl.textContent = translations?.[currentLang]?.swipeHint || '';
     }
-  }
+  });
 }
 
 function updateExchangeRate(lang) {
   if (!exchangeRate || isNaN(exchangeRate)) return;
 
-  const rateText = translations[lang].exchangeRate.replace('{{rate}}',
+  const rateText = translations?.[lang]?.exchangeRate?.replace('{{rate}}',
     Math.round(exchangeRate).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US')
   );
 
-  document.getElementById("exchangeRateText").textContent = rateText;
+  document.getElementById("exchangeRateText").textContent = rateText || '';
 }
 
 function updateLastUpdated(lang) {
   const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
-  document.getElementById("lastUpdated").textContent =
-    translations[lang].lastUpdated.replace('{{date}}', date);
+  const text = translations?.[lang]?.lastUpdated?.replace('{{date}}', date);
+  document.getElementById("lastUpdated").textContent = text || '';
 }
 
-// ✅ 새로운 함수: 언어 스위치 버튼 이벤트 등록
+// 언어 스위치 버튼 이벤트 등록
 function registerLanguageSwitcherEvents() {
   document.getElementById('lang-ko')?.addEventListener('click', () => setLanguage('ko'));
   document.getElementById('lang-en')?.addEventListener('click', () => setLanguage('en'));
@@ -170,11 +174,12 @@ function registerLanguageSwitcherEvents() {
   document.getElementById('nav-lang-en')?.addEventListener('click', () => setLanguage('en'));
 }
 
-// ✅ 페이지 로딩 시 초기화
+// 페이지 로딩 시 초기화
 document.addEventListener('DOMContentLoaded', () => {
-  setLanguage(window.currentLang); // 언어 초기 적용
-  registerLanguageSwitcherEvents(); // 버튼 이벤트 등록
+  setLanguage(window.currentLang);
+  registerLanguageSwitcherEvents();
 });
 
+// 전역 등록
 window.setLanguage = setLanguage;
 window.registerLanguageSwitcherEvents = registerLanguageSwitcherEvents;
