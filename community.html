@@ -31,7 +31,7 @@
       .then(res => res.text())
       .then(html => {
         document.getElementById('header-placeholder').innerHTML = html;
-
+    
         const path = location.pathname.split("/").pop();
         document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
           const href = link.getAttribute('href');
@@ -40,14 +40,16 @@
             link.setAttribute('aria-current', 'page');
           }
         });
-
-        // ✅ 이벤트 등록 + 언어 설정
-        if (typeof registerLanguageSwitcherEvents === 'function') {
-          registerLanguageSwitcherEvents();
-        }
-        if (typeof setLanguage === 'function') {
-          setLanguage(window.currentLang);
-        }
+    
+        // ✅ DOM 반영 이후 이벤트 등록과 언어 적용
+        setTimeout(() => {
+          if (typeof registerLanguageSwitcherEvents === 'function') {
+            registerLanguageSwitcherEvents();
+          }
+          if (typeof setLanguage === 'function') {
+            setLanguage(window.currentLang);
+          }
+        }, 0);
       });
   </script>
 
