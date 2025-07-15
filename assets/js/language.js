@@ -181,5 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 전역 등록
-window.setLanguage = setLanguage;
-window.registerLanguageSwitcherEvents = registerLanguageSwitcherEvents;
+(() => {
+  window.setLanguage = setLanguage;
+  window.registerLanguageSwitcherEvents = registerLanguageSwitcherEvents;
+})();
