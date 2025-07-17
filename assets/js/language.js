@@ -61,6 +61,16 @@ function setLanguage(lang) {
     }
   }
 
+  // ✅ 현재 언어 강조 (네비게이션 + 상단 버튼 공통 처리)
+  ['lang', 'nav-lang'].forEach(prefix => {
+    ['ko', 'en'].forEach(code => {
+      const el = document.getElementById(`${prefix}-${code}`);
+      if (el) {
+        el.classList.toggle('active-lang', code === lang);
+      }
+    });
+  });
+
   updateChartTitle?.(lang);
   updateSwipeHints?.();
   updateTotal?.(lang);
