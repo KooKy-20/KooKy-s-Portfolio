@@ -1,26 +1,29 @@
 // ✅ 브라우저 기본 언어 또는 기본값 설정
 window.currentLang = (navigator.language || navigator.userLanguage).startsWith('en') ? 'en' : 'ko';
 
-function loadStockCharts(lang) {
-  const container = document.getElementById('stock-charts');
-  if (!container) return;
+function loadTradingViewCharts(lang = 'ko') {
+  const spx = document.getElementById("spx-chart");
+  const kospi = document.getElementById("kospi-chart");
+  if (!spx || !kospi) return;
 
-  container.innerHTML = `
-    <div class="row justify-content-center g-4">
-      <div class="col-md-6 col-12">
-        <div class="border rounded p-2">
-          <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=${lang}#%7B%22symbol%22%3A%22OANDA%3AUS500USD%22%2C%22width%22%3A%22auto%22%2C%22height%22%3A220%2C%22locale%22%3A%22${lang}%22%2C%22dateRange%22%3A%221D%22%2C%22colorTheme%22%3A%22light%22%2C%22isTransparent%22%3Afalse%2C%22autosize%22%3Atrue%7D"
-                  style="width: 100%; height: 220px;" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-        </div>
-      </div>
-      <div class="col-md-6 col-12">
-        <div class="border rounded p-2">
-          <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=${lang}#%7B%22symbol%22%3A%22KRX%3AKS200%22%2C%22width%22%3A%22auto%22%2C%22height%22%3A220%2C%22locale%22%3A%22${lang}%22%2C%22dateRange%22%3A%221D%22%2C%22colorTheme%22%3A%22light%22%2C%22isTransparent%22%3Afalse%2C%22autosize%22%3Atrue%7D"
-                  style="width: 100%; height: 220px;" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-        </div>
-      </div>
-    </div>
-  `;
+  spx.innerHTML = '';
+  kospi.innerHTML = '';
+
+  const locale = lang === 'ko' ? 'ko' : 'en';
+
+  const makeWidget = (containerId, symbol) => {
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_${symbol}&symbol=${symbol}&interval=D&hide_side_toolbar=false&theme=light&style=1&locale=${locale}&allow_symbol_change=false&save_image=false&studies=[]`;
+    iframe.width = "100%";
+    iframe.height = "300";
+    iframe.frameBorder = "0";
+    iframe.allowtransparency = "true";
+    iframe.scrolling = "no";
+    document.getElementById(containerId).appendChild(iframe);
+  };
+
+  makeWidget("spx-chart", "SP:SPX");
+  makeWidget("kospi-chart", "KRX:KOSPI");
 }
 
 // ✅ Giscus 위젯 재로딩
@@ -103,9 +106,8 @@ function setLanguage(lang) {
     reloadGiscus(lang);
   }
   
-  if (typeof loadStockCharts === 'function') {
-  loadStockCharts(lang);
-  }  
+  // ✅ TradingView 위젯도 언어에 맞게 로드
+loadTradingViewCharts(lang);
   
 }
 
@@ -193,6 +195,7 @@ function registerLanguageSwitcherEvents() {
 document.addEventListener('DOMContentLoaded', () => {
   setLanguage(window.currentLang);
   registerLanguageSwitcherEvents();
+  loadTradingViewCharts(window.currentLang);
 });
 
 // ✅ 전역 등록
