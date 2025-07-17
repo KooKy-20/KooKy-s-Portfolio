@@ -16,21 +16,6 @@
     window.currentLang = (navigator.language || navigator.userLanguage).startsWith('en') ? 'en' : 'ko';
   </script>
   <script src="assets/js/language.js"></script>
-
-<style>
-.chart-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: center;
-}
-.chart-box {
-  width: 100%;
-  max-width: 400px;
-  min-width: 300px;
-  height: 320px;
-}
-</style>
   
 </head>
 
@@ -43,14 +28,6 @@
     <p data-i18n="community_subtitle">포트폴리오에 대한 조언의 한마디를 남겨주세요</p>
   </div>
 
-  <!-- ✅ 실시간 주가 차트 박스 (빈 상태) -->
-<div id="chart-container" class="chart-wrapper d-flex flex-wrap justify-content-center gap-3 my-5">
-  <!-- S&P 500 -->
-  <div id="spx-chart" class="chart-box"></div>
-  <!-- KOSPI -->
-  <div id="kospi-chart" class="chart-box"></div>
-</div>
-  
   <!-- ✅ Giscus 삽입 위치 -->
   <div class="container mt-5" style="max-width: 800px;">
     <div id="giscus-container"></div>
@@ -91,38 +68,6 @@
       }
     });
   </script>
-
-<script>
-function loadInvestingCharts(lang) {
-  const spx = document.getElementById('spx-chart');
-  const kospi = document.getElementById('kospi-chart');
-  if (!spx || !kospi) return;
-
-  spx.innerHTML = '';
-  kospi.innerHTML = '';
-
-  const locale = lang === 'en' ? 'en' : 'ko';
-
-  const spxIframe = document.createElement('iframe');
-  spxIframe.src = `https://ssltvc.forexpros.com/?pair_ID=166&height=320&width=100%&lang_id=${locale === 'en' ? 1 : 17}`;
-  spxIframe.width = '100%';
-  spxIframe.height = '320';
-  spxIframe.frameBorder = '0';
-  spxIframe.allowTransparency = 'true';
-  spxIframe.scrolling = 'no';
-
-  const kospiIframe = document.createElement('iframe');
-  kospiIframe.src = `https://ssltvc.forexpros.com/?pair_ID=17920&height=320&width=100%&lang_id=${locale === 'en' ? 1 : 17}`;
-  kospiIframe.width = '100%';
-  kospiIframe.height = '320';
-  kospiIframe.frameBorder = '0';
-  kospiIframe.allowTransparency = 'true';
-  kospiIframe.scrolling = 'no';
-
-  spx.appendChild(spxIframe);
-  kospi.appendChild(kospiIframe);
-}
-</script>
   
   <script src="assets/js/main.js"></script>
 </body>
