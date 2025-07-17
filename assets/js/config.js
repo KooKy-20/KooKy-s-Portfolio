@@ -21,7 +21,9 @@ const translations = {
       "오뚜기", "비바리퍼블리카", "금", "금ETF(IAU)", "금ETF(KRX)", "비트코인"],
     total: "총합: ₩{{amount}}원",
     exchangeRate: "환율: 1 USD ≒ {{rate}}원 (출처: Frankfurter.app)",
-    lastUpdated: "업데이트: {{date}}"
+    lastUpdated: "업데이트: {{date}}",
+    community_title: "커뮤니티 페이지",
+    community_subtitle: "포트폴리오에 대한 조언의 한마디를 남겨주세요"
   },
   en: {
     nav_column: "Column",
@@ -45,7 +47,9 @@ const translations = {
       "Ottogi", "Viva Republica", "Gold", "Gold ETF (IAU)", "Gold ETF (KRX)", "Bitcoin"],
     total: "Total: ${{amount}}",
     exchangeRate: "Exchange Rate: 1 USD ≒ ₩{{rate}} (Source: Frankfurter.app)",
-    lastUpdated: "Last updated: {{date}}"
+    lastUpdated: "Last updated: {{date}}",
+    community_title: "Community Page",
+    community_subtitle: "Leave a short piece of advice about the portfolio"
   }
 };
 
