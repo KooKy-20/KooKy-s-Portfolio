@@ -113,6 +113,9 @@ function setLanguage(lang) {
 
 // ✅ 총합 갱신
 function updateTotal(lang) {
+  const totalEl = document.getElementById("totalAmount");
+  if (!totalEl) return; // community.html 등에서 요소 없으면 바로 종료
+
   const tableId = lang === 'ko' ? 'portfolio-ko' : 'portfolio-en';
   let sum = 0;
   document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
@@ -125,7 +128,7 @@ function updateTotal(lang) {
     ? sum.toLocaleString('ko-KR')
     : (sum / exchangeRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  document.getElementById("totalAmount").textContent =
+  totalEl.textContent =
     translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
 }
 
