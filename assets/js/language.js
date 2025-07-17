@@ -1,31 +1,6 @@
 // ✅ 브라우저 기본 언어 또는 기본값 설정
 window.currentLang = (navigator.language || navigator.userLanguage).startsWith('en') ? 'en' : 'ko';
 
-function loadTradingViewCharts(lang = 'ko') {
-  const spx = document.getElementById("spx-chart");
-  const kospi = document.getElementById("kospi-chart");
-  if (!spx || !kospi) return;
-
-  spx.innerHTML = '';
-  kospi.innerHTML = '';
-
-  const locale = lang === 'ko' ? 'ko' : 'en';
-
-  const makeWidget = (containerId, symbol) => {
-    const iframe = document.createElement("iframe");
-    iframe.src = `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_${symbol}&symbol=${symbol}&interval=D&hide_side_toolbar=false&theme=light&style=1&locale=${locale}&allow_symbol_change=false&save_image=false&studies=[]`;
-    iframe.width = "100%";
-    iframe.height = "300";
-    iframe.frameBorder = "0";
-    iframe.allowtransparency = "true";
-    iframe.scrolling = "no";
-    document.getElementById(containerId).appendChild(iframe);
-  };
-
-  makeWidget("spx-chart", "SP:SPX");
-  makeWidget("kospi-chart", "KRX:KOSPI");
-}
-
 // ✅ Giscus 위젯 재로딩
 function reloadGiscus(lang) {
   const container = document.getElementById('giscus-container');
@@ -106,9 +81,9 @@ function setLanguage(lang) {
     reloadGiscus(lang);
   }
   
-  // ✅ TradingView 위젯도 언어에 맞게 로드
-loadTradingViewCharts(lang);
-  
+  if (typeof window.loadInvestingCharts === 'function') {
+  loadInvestingCharts(lang);
+  } 
 }
 
 // ✅ 총합 갱신
