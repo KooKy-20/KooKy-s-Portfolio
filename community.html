@@ -98,43 +98,30 @@ function loadInvestingCharts(lang) {
   const kospi = document.getElementById('kospi-chart');
   if (!spx || !kospi) return;
 
-  // 초기화
   spx.innerHTML = '';
   kospi.innerHTML = '';
 
   const locale = lang === 'en' ? 'en' : 'ko';
 
-  // S&P 500 위젯
-  const spxScript = document.createElement('script');
-  spxScript.src = 'https://www.investing.com/webmaster-tools/technical-charts/js';
-  spxScript.async = true;
-  spxScript.innerHTML = JSON.stringify({
-    width: '100%',
-    height: '320',
-    symbols: [['S&P 500', 'spx']],
-    locale,
-    theme: 'light',
-    isTransparent: false
-  });
-  spx.appendChild(spxScript);
+  const spxIframe = document.createElement('iframe');
+  spxIframe.src = `https://ssltvc.forexpros.com/?pair_ID=166&height=320&width=100%&lang_id=${locale === 'en' ? 1 : 17}`;
+  spxIframe.width = '100%';
+  spxIframe.height = '320';
+  spxIframe.frameBorder = '0';
+  spxIframe.allowTransparency = 'true';
+  spxIframe.scrolling = 'no';
 
-  // KOSPI 위젯
-  const kospiScript = document.createElement('script');
-  kospiScript.src = 'https://www.investing.com/webmaster-tools/technical-charts/js';
-  kospiScript.async = true;
-  kospiScript.innerHTML = JSON.stringify({
-    width: '100%',
-    height: '320',
-    symbols: [['KOSPI', 'ks11']],
-    locale,
-    theme: 'light',
-    isTransparent: false
-  });
-  kospi.appendChild(kospiScript);
+  const kospiIframe = document.createElement('iframe');
+  kospiIframe.src = `https://ssltvc.forexpros.com/?pair_ID=17920&height=320&width=100%&lang_id=${locale === 'en' ? 1 : 17}`;
+  kospiIframe.width = '100%';
+  kospiIframe.height = '320';
+  kospiIframe.frameBorder = '0';
+  kospiIframe.allowTransparency = 'true';
+  kospiIframe.scrolling = 'no';
+
+  spx.appendChild(spxIframe);
+  kospi.appendChild(kospiIframe);
 }
-
-// ✅ 전역에서 호출되도록 등록
-window.loadInvestingCharts = loadInvestingCharts;
 </script>
   
   <script src="assets/js/main.js"></script>
