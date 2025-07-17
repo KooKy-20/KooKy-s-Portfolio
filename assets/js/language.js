@@ -80,10 +80,7 @@ function setLanguage(lang) {
   if (window.location.pathname.includes('community')) {
     reloadGiscus(lang);
   }
-  
-  if (typeof window.loadInvestingCharts === 'function') {
-  loadInvestingCharts(lang);
-  } 
+
 }
 
 // ✅ 총합 갱신
@@ -170,7 +167,6 @@ function registerLanguageSwitcherEvents() {
 document.addEventListener('DOMContentLoaded', () => {
   setLanguage(window.currentLang);
   registerLanguageSwitcherEvents();
-  loadInvestingCharts(window.currentLang || 'ko');
 });
 
 // ✅ 전역 등록
