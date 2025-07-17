@@ -170,7 +170,7 @@ function registerLanguageSwitcherEvents() {
 document.addEventListener('DOMContentLoaded', () => {
   setLanguage(window.currentLang);
   registerLanguageSwitcherEvents();
-  loadTradingViewCharts(window.currentLang);
+  loadInvestingCharts(window.currentLang || 'ko');
 });
 
 // ✅ 전역 등록
