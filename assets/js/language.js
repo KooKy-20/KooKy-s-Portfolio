@@ -1,6 +1,28 @@
 // ✅ 브라우저 기본 언어 또는 기본값 설정
 window.currentLang = (navigator.language || navigator.userLanguage).startsWith('en') ? 'en' : 'ko';
 
+function loadStockCharts(lang) {
+  const container = document.getElementById('stock-charts');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="row justify-content-center g-4">
+      <div class="col-md-6 col-12">
+        <div class="border rounded p-2">
+          <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=${lang}#%7B%22symbol%22%3A%22SP%3ASPX%22%2C%22width%22%3A%22auto%22%2C%22height%22%3A220%2C%22locale%22%3A%22${lang}%22%2C%22dateRange%22%3A%221D%22%2C%22colorTheme%22%3A%22light%22%2C%22isTransparent%22%3Afalse%2C%22autosize%22%3Atrue%7D"
+                  style="width: 100%; height: 220px;" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+        </div>
+      </div>
+      <div class="col-md-6 col-12">
+        <div class="border rounded p-2">
+          <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=${lang}#%7B%22symbol%22%3A%22KRX%3AKOSPI%22%2C%22width%22%3A%22auto%22%2C%22height%22%3A220%2C%22locale%22%3A%22${lang}%22%2C%22dateRange%22%3A%221D%22%2C%22colorTheme%22%3A%22light%22%2C%22isTransparent%22%3Afalse%2C%22autosize%22%3Atrue%7D"
+                  style="width: 100%; height: 220px;" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 // ✅ Giscus 위젯 재로딩
 function reloadGiscus(lang) {
   const container = document.getElementById('giscus-container');
@@ -80,6 +102,11 @@ function setLanguage(lang) {
   if (window.location.pathname.includes('community')) {
     reloadGiscus(lang);
   }
+  
+  if (typeof loadStockCharts === 'function') {
+  loadStockCharts(lang);
+  }  
+  
 }
 
 // ✅ 총합 갱신
