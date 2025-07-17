@@ -36,6 +36,7 @@ function getAmountRenderFn(tableId) {
   };
 }
 
+// ✅ 이미 전역에 선언되어 있다고 가정하고 let/var 제거
 function initDataTableKo() {
   preserveAmountData('portfolio-ko');
   if ($.fn.DataTable.isDataTable('#portfolio-ko')) {
@@ -71,7 +72,3 @@ function initDataTableEn() {
     }]
   });
 }
-
-let dataTableKo, dataTableEn;
-let isKoInitialized = false;
-let isEnInitialized = false;
