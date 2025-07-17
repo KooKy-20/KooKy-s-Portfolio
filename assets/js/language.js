@@ -63,45 +63,6 @@ function setLanguage(lang) {
 
   updateChartTitle?.(lang);
   updateSwipeHints?.();
-
-  const chartLabelMap = {
-    sectorChart: 'labels_sector',
-    amountChart: 'labels_amount',
-    categoryChart: 'labels_category',
-  };
-
-  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
-
-  for (const chartId of ids) {
-    const chart = Chart.getChart(chartId);
-    if (!chart) continue;
-
-    const labelKeyBase = chartLabelMap[chartId];
-    const oldLabels = chart.data.labels;
-
-    const fromList = lang === 'ko'
-      ? translations?.en?.[labelKeyBase]
-      : translations?.ko?.[labelKeyBase];
-
-    const toList = lang === 'ko'
-      ? translations?.ko?.[labelKeyBase]
-      : translations?.en?.[labelKeyBase];
-
-    const translatedLabels = oldLabels.map(label => {
-      const idx = fromList?.indexOf(label);
-      return idx >= 0 ? toList?.[idx] : label;
-    });
-
-    chart.data.labels = translatedLabels;
-    chart.update();
-  }
-
-  ['lang', 'nav-lang'].forEach(prefix => {
-    document.getElementById(`${prefix}-ko`)?.classList.remove('active-lang');
-    document.getElementById(`${prefix}-en`)?.classList.remove('active-lang');
-    document.getElementById(`${prefix}-${lang}`)?.classList.add('active-lang');
-  });
-
   updateTotal?.(lang);
   updateExchangeRate?.(lang);
   updateLastUpdated?.(lang);
@@ -114,11 +75,14 @@ function setLanguage(lang) {
 // ✅ 총합 갱신
 function updateTotal(lang) {
   const totalEl = document.getElementById("totalAmount");
-  if (!totalEl) return; // community.html 등에서 요소 없으면 바로 종료
+  if (!totalEl) return;
 
   const tableId = lang === 'ko' ? 'portfolio-ko' : 'portfolio-en';
+  const table = document.getElementById(tableId);
+  if (!table) return;
+
   let sum = 0;
-  document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
+  table.querySelectorAll('tbody tr').forEach(row => {
     const amountText = row.children[3]?.dataset.amount || row.children[3]?.textContent.replace(/[^\d]/g, '');
     const amount = parseInt(amountText, 10);
     if (!isNaN(amount)) sum += amount;
@@ -128,12 +92,13 @@ function updateTotal(lang) {
     ? sum.toLocaleString('ko-KR')
     : (sum / exchangeRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  totalEl.textContent =
-    translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
+  totalEl.textContent = translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
 }
 
 // ✅ 차트 제목 갱신
 function updateChartTitle(lang) {
+  if (typeof Chart === 'undefined') return;
+
   const isMobile = window.innerWidth <= 600;
   const ids = typeof chartIds !== 'undefined' ? chartIds : [];
   ids.forEach(id => {
@@ -159,20 +124,24 @@ function updateSwipeHints() {
 
 // ✅ 환율 텍스트 갱신
 function updateExchangeRate(lang) {
-  if (!exchangeRate || isNaN(exchangeRate)) return;
+  const rateEl = document.getElementById("exchangeRateText");
+  if (!rateEl || !exchangeRate || isNaN(exchangeRate)) return;
 
   const rateText = translations?.[lang]?.exchangeRate?.replace('{{rate}}',
     Math.round(exchangeRate).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US')
   );
 
-  document.getElementById("exchangeRateText").textContent = rateText || '';
+  rateEl.textContent = rateText || '';
 }
 
 // ✅ 마지막 업데이트 날짜 표시
 function updateLastUpdated(lang) {
+  const dateEl = document.getElementById("lastUpdated");
+  if (!dateEl) return;
+
   const date = new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US');
   const text = translations?.[lang]?.lastUpdated?.replace('{{date}}', date);
-  document.getElementById("lastUpdated").textContent = text || '';
+  dateEl.textContent = text || '';
 }
 
 // ✅ 언어 버튼 이벤트 등록
