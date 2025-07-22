@@ -24,7 +24,9 @@ const translations = {
     exchangeRate: "환율: 1 USD ≒ {{rate}}원 (출처: Frankfurter.app)",
     lastUpdated: "업데이트: {{date}}",
     community_title: "커뮤니티 페이지",
-    community_subtitle: "포트폴리오에 대한 조언의 한마디를 남겨주세요"
+    community_subtitle: "포트폴리오에 대한 조언의 한마디를 남겨주세요",
+    column_title: "칼럼 페이지",
+    column_subtitle: "곧 콘텐츠가 추가될 예정입니다."
   },
   en: {
     nav_column: "Column",
@@ -51,7 +53,9 @@ const translations = {
     exchangeRate: "Exchange Rate: 1 USD ≒ ₩{{rate}} (Source: Frankfurter.app)",
     lastUpdated: "Last updated: {{date}}",
     community_title: "Community Page",
-    community_subtitle: "Leave a short piece of advice about the portfolio"
+    community_subtitle: "Leave a short piece of advice about the portfolio",
+    column_title: "Column Page",
+    column_subtitle: "Content will be added soon."
   }
 };
 
