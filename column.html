@@ -46,11 +46,12 @@
     }
   </style>
 
-  <!-- ✅ 언어 스크립트 먼저 -->
+  <!-- ✅ 순서 중요: translations가 담긴 config.js 먼저 로드 -->
   <script>
     window.currentLang = (navigator.language || navigator.userLanguage).startsWith('en') ? 'en' : 'ko';
   </script>
-  <script src="assets/js/language.js"></script>
+  <script src="assets/js/config.js"></script>       <!-- translations 포함 -->
+  <script src="assets/js/language.js"></script>     <!-- translations 사용 -->
 </head>
 
 <body>
