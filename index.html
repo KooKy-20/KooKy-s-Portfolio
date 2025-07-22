@@ -174,10 +174,25 @@
 
     /* ✅ 페이지 전체 기본 여백 제거 */
   html, body {
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-    
+
+  body > :first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  #header-placeholder {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .navbar {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
       /* ✅ 헤더를 화면 전체 너비로 확장 */
   #header-placeholder nav.navbar {
     width: 100vw;
