@@ -171,103 +171,98 @@
   
   /* ✅ 모바일용 스타일 */
 @media (max-width: 600px) {
-
-    /* ✅ 페이지 전체 기본 여백 제거 */
   html, body {
     margin: 0 !important;
     padding: 0 !important;
+    font-size: 15px;
   }
 
-  body > :first-child {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
-  #header-placeholder {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
+  body > :first-child,
+  #header-placeholder,
   .navbar {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
-  
-      /* ✅ 헤더를 화면 전체 너비로 확장 */
+
+  .navbar .navbar-brand {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .nav-lang-switcher {
+    line-height: 1.5;
+    font-size: 0.9rem;
+  }
+
   #header-placeholder nav.navbar {
     width: 100vw;
     margin-left: calc(-1 * ((100vw - 100%) / 2));
     border-radius: 0;
   }
-  
+
   .lang-switcher {
-      
-      position: static;
-      text-align: center;
-      margin: 10px 0;
-    }
-    
-    .chart-canvas {
-      position: absolute;
-      z-index: 1;
-      top: 0;
-      left: 50%;                      /* ✅ 화면 가로 중앙 기준으로 */
-      transform: translateX(-50%); 
-      width: 100%;
-      height: 100%;
-    }
-    
-    .chart-container {
-      max-width: 100%;
-      width: 100%;
-      height: 500px;
-      margin-top: 30px;
-      margin-bottom: 0px;
-    }
-    
-    #chartSlider { 
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      height: 480px;
-      margin-top: 30px;
-      margin-bottom: 0px;
-      overflow: visible;
-    }
+    position: static;
+    text-align: center;
+    margin: 10px 0;
+  }
 
-    .chart-button-group {
-      position: absolute;
-      top: 95%;                       /* 차트 바로 아래에 위치 */
-      left: 50%;
-      transform: translateX(-50%);     /* 가로 중앙 정렬 */
-      z-index: 10;
-      display: none;
-      justify-content: center;
-      width: auto;
-      gap: 12px;
-      pointer-events: none;
-    }
-      
-    .chart-button-group button {
-      pointer-events: auto;
-      font-size: 16px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .chart-button-group button:hover {
-      background-color: #e0e0e0;
-    }
+  .chart-canvas {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+  }
 
-  
-  body {
-    font-size: 15px;
-    padding: 1.5rem 1rem;
+  .chart-container {
+    max-width: 100%;
+    width: 100%;
+    height: 500px;
+    margin-top: 30px;
+    margin-bottom: 0px;
+  }
+
+  #chartSlider {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 480px;
+    margin-top: 30px;
+    margin-bottom: 0px;
+    overflow: visible;
+  }
+
+  .chart-button-group {
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: none;
+    justify-content: center;
+    width: auto;
+    gap: 12px;
+    pointer-events: none;
+  }
+
+  .chart-button-group button {
+    pointer-events: auto;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .chart-button-group button:hover {
+    background-color: #e0e0e0;
   }
 
   h2, h3 {
@@ -281,15 +276,12 @@
 
   th {
     font-size: 13px;
-    padding: 0px 0px;
+    padding: 0;
   }
 
   th.sorting::before,
   th.sorting_asc::before,
-  th.sorting_desc::before {
-    font-size: 8px !important;
-  }
-
+  th.sorting_desc::before,
   th.sorting::after,
   th.sorting_asc::after,
   th.sorting_desc::after {
