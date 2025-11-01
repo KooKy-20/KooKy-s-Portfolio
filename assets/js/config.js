@@ -91,7 +91,7 @@ async function fetchExchangeRate() {
   }
 }
 
-const chartIds = ['sectorChart', 'amountChart', 'categoryChart'];
+const chartIds = ['amountChart', 'sectorChart', 'categoryChart'];
 let currentChartIndex = 0;
 
 let isKoInitialized = false;
