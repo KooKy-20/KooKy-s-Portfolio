@@ -55,7 +55,7 @@ console.log({
   sectorMap
 });
 
-    console.log('초기 표시 차트:', chartIds[defaultIndex]);
+    
 
 
     if (typeof createPieChart === 'function') {
@@ -66,6 +66,7 @@ console.log({
 
     if (typeof showChart === 'function') {
       const defaultIndex = chartIds.indexOf('amountChart');
+      console.log('초기 표시 차트:', chartIds[defaultIndex]);
       showChart(defaultIndex >= 0 ? defaultIndex : 0);
     }
     if (typeof setupChartNavigation === 'function') {
