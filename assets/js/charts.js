@@ -34,12 +34,11 @@ function createPieChart(ctxId, dataMap) {
   }
 
   // ✅ 데이터 숫자 변환 및 정렬
-  const entries = Object.entries(dataMap)
-    .map(([label, value]) => ({
-      label,
-      value: typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value
-    }))
-    .sort((a, b) => b.value - a.value);
+const entries = Object.entries(dataMap).map(([label, value]) => ({
+  label,
+  value: typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value
+}));
+
 
   const labels = entries.map(e => e.label);
   const values = entries.map(e => e.value);
