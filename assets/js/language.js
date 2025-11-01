@@ -72,6 +72,7 @@ function setLanguage(lang) {
   });
 
   updateChartTitle?.(lang);
+  updateChartLabels?.(lang);
   updateSwipeHints?.();
   updateTotal?.(lang);
   updateExchangeRate?.(lang);
@@ -119,6 +120,31 @@ function updateChartTitle(lang) {
       chart.options.plugins.title.font.size = isMobile ? 18 : 22;
       chart.update('none');
     }
+  });
+}
+
+// ✅ 차트 라벨 및 데이터셋 언어 갱신
+function updateChartLabels(lang) {
+  if (typeof Chart === 'undefined') return;
+
+  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
+  ids.forEach(id => {
+    const chart = Chart.getChart(id);
+    if (!chart) return;
+
+    switch (id) {
+      case 'sectorChart':
+        chart.data.labels = translations?.[lang]?.labels_sector || chart.data.labels;
+        break;
+      case 'categoryChart':
+        chart.data.labels = translations?.[lang]?.labels_category || chart.data.labels;
+        break;
+      case 'amountChart':
+        chart.data.labels = translations?.[lang]?.labels_amount || chart.data.labels;
+        break;
+    }
+
+    chart.update('none');
   });
 }
 
