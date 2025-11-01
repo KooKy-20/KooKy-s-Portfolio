@@ -59,20 +59,12 @@ const translations = {
   }
 };
 
-  const chartTitles = {
-  sectorChart: {
-    ko: '섹터별 자산 비중',
-    en: 'Asset Allocation by Sector'
-  },
-  amountChart: {
-    ko: '금액별 자산 비중',
-    en: 'Asset Allocation by Amount'
-  },
-  categoryChart: {
-    ko: '분류별 자산 비중',
-    en: 'Asset Allocation by Category'
-  }
+const chartTitles = {
+  amountChart: { ko: '금액별 자산 비중', en: 'Asset Allocation by Amount' },
+  sectorChart: { ko: '섹터별 비중', en: 'Sector Allocation' },
+  categoryChart: { ko: '국가/카테고리 비중', en: 'Category Allocation' }
 };
+
 
 let exchangeRate = 1390; // 기본값
 let currentLang = 'ko'; // 기본 언어
