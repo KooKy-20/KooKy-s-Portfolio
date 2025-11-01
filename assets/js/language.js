@@ -71,22 +71,19 @@ function setLanguage(lang) {
     });
   });
 
-  // ⛔️ [제거]
-  // updateChartTitle?.(lang);
-  // updateChartLabels?.(lang);
-
-  updateTooltipLanguage?.(lang); // 툴팁 콜백은 갱신 필요
+  // ⛔️ [제거] updateTooltipLanguage?.(lang);
+  
   updateSwipeHints?.();
   updateTotal?.(lang);
   updateExchangeRate?.(lang);
   updateLastUpdated?.(lang);
 
-  // ✅ [추가] 모든 차트를 강제로 업데이트하여 동적 텍스트(제목, 라벨)를 새로 그리도록 함
+  // ✅ [유지] 모든 차트를 강제로 업데이트 (이 코드가 동적 툴팁을 새로 그리게 함)
   if (typeof chartIds !== 'undefined' && typeof Chart !== 'undefined') {
     chartIds.forEach(id => {
       const chart = Chart.getChart(id);
       if (chart) {
-        chart.update(); // 'none'이 아닌 기본 update()를 호출
+        chart.update();
       }
     });
   }
@@ -120,39 +117,13 @@ function updateTotal(lang) {
   totalEl.textContent = translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
 }
 
-// ⛔️ [제거] updateChartTitle 함수 전체를 삭제합니다.
 
-// ⛔️ [제거] updateChartLabels 함수 전체를 삭제합니다.
-
+// ⛔️ [제거] updateTooltipLanguage 함수 전체를 삭제합니다.
+/*
 function updateTooltipLanguage(lang) {
-  if (typeof Chart === 'undefined') return;
-  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
-
-  ids.forEach(id => {
-    const chart = Chart.getChart(id);
-    if (!chart) return;
-
-    // 기존 툴팁 콜백 갱신 (이 로직은 유효합니다)
-    chart.options.plugins.tooltip.callbacks.label = ctx => {
-      const value = Number(ctx.raw) || 0;
-      const total = ctx.dataset.data.reduce((a, b) => a + (Number(b) || 0), 0);
-      const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-      const rate = typeof exchangeRate === 'number' && exchangeRate > 0 ? exchangeRate : 1390;
-
-      const formatted =
-        lang === 'ko'
-          ? '₩' + value.toLocaleString('ko-KR')
-          : '$' + (value / rate).toLocaleString('en-US', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-            });
-
-      return `${ctx.label}: ${formatted} (${percent}%)`;
-    };
-
-    chart.update('none'); // 갱신
-  });
+  // ... (이 함수 전체 삭제) ...
 }
+*/
 
 
 // ✅ 스와이프 힌트 갱신
