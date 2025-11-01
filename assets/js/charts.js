@@ -54,10 +54,26 @@ function createPieChart(ctxId, dataMap) {
         tooltip: {
           callbacks: {
             label: ctx => {
-              const value = ctx.raw.toLocaleString();
+              const lang = window.currentLang || 'ko'; // 현재 언어
+              const value = ctx.raw;
               const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-              const percent = ((ctx.raw / total) * 100).toFixed(1);
-              return `${ctx.label}: ₩${value} (${percent}%)`;
+              const percent = ((value / total) * 100).toFixed(1);
+        
+              // 금액 포매팅
+              if (lang === 'ko') {
+                // 한국어: 원화 그대로 표시
+                const formattedValue = value.toLocaleString('ko-KR');
+                return `${ctx.label}: ₩${formattedValue} (${percent}%)`;
+              } else {
+                // 영어: 달러 환산 표시 (config.js에 exchangeRate 변수가 이미 있음)
+                const rate = typeof exchangeRate === 'number' && exchangeRate > 0 ? exchangeRate : 1390;
+                const usdValue = value / rate;
+                const formattedValue = usdValue.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                });
+                return `${ctx.label}: $${formattedValue} (${percent}%)`;
+              }
             }
           }
         }
