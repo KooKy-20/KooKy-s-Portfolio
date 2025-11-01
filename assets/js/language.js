@@ -71,13 +71,25 @@ function setLanguage(lang) {
     });
   });
 
-  updateChartTitle?.(lang);
-  updateChartLabels?.(lang);
-  updateTooltipLanguage?.(lang);
+  // ⛔️ [제거]
+  // updateChartTitle?.(lang);
+  // updateChartLabels?.(lang);
+
+  updateTooltipLanguage?.(lang); // 툴팁 콜백은 갱신 필요
   updateSwipeHints?.();
   updateTotal?.(lang);
   updateExchangeRate?.(lang);
   updateLastUpdated?.(lang);
+
+  // ✅ [추가] 모든 차트를 강제로 업데이트하여 동적 텍스트(제목, 라벨)를 새로 그리도록 함
+  if (typeof chartIds !== 'undefined' && typeof Chart !== 'undefined') {
+    chartIds.forEach(id => {
+      const chart = Chart.getChart(id);
+      if (chart) {
+        chart.update(); // 'none'이 아닌 기본 update()를 호출
+      }
+    });
+  }
 
   if (window.location.pathname.includes('community')) {
     reloadGiscus(lang);
@@ -108,67 +120,9 @@ function updateTotal(lang) {
   totalEl.textContent = translations?.[lang]?.total?.replace('{{amount}}', formatted) || '';
 }
 
-// ✅ 차트 제목 갱신
-function updateChartTitle(lang) {
-  if (typeof Chart === 'undefined') return;
+// ⛔️ [제거] updateChartTitle 함수 전체를 삭제합니다.
 
-  const isMobile = window.innerWidth <= 600;
-  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
-  ids.forEach(id => {
-    const chart = Chart.getChart(id);
-    if (chart?.options?.plugins?.title) {
-      chart.options.plugins.title.text = chartTitles?.[id]?.[lang] || '';
-      chart.options.plugins.title.font.size = isMobile ? 18 : 22;
-      chart.update('none');
-    }
-  });
-}
-
-// ✅ 차트 라벨 및 데이터셋 언어 갱신
-// ✅ 파일: assets/js/language.js
-
-function updateChartLabels(lang) {
-  if (typeof Chart === 'undefined') return;
-
-  // 1) 사전(ko<->en) 정의: 순서를 바꾸지 않기 위해 "값 치환"만 한다.
-  const sectorKo2En = {
-    '현금/채권':'Cash/Bond','테크':'Tech','산업재':'Industrials',
-    '금융':'Finance','소비재/서비스':'Consumer/Services','기타':'Others'
-  };
-  const sectorEn2Ko = Object.fromEntries(Object.entries(sectorKo2En).map(([k,v])=>[v,k]));
-
-  const categoryKo2En = { '현금성':'Cash','미국':'USA','한국':'Korea','기타':'Others' };
-  const categoryEn2Ko = Object.fromEntries(Object.entries(categoryKo2En).map(([k,v])=>[v,k]));
-
-  const toLang = (list, dict) => list.map(x => dict[x] ?? x);
-
-  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
-  ids.forEach(id => {
-    const chart = Chart.getChart(id);
-    if (!chart) return;
-
-    // ⚠️ amountChart(개별 종목)는 테이블에서 계산된 동적 순서라 덮어쓰면 안 됨.
-    if (id === 'amountChart') {
-      // 아무 것도 하지 않음: 순서/명칭 보존
-      return;
-    }
-
-    if (id === 'sectorChart') {
-      chart.data.labels = (lang === 'en')
-        ? toLang(chart.data.labels, sectorKo2En)
-        : toLang(chart.data.labels, sectorEn2Ko);
-    }
-
-    if (id === 'categoryChart') {
-      chart.data.labels = (lang === 'en')
-        ? toLang(chart.data.labels, categoryKo2En)
-        : toLang(chart.data.labels, categoryEn2Ko);
-    }
-
-    chart.update('none');
-  });
-}
-
+// ⛔️ [제거] updateChartLabels 함수 전체를 삭제합니다.
 
 function updateTooltipLanguage(lang) {
   if (typeof Chart === 'undefined') return;
@@ -178,7 +132,7 @@ function updateTooltipLanguage(lang) {
     const chart = Chart.getChart(id);
     if (!chart) return;
 
-    // 기존 툴팁 콜백 갱신
+    // 기존 툴팁 콜백 갱신 (이 로직은 유효합니다)
     chart.options.plugins.tooltip.callbacks.label = ctx => {
       const value = Number(ctx.raw) || 0;
       const total = ctx.dataset.data.reduce((a, b) => a + (Number(b) || 0), 0);
