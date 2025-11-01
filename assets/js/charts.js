@@ -101,8 +101,11 @@ function createPieChart(ctxId, dataMap) {
         },
         tooltip: {
           callbacks: {
-            // ✅ 툴팁 라벨 번역 (ctxId 사용)
-            label: ctx => {
+            // ✅ [수정 1] 툴팁 '제목'을 번역하는 콜백 추가
+            title: (tooltipItems) => {
+              const ctx = tooltipItems[0];
+              if (!ctx) return '';
+              
               const lang = window.currentLang || 'ko';
               const chartId = ctxId;
               const originalLabel = ctx.chart.data.labels[ctx.dataIndex];
@@ -130,15 +133,19 @@ function createPieChart(ctxId, dataMap) {
                   translatedLabel = enLabels[labelIndex];
                 }
               }
+              return translatedLabel; // 번역된 라벨을 제목으로 반환
+            },
 
-              // 2. 값 포매팅
+            // ✅ [수정 2] 툴팁 '본문'은 값만 표시하도록 단순화
+            label: ctx => {
+              const lang = window.currentLang || 'ko';
               const value = ctx.raw;
               const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
               const percent = ((value / total) * 100).toFixed(1);
 
               if (lang === 'ko') {
                 const formattedValue = value.toLocaleString('ko-KR');
-                return `${translatedLabel}: ₩${formattedValue} (${percent}%)`;
+                return `₩${formattedValue} (${percent}%)`;
               } else {
                 const rate = typeof exchangeRate === 'number' && exchangeRate > 0 ? exchangeRate : 1390;
                 const usdValue = value / rate;
@@ -146,7 +153,7 @@ function createPieChart(ctxId, dataMap) {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2
                 });
-                return `${translatedLabel}: $${formattedValue} (${percent}%)`;
+                return `$${formattedValue} (${percent}%)`;
               }
             }
           }
