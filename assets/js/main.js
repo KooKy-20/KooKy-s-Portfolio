@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener('load', async () => {
   // ✅ 헤더 먼저 로드
   await fetch('header.html')
     .then(res => res.text())
