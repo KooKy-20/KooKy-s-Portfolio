@@ -1,19 +1,32 @@
 function createPieChart(ctxId, dataMap) {
   const canvas = document.getElementById(ctxId);
-  if (!canvas) return null; // canvas 없으면 chart 생성 X
+  if (!canvas) return null;
 
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
 
+  // ✅ 기존 차트 제거 (이 부분이 없으면 데이터가 반영되지 않음)
+  const existingChart = Chart.getChart(ctxId);
+  if (existingChart) existingChart.destroy();
+
+  // ✅ 문자열 금액을 숫자로 변환 (예: "10490784" → 10490784)
   const entries = Object.entries(dataMap)
-    .map(([label, value]) => ({ label, value }))
+    .map(([label, value]) => ({
+      label,
+      value: typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value
+    }))
     .sort((a, b) => b.value - a.value);
 
   const labels = entries.map(e => e.label);
   const values = entries.map(e => e.value);
   const title = chartTitles?.[ctxId]?.[currentLang] || '';
-
   const isMobile = window.innerWidth <= 600;
+
+  // ✅ 숨김 상태라면 먼저 보이도록 잠시 강제 표시 후 생성
+  const originalDisplay = canvas.style.display;
+  if (originalDisplay === 'none') {
+    canvas.style.display = 'block';
+  }
 
   const chart = new Chart(ctx, {
     type: 'pie',
@@ -21,7 +34,10 @@ function createPieChart(ctxId, dataMap) {
       labels,
       datasets: [{
         data: values,
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#999999'],
+        backgroundColor: [
+          '#FF6384', '#36A2EB', '#FFCE56',
+          '#4BC0C0', '#9966FF', '#999999'
+        ],
         hoverOffset: 10
       }]
     },
@@ -34,7 +50,6 @@ function createPieChart(ctxId, dataMap) {
           display: true,
           text: title,
           font: { size: isMobile ? 18 : 22, weight: 'bold' },
-          padding: { bottom: 40 },
           color: '#111'
         },
         legend: { display: false },
@@ -54,18 +69,14 @@ function createPieChart(ctxId, dataMap) {
         tooltip: {
           callbacks: {
             label: ctx => {
-              const lang = window.currentLang || 'ko'; // 현재 언어
+              const lang = window.currentLang || 'ko';
               const value = ctx.raw;
               const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
               const percent = ((value / total) * 100).toFixed(1);
-        
-              // 금액 포매팅
               if (lang === 'ko') {
-                // 한국어: 원화 그대로 표시
                 const formattedValue = value.toLocaleString('ko-KR');
                 return `${ctx.label}: ₩${formattedValue} (${percent}%)`;
               } else {
-                // 영어: 달러 환산 표시 (config.js에 exchangeRate 변수가 이미 있음)
                 const rate = typeof exchangeRate === 'number' && exchangeRate > 0 ? exchangeRate : 1390;
                 const usdValue = value / rate;
                 const formattedValue = usdValue.toLocaleString('en-US', {
@@ -82,10 +93,10 @@ function createPieChart(ctxId, dataMap) {
     plugins: [
       ChartDataLabels,
       {
-        id: 'customHint',
+        id: 'mobileHint',
         afterDraw(chart) {
           if (window.innerWidth > 600) return;
-          const { ctx, chartArea } = chart;
+          const { ctx } = chart;
           const text = translations?.[currentLang]?.swipeHint || '';
           ctx.save();
           ctx.font = '13px sans-serif';
@@ -97,6 +108,9 @@ function createPieChart(ctxId, dataMap) {
       }
     ]
   });
+
+  // ✅ 다시 원래 display 상태 복원
+  canvas.style.display = originalDisplay;
 
   return chart;
 }
