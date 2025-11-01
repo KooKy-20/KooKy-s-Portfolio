@@ -62,7 +62,8 @@ console.log({
     }
 
     if (typeof showChart === 'function') {
-      showChart(0);
+      const defaultIndex = chartIds.indexOf('amountChart');
+      showChart(defaultIndex >= 0 ? defaultIndex : 0);
     }
     if (typeof setupChartNavigation === 'function') {
       setupChartNavigation();
