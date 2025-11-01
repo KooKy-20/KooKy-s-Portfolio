@@ -49,13 +49,17 @@ window.addEventListener('load', async () => {
         sectorMap[sector] = (sectorMap[sector] || 0) + amount;
       }
     });
-console.log({
-  nameMap,
-  categoryMap,
-  sectorMap
-});
+    console.log({
+      nameMap,
+      categoryMap,
+      sectorMap
+    });
 
+    // ✅ 수정된 부분: defaultIndex 정의를 console.log 앞으로 이동
+    const defaultIndex = chartIds.indexOf('amountChart');
     
+    // ✅ 수정된 부분: defaultIndex가 유효한지 확인 후 로그
+    console.log('초기 표시 차트:', chartIds[defaultIndex >= 0 ? defaultIndex : 0]);
 
 
     if (typeof createPieChart === 'function') {
@@ -64,13 +68,10 @@ console.log({
       window.sectorChart = createPieChart('sectorChart', sectorMap);
     }
 
-    // 차트 3개 생성 직후에 배치
-    if (typeof showChart === 'function' && Array.isArray(chartIds)) {
-      const startIndex = chartIds.indexOf('amountChart');
-      currentChartIndex = startIndex >= 0 ? startIndex : 0;
-      showChart(currentChartIndex);
+    if (typeof showChart === 'function') {
+      // ✅ 수정된 부분: 이미 정의된 defaultIndex 사용
+      showChart(defaultIndex >= 0 ? defaultIndex : 0);
     }
-
     if (typeof setupChartNavigation === 'function') {
       setupChartNavigation();
     }
