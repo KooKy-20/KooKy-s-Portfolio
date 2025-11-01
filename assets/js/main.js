@@ -49,6 +49,11 @@ window.addEventListener('DOMContentLoaded', async () => {
         sectorMap[sector] = (sectorMap[sector] || 0) + amount;
       }
     });
+console.log({
+  nameMap,
+  categoryMap,
+  sectorMap
+});
 
     if (typeof createPieChart === 'function') {
       window.amountChart = createPieChart('amountChart', nameMap);
@@ -63,13 +68,6 @@ window.addEventListener('DOMContentLoaded', async () => {
       setupChartNavigation();
     }
   }
-
-  console.log({
-  nameMap,
-  categoryMap,
-  sectorMap
-});
-
 
   // ✅ 언어 다시 적용 (차트 제목 등 포함)
   if (typeof window.setLanguage === 'function') {
