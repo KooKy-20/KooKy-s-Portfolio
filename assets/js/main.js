@@ -64,11 +64,13 @@ console.log({
       window.sectorChart = createPieChart('sectorChart', sectorMap);
     }
 
-    if (typeof showChart === 'function') {
-      const defaultIndex = chartIds.indexOf('amountChart');
-      console.log('초기 표시 차트:', chartIds[defaultIndex]);
-      showChart(defaultIndex >= 0 ? defaultIndex : 0);
+    // 차트 3개 생성 직후에 배치
+    if (typeof showChart === 'function' && Array.isArray(chartIds)) {
+      const startIndex = chartIds.indexOf('amountChart');
+      currentChartIndex = startIndex >= 0 ? startIndex : 0;
+      showChart(currentChartIndex);
     }
+
     if (typeof setupChartNavigation === 'function') {
       setupChartNavigation();
     }
