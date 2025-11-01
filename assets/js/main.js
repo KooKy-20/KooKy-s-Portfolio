@@ -64,6 +64,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  console.log({
+  nameMap,
+  categoryMap,
+  sectorMap
+});
+
+
   // ✅ 언어 다시 적용 (차트 제목 등 포함)
   if (typeof window.setLanguage === 'function') {
     window.setLanguage(window.currentLang);
