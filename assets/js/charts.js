@@ -1,22 +1,3 @@
-// ✅ 차트 식별 순서 (화면 표시 순서)
-const chartIds = ['amountChart', 'sectorChart', 'categoryChart'];
-
-// ✅ 차트 제목 정의 (각 ID와 정확히 매칭되어야 함)
-const chartTitles = {
-  amountChart: { 
-    ko: '금액별 자산 비중', 
-    en: 'Asset Allocation by Amount' 
-  },
-  sectorChart: { 
-    ko: '섹터별 비중', 
-    en: 'Sector Allocation' 
-  },
-  categoryChart: { 
-    ko: '국가별 비중', 
-    en: 'Category Allocation' 
-  }
-};
-
 function createPieChart(ctxId, dataMap) {
   const canvas = document.getElementById(ctxId);
   if (!canvas) return null;
