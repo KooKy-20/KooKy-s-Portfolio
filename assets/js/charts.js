@@ -5,11 +5,11 @@ function createPieChart(ctxId, dataMap) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
 
-  // ✅ 기존 차트 제거 (이 부분이 없으면 데이터가 반영되지 않음)
-  const existingChart = Chart.getChart(ctxId);
-  if (existingChart) existingChart.destroy();
+  // ✅ 기존 차트 파괴 (데이터 갱신 불가 문제 해결)
+  const existing = Chart.getChart(ctxId);
+  if (existing) existing.destroy();
 
-  // ✅ 문자열 금액을 숫자로 변환 (예: "10490784" → 10490784)
+  // ✅ 문자열 금액을 숫자로 변환
   const entries = Object.entries(dataMap)
     .map(([label, value]) => ({
       label,
@@ -22,7 +22,7 @@ function createPieChart(ctxId, dataMap) {
   const title = chartTitles?.[ctxId]?.[currentLang] || '';
   const isMobile = window.innerWidth <= 600;
 
-  // ✅ 숨김 상태라면 먼저 보이도록 잠시 강제 표시 후 생성
+  // ✅ 숨김 캔버스 일시 표시 (display:none 상태 문제 해결)
   const originalDisplay = canvas.style.display;
   if (originalDisplay === 'none') {
     canvas.style.display = 'block';
@@ -90,30 +90,15 @@ function createPieChart(ctxId, dataMap) {
         }
       }
     },
-    plugins: [
-      ChartDataLabels,
-      {
-        id: 'mobileHint',
-        afterDraw(chart) {
-          if (window.innerWidth > 600) return;
-          const { ctx } = chart;
-          const text = translations?.[currentLang]?.swipeHint || '';
-          ctx.save();
-          ctx.font = '13px sans-serif';
-          ctx.fillStyle = '#666';
-          ctx.textAlign = 'center';
-          ctx.fillText(text, chart.width / 2, 70);
-          ctx.restore();
-        }
-      }
-    ]
+    plugins: [ChartDataLabels]
   });
 
-  // ✅ 다시 원래 display 상태 복원
+  // ✅ 다시 원래 상태로 복원
   canvas.style.display = originalDisplay;
 
   return chart;
 }
+
 
 function showChart(index) {
   if (!Array.isArray(chartIds) || !chartIds.length) return;
