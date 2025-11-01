@@ -9,7 +9,7 @@ function reloadGiscus(lang) {
   container.innerHTML = '';
 
   const giscus = document.createElement('script');
-  giscus.src = 'https://giscus.app/client.js';
+  giscus.src = 'https.://giscus.app/client.js';
   giscus.setAttribute('data-repo', 'KooKy-20/KooKy-s-Portfolio');
   giscus.setAttribute('data-repo-id', 'R_kgDOPF8vpA');
   giscus.setAttribute('data-category', 'Guestbook');
@@ -71,7 +71,7 @@ function setLanguage(lang) {
     });
   });
 
-  // ⛔️ [제거] updateTooltipLanguage?.(lang);
+  // ⛔️ [제거 완료] updateTooltipLanguage?.(lang);
   
   updateSwipeHints?.();
   updateTotal?.(lang);
@@ -118,12 +118,7 @@ function updateTotal(lang) {
 }
 
 
-// ⛔️ [제거] updateTooltipLanguage 함수 전체를 삭제합니다.
-/*
-function updateTooltipLanguage(lang) {
-  // ... (이 함수 전체 삭제) ...
-}
-*/
+// ⛔️ [제거 완료] updateTooltipLanguage 함수 전체가 삭제되었습니다.
 
 
 // ✅ 스와이프 힌트 갱신
