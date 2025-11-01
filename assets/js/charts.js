@@ -45,10 +45,11 @@ function createPieChart(ctxId, dataMap) {
       plugins: {
         title: {
           display: true,
-          // ✅ [수정] 'text'를 함수로 변경하여 동적으로 제목 반환
+          // ✅ [수정 1] 불안정한 ctxId 대신 ctx.chart.id 사용
           text: (ctx) => {
             const lang = window.currentLang || 'ko';
-            return chartTitles?.[ctxId]?.[lang] || ''; // ctxId는 createPieChart의 파라미터
+            const chartId = ctx.chart.id; // <-- 이 부분이 핵심입니다.
+            return chartTitles?.[chartId]?.[lang] || '';
           },
           font: { size: isMobile ? 18 : 22, weight: 'bold' },
           color: '#111'
@@ -61,17 +62,19 @@ function createPieChart(ctxId, dataMap) {
           align: 'end',
           textStrokeColor: '#fff',
           textStrokeWidth: 3,
-          // ✅ [수정] 'formatter'를 함수로 변경하여 동적으로 라벨 번역
+          // ✅ [수정 2] 여기도 동일하게 ctx.chart.id 사용
           formatter: (value, ctx) => {
             const lang = window.currentLang || 'ko';
+            const chartId = ctx.chart.id; // <-- 이 부분이 핵심입니다.
+            
             // 1. 원본 라벨 (항상 한국어 기준)
             const label = ctx.chart.data.labels[ctx.dataIndex];
             
             let translatedLabel = label;
             let koLabels, enLabels;
 
-            // 2. 현재 차트 ID(ctxId)에 맞는 번역 데이터셋 찾기
-            switch(ctxId) {
+            // 2. 현재 차트 ID(chartId)에 맞는 번역 데이터셋 찾기
+            switch(chartId) {
               case 'amountChart':
                 koLabels = translations?.ko?.labels_amount;
                 enLabels = translations?.en?.labels_amount;
@@ -102,6 +105,8 @@ function createPieChart(ctxId, dataMap) {
         },
         tooltip: {
           callbacks: {
+            // 툴팁은 이미 language.js에서 콜백을 직접 덮어쓰므로
+            // 여기서는 기본 로직만 유지해도 됩니다.
             label: ctx => {
               const lang = window.currentLang || 'ko';
               const value = ctx.raw;
@@ -159,7 +164,6 @@ function showChart(index) {
   }
 
   currentChartIndex = index;
-  // ⛔️ [제거] updateChartTitle?.(currentLang); (제거됨)
 }
 
 function setupChartNavigation() {
