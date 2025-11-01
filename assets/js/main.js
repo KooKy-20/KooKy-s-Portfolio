@@ -55,6 +55,9 @@ console.log({
   sectorMap
 });
 
+    console.log('초기 표시 차트:', chartIds[defaultIndex]);
+
+
     if (typeof createPieChart === 'function') {
       window.amountChart = createPieChart('amountChart', nameMap);
       window.categoryChart = createPieChart('categoryChart', categoryMap);
