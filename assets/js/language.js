@@ -125,29 +125,50 @@ function updateChartTitle(lang) {
 }
 
 // ✅ 차트 라벨 및 데이터셋 언어 갱신
+// ✅ 파일: assets/js/language.js
+
 function updateChartLabels(lang) {
   if (typeof Chart === 'undefined') return;
+
+  // 1) 사전(ko<->en) 정의: 순서를 바꾸지 않기 위해 "값 치환"만 한다.
+  const sectorKo2En = {
+    '현금/채권':'Cash/Bond','테크':'Tech','산업재':'Industrials',
+    '금융':'Finance','소비재/서비스':'Consumer/Services','기타':'Others'
+  };
+  const sectorEn2Ko = Object.fromEntries(Object.entries(sectorKo2En).map(([k,v])=>[v,k]));
+
+  const categoryKo2En = { '현금성':'Cash','미국':'USA','한국':'Korea','기타':'Others' };
+  const categoryEn2Ko = Object.fromEntries(Object.entries(categoryKo2En).map(([k,v])=>[v,k]));
+
+  const toLang = (list, dict) => list.map(x => dict[x] ?? x);
 
   const ids = typeof chartIds !== 'undefined' ? chartIds : [];
   ids.forEach(id => {
     const chart = Chart.getChart(id);
     if (!chart) return;
 
-    switch (id) {
-      case 'sectorChart':
-        chart.data.labels = translations?.[lang]?.labels_sector || chart.data.labels;
-        break;
-      case 'categoryChart':
-        chart.data.labels = translations?.[lang]?.labels_category || chart.data.labels;
-        break;
-      case 'amountChart':
-        chart.data.labels = translations?.[lang]?.labels_amount || chart.data.labels;
-        break;
+    // ⚠️ amountChart(개별 종목)는 테이블에서 계산된 동적 순서라 덮어쓰면 안 됨.
+    if (id === 'amountChart') {
+      // 아무 것도 하지 않음: 순서/명칭 보존
+      return;
+    }
+
+    if (id === 'sectorChart') {
+      chart.data.labels = (lang === 'en')
+        ? toLang(chart.data.labels, sectorKo2En)
+        : toLang(chart.data.labels, sectorEn2Ko);
+    }
+
+    if (id === 'categoryChart') {
+      chart.data.labels = (lang === 'en')
+        ? toLang(chart.data.labels, categoryKo2En)
+        : toLang(chart.data.labels, categoryEn2Ko);
     }
 
     chart.update('none');
   });
 }
+
 
 function updateTooltipLanguage(lang) {
   if (typeof Chart === 'undefined') return;
