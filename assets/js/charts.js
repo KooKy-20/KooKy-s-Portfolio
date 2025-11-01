@@ -1,15 +1,20 @@
 function createPieChart(ctxId, dataMap) {
   const canvas = document.getElementById(ctxId);
   if (!canvas) return null;
-
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
 
-  // ✅ 기존 차트 파괴 (데이터 갱신 불가 문제 해결)
+  // ✅ 기존 차트 제거 (갱신 문제 방지)
   const existing = Chart.getChart(ctxId);
   if (existing) existing.destroy();
 
-  // ✅ 문자열 금액을 숫자로 변환
+  // ✅ 숨겨진 캔버스일 경우 임시로 표시
+  const originalDisplay = canvas.style.display;
+  if (originalDisplay === 'none') {
+    canvas.style.display = 'block';
+  }
+
+  // ✅ 데이터 숫자 변환 및 정렬
   const entries = Object.entries(dataMap)
     .map(([label, value]) => ({
       label,
@@ -21,12 +26,6 @@ function createPieChart(ctxId, dataMap) {
   const values = entries.map(e => e.value);
   const title = chartTitles?.[ctxId]?.[currentLang] || '';
   const isMobile = window.innerWidth <= 600;
-
-  // ✅ 숨김 캔버스 일시 표시 (display:none 상태 문제 해결)
-  const originalDisplay = canvas.style.display;
-  if (originalDisplay === 'none') {
-    canvas.style.display = 'block';
-  }
 
   const chart = new Chart(ctx, {
     type: 'pie',
@@ -93,11 +92,12 @@ function createPieChart(ctxId, dataMap) {
     plugins: [ChartDataLabels]
   });
 
-  // ✅ 다시 원래 상태로 복원
+  // ✅ 다시 원래 상태 복원
   canvas.style.display = originalDisplay;
 
   return chart;
 }
+
 
 
 function showChart(index) {
