@@ -45,10 +45,9 @@ function createPieChart(ctxId, dataMap) {
       plugins: {
         title: {
           display: true,
-          // ✅ [수정 1] 불안정한 ctxId 대신 ctx.chart.id 사용
           text: (ctx) => {
             const lang = window.currentLang || 'ko';
-            const chartId = ctx.chart.id; // <-- 이 부분이 핵심입니다.
+            const chartId = ctx.chart.id;
             return chartTitles?.[chartId]?.[lang] || '';
           },
           font: { size: isMobile ? 18 : 22, weight: 'bold' },
@@ -62,18 +61,15 @@ function createPieChart(ctxId, dataMap) {
           align: 'end',
           textStrokeColor: '#fff',
           textStrokeWidth: 3,
-          // ✅ [수정 2] 여기도 동일하게 ctx.chart.id 사용
           formatter: (value, ctx) => {
             const lang = window.currentLang || 'ko';
-            const chartId = ctx.chart.id; // <-- 이 부분이 핵심입니다.
+            const chartId = ctx.chart.id;
             
-            // 1. 원본 라벨 (항상 한국어 기준)
             const label = ctx.chart.data.labels[ctx.dataIndex];
             
             let translatedLabel = label;
             let koLabels, enLabels;
 
-            // 2. 현재 차트 ID(chartId)에 맞는 번역 데이터셋 찾기
             switch(chartId) {
               case 'amountChart':
                 koLabels = translations?.ko?.labels_amount;
@@ -89,7 +85,6 @@ function createPieChart(ctxId, dataMap) {
                 break;
             }
 
-            // 3. 영어일 경우, 한국어 라벨의 인덱스를 찾아 영어 라벨로 교체
             if (lang === 'en' && koLabels && enLabels) {
               const labelIndex = koLabels.indexOf(label);
               if (labelIndex !== -1 && enLabels[labelIndex]) {
@@ -97,7 +92,6 @@ function createPieChart(ctxId, dataMap) {
               }
             }
             
-            // 4. 최종 라벨 포맷 생성
             const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
             const percent = ((value / total) * 100).toFixed(1);
             return `${translatedLabel} (${percent}%)`;
@@ -105,16 +99,44 @@ function createPieChart(ctxId, dataMap) {
         },
         tooltip: {
           callbacks: {
-            // 툴팁은 이미 language.js에서 콜백을 직접 덮어쓰므로
-            // 여기서는 기본 로직만 유지해도 됩니다.
+            // ✅ [수정] 툴팁 콜백에도 레이블 번역 + 값 포매팅 로직을 동적으로 통합
             label: ctx => {
               const lang = window.currentLang || 'ko';
+              const chartId = ctx.chart.id;
+              const originalLabel = ctx.chart.data.labels[ctx.dataIndex];
+
+              // 1. 레이블 번역 (datalabels와 동일)
+              let translatedLabel = originalLabel;
+              let koLabels, enLabels;
+              switch(chartId) {
+                case 'amountChart':
+                  koLabels = translations?.ko?.labels_amount;
+                  enLabels = translations?.en?.labels_amount;
+                  break;
+                case 'sectorChart':
+                  koLabels = translations?.ko?.labels_sector;
+                  enLabels = translations?.en?.labels_sector;
+                  break;
+                case 'categoryChart':
+                  koLabels = translations?.ko?.labels_category;
+                  enLabels = translations?.en?.labels_category;
+                  break;
+              }
+              if (lang === 'en' && koLabels && enLabels) {
+                const labelIndex = koLabels.indexOf(originalLabel);
+                if (labelIndex !== -1 && enLabels[labelIndex]) {
+                  translatedLabel = enLabels[labelIndex];
+                }
+              }
+
+              // 2. 값 포매팅 (기존 language.js의 로직)
               const value = ctx.raw;
               const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
               const percent = ((value / total) * 100).toFixed(1);
+
               if (lang === 'ko') {
                 const formattedValue = value.toLocaleString('ko-KR');
-                return `${ctx.label}: ₩${formattedValue} (${percent}%)`;
+                return `${translatedLabel}: ₩${formattedValue} (${percent}%)`;
               } else {
                 const rate = typeof exchangeRate === 'number' && exchangeRate > 0 ? exchangeRate : 1390;
                 const usdValue = value / rate;
@@ -122,7 +144,7 @@ function createPieChart(ctxId, dataMap) {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2
                 });
-                return `${ctx.label}: $${formattedValue} (${percent}%)`;
+                return `${translatedLabel}: $${formattedValue} (${percent}%)`;
               }
             }
           }
