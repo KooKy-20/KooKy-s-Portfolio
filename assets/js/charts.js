@@ -45,11 +45,10 @@ function createPieChart(ctxId, dataMap) {
       plugins: {
         title: {
           display: true,
-          // ✅ [수정] 불안정한 ctx.chart.id 대신, 함수의 인자인 'ctxId'를 사용
+          // ✅ 제목 번역 (ctxId 사용)
           text: (ctx) => {
             const lang = window.currentLang || 'ko';
-            // const chartId = ctx.chart.id; // ⛔️ 이 코드가 문제였습니다.
-            const chartId = ctxId; // ✅ 'ctxId' (클로저 변수)를 사용해야 합니다.
+            const chartId = ctxId;
             return chartTitles?.[chartId]?.[lang] || '';
           },
           font: { size: isMobile ? 18 : 22, weight: 'bold' },
@@ -63,11 +62,10 @@ function createPieChart(ctxId, dataMap) {
           align: 'end',
           textStrokeColor: '#fff',
           textStrokeWidth: 3,
-          // ✅ [수정] 여기도 동일하게 'ctxId' 사용
+          // ✅ 데이터 라벨 번역 (ctxId 사용)
           formatter: (value, ctx) => {
             const lang = window.currentLang || 'ko';
-            // const chartId = ctx.chart.id; // ⛔️
-            const chartId = ctxId; // ✅
+            const chartId = ctxId;
             
             const label = ctx.chart.data.labels[ctx.dataIndex];
             
@@ -103,11 +101,10 @@ function createPieChart(ctxId, dataMap) {
         },
         tooltip: {
           callbacks: {
-            // ✅ [수정] 툴팁 콜백에도 'ctxId' 사용
+            // ✅ 툴팁 라벨 번역 (ctxId 사용)
             label: ctx => {
               const lang = window.currentLang || 'ko';
-              // const chartId = ctx.chart.id; // ⛔️
-              const chartId = ctxId; // ✅
+              const chartId = ctxId;
               const originalLabel = ctx.chart.data.labels[ctx.dataIndex];
 
               // 1. 레이블 번역
