@@ -15,21 +15,20 @@ function createPieChart(ctxId, dataMap) {
   }
 
   // ✅ 데이터 숫자 변환 및 정렬
-const entries = Object.entries(dataMap).map(([label, value]) => ({
-  label,
-  value: typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value
-}));
+  const entries = Object.entries(dataMap).map(([label, value]) => ({
+    label,
+    value: typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value
+  }));
 
 
   const labels = entries.map(e => e.label);
   const values = entries.map(e => e.value);
-  const title = chartTitles?.[ctxId]?.[currentLang] || '';
   const isMobile = window.innerWidth <= 600;
 
   const chart = new Chart(ctx, {
     type: 'pie',
     data: {
-      labels,
+      labels, // 원본 라벨(한국어)
       datasets: [{
         data: values,
         backgroundColor: [
@@ -46,7 +45,11 @@ const entries = Object.entries(dataMap).map(([label, value]) => ({
       plugins: {
         title: {
           display: true,
-          text: title,
+          // ✅ [수정] 'text'를 함수로 변경하여 동적으로 제목 반환
+          text: (ctx) => {
+            const lang = window.currentLang || 'ko';
+            return chartTitles?.[ctxId]?.[lang] || ''; // ctxId는 createPieChart의 파라미터
+          },
           font: { size: isMobile ? 18 : 22, weight: 'bold' },
           color: '#111'
         },
@@ -58,10 +61,43 @@ const entries = Object.entries(dataMap).map(([label, value]) => ({
           align: 'end',
           textStrokeColor: '#fff',
           textStrokeWidth: 3,
+          // ✅ [수정] 'formatter'를 함수로 변경하여 동적으로 라벨 번역
           formatter: (value, ctx) => {
+            const lang = window.currentLang || 'ko';
+            // 1. 원본 라벨 (항상 한국어 기준)
+            const label = ctx.chart.data.labels[ctx.dataIndex];
+            
+            let translatedLabel = label;
+            let koLabels, enLabels;
+
+            // 2. 현재 차트 ID(ctxId)에 맞는 번역 데이터셋 찾기
+            switch(ctxId) {
+              case 'amountChart':
+                koLabels = translations?.ko?.labels_amount;
+                enLabels = translations?.en?.labels_amount;
+                break;
+              case 'sectorChart':
+                koLabels = translations?.ko?.labels_sector;
+                enLabels = translations?.en?.labels_sector;
+                break;
+              case 'categoryChart':
+                koLabels = translations?.ko?.labels_category;
+                enLabels = translations?.en?.labels_category;
+                break;
+            }
+
+            // 3. 영어일 경우, 한국어 라벨의 인덱스를 찾아 영어 라벨로 교체
+            if (lang === 'en' && koLabels && enLabels) {
+              const labelIndex = koLabels.indexOf(label);
+              if (labelIndex !== -1 && enLabels[labelIndex]) {
+                translatedLabel = enLabels[labelIndex];
+              }
+            }
+            
+            // 4. 최종 라벨 포맷 생성
             const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
             const percent = ((value / total) * 100).toFixed(1);
-            return `${ctx.chart.data.labels[ctx.dataIndex]} (${percent}%)`;
+            return `${translatedLabel} (${percent}%)`;
           }
         },
         tooltip: {
@@ -123,7 +159,7 @@ function showChart(index) {
   }
 
   currentChartIndex = index;
-  updateChartTitle?.(currentLang);
+  // ⛔️ [제거] updateChartTitle?.(currentLang); (제거됨)
 }
 
 function setupChartNavigation() {
