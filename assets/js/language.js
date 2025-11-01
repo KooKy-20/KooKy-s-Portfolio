@@ -73,6 +73,7 @@ function setLanguage(lang) {
 
   updateChartTitle?.(lang);
   updateChartLabels?.(lang);
+  updateTooltipLanguage?.(lang);
   updateSwipeHints?.();
   updateTotal?.(lang);
   updateExchangeRate?.(lang);
@@ -147,6 +148,37 @@ function updateChartLabels(lang) {
     chart.update('none');
   });
 }
+
+function updateTooltipLanguage(lang) {
+  if (typeof Chart === 'undefined') return;
+  const ids = typeof chartIds !== 'undefined' ? chartIds : [];
+
+  ids.forEach(id => {
+    const chart = Chart.getChart(id);
+    if (!chart) return;
+
+    // 기존 툴팁 콜백 갱신
+    chart.options.plugins.tooltip.callbacks.label = ctx => {
+      const value = Number(ctx.raw) || 0;
+      const total = ctx.dataset.data.reduce((a, b) => a + (Number(b) || 0), 0);
+      const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+      const rate = typeof exchangeRate === 'number' && exchangeRate > 0 ? exchangeRate : 1390;
+
+      const formatted =
+        lang === 'ko'
+          ? '₩' + value.toLocaleString('ko-KR')
+          : '$' + (value / rate).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            });
+
+      return `${ctx.label}: ${formatted} (${percent}%)`;
+    };
+
+    chart.update('none'); // 갱신
+  });
+}
+
 
 // ✅ 스와이프 힌트 갱신
 function updateSwipeHints() {
